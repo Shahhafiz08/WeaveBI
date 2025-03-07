@@ -10,12 +10,12 @@ import { AuthGuard } from 'src/auth/guard';
 
 // ----------------------------------------------------------------------
 
-const IndexPage = lazy(() => import('src/pages/dashboard/one'));
-const PageTwo = lazy(() => import('src/pages/dashboard/two'));
-const PageThree = lazy(() => import('src/pages/dashboard/three'));
-const PageFour = lazy(() => import('src/pages/dashboard/four'));
-const PageFive = lazy(() => import('src/pages/dashboard/five'));
-const PageSix = lazy(() => import('src/pages/dashboard/six'));
+const Home = lazy(() => import('src/pages/home/home'));
+const DbConnections = lazy(() => import('src/pages/home/dbConnections'));
+const Dashboard = lazy(() => import('src/pages/home/Dashboard'));
+const QueryBuilder = lazy(() => import('src/pages/home/queryBuilder'));
+const Settings = lazy(() => import('src/pages/home/settings'));
+const Logut = lazy(() => import('src/pages/home/logut'));
 
 // ----------------------------------------------------------------------
 
@@ -32,17 +32,12 @@ export const dashboardRoutes = [
     path: 'dashboard',
     element: CONFIG.auth.skip ? <>{layoutContent}</> : <AuthGuard>{layoutContent}</AuthGuard>,
     children: [
-      { element: <IndexPage />, index: true },
-      { path: 'two', element: <PageTwo /> },
-      { path: 'three', element: <PageThree /> },
-      {
-        path: 'group',
-        children: [
-          { element: <PageFour />, index: true },
-          { path: 'five', element: <PageFive /> },
-          { path: 'six', element: <PageSix /> },
-        ],
-      },
+      { path: 'home', element: <Home /> },
+      { path: 'database-connection', element: <DbConnections /> },
+      { path: 'dashboard', element: <Dashboard /> },
+      { path: 'query-builder', element: <QueryBuilder /> },
+      { path: 'settings', element: <Settings /> },
+      { path: 'logut', element: <Logut /> },
     ],
   },
 ];

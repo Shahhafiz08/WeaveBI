@@ -76,3 +76,14 @@ input[type='number']::-webkit-inner-spin-button {
   margin: 0;
   -webkit-appearance: none;
 }
+.grid-stack {
+  background: transparent !important;
+}
+
+.grid-stack-item {
+  min-height: 100px !important;
+}
+
+.grid-stack-item-content {
+  inset: 5px !important;
+}

@@ -51,14 +51,8 @@ export function JwtSignInView() {
 
   const password = useBoolean();
 
-  const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: '@demo1',
-  };
-
   const methods = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
-    defaultValues,
   });
 
   const {
@@ -74,7 +68,7 @@ export function JwtSignInView() {
       router.refresh();
     } catch (error) {
       console.error(error);
-      setErrorMsg(error instanceof Error ? error.message : error);
+      setErrorMsg(error.message);
     }
   });
 
@@ -150,13 +144,12 @@ export function JwtSignInView() {
     <>
       {renderHead}
 
-      {!!errorMsg && (
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {errorMsg}
-        </Alert>
-      )}
-
       <Form methods={methods} onSubmit={onSubmit}>
+        {!!errorMsg && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {errorMsg}
+          </Alert>
+        )}
         {renderForm}
       </Form>
     </>

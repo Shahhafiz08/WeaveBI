@@ -10,7 +10,7 @@
   "secondary": {
     "lighter": "#EFD6FF",
     "light": "#C684FF",
-    "main": "#F5EFE7",
+    "main": "#EFEFEF",
     "dark": "#5119B7",
     "darker": "#27097A",
     "contrastText": "#FFFFFF"

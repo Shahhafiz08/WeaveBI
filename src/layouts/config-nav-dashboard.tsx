@@ -46,29 +46,20 @@ export const navData = [
    * Overview
    */
   {
-    subheader: 'Overview 6.0.0',
     items: [
-      { title: 'One', path: paths.dashboard.root, icon: ICONS.dashboard },
-      { title: 'Two', path: paths.dashboard.two, icon: ICONS.ecommerce },
-      { title: 'Three', path: paths.dashboard.three, icon: ICONS.analytics },
+      { title: 'Home', path: paths.dashboard.home, icon: ICONS.label },
+      {
+        title: 'DataBase Connection',
+        path: paths.dashboard.databaseConnections,
+        icon: ICONS.ecommerce,
+      },
+      { title: 'Dashboard', path: paths.dashboard.dashBoard, icon: ICONS.analytics },
+      { title: 'Query Builder', path: paths.dashboard.queryBuilder, icon: ICONS.folder },
+      { title: 'Setting', path: paths.dashboard.settings, icon: ICONS.banking },
+      { title: 'Logut', path: paths.dashboard.logut, icon: ICONS.menuItem },
     ],
   },
   /**
    * Management
    */
-  {
-    subheader: 'Management',
-    items: [
-      {
-        title: 'Group',
-        path: paths.dashboard.group.root,
-        icon: ICONS.user,
-        children: [
-          { title: 'Four', path: paths.dashboard.group.root },
-          { title: 'Five', path: paths.dashboard.group.five },
-          { title: 'Six', path: paths.dashboard.group.six },
-        ],
-      },
-    ],
-  },
 ];

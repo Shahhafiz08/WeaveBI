@@ -23,6 +23,7 @@ export function AuthGuard({ children }: Props) {
   const searchParams = useSearchParams();
 
   const { authenticated, loading } = useAuthContext();
+  console.log(authenticated);
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 

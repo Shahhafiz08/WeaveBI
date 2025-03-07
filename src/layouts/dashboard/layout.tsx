@@ -10,7 +10,7 @@ import { iconButtonClasses } from '@mui/material/IconButton';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { _contacts, _notifications } from 'src/_mock';
+import { _notifications } from 'src/_mock';
 import { varAlpha, stylesMode } from 'src/theme/styles';
 
 import { bulletColor } from 'src/components/nav-section';
@@ -23,7 +23,6 @@ import { NavVertical } from './nav-vertical';
 import { NavHorizontal } from './nav-horizontal';
 import { _account } from '../config-nav-account';
 import { HeaderBase } from '../core/header-base';
-import { _workspaces } from '../config-nav-workspace';
 import { LayoutSection } from '../core/layout-section';
 import { navData as dashboardNavData } from '../config-nav-dashboard';
 
@@ -76,16 +75,15 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
             onOpenNav={mobileNavOpen.onTrue}
             data={{
               nav: navData,
-              langs: [
-                { value: 'en', label: 'English', countryCode: 'GB' },
-                { value: 'fr', label: 'French', countryCode: 'FR' },
-                { value: 'vi', label: 'Vietnamese', countryCode: 'VN' },
-                { value: 'cn', label: 'Chinese', countryCode: 'CN' },
-                { value: 'ar', label: 'Arabic', countryCode: 'SA' },
-              ],
+              // langs: [
+              //   { value: 'en', label: 'English', countryCode: 'GB' },
+              //   { value: 'fr', label: 'French', countryCode: 'FR' },
+              //   { value: 'vi', label: 'Vietnamese', countryCode: 'VN' },
+              //   { value: 'cn', label: 'Chinese', countryCode: 'CN' },
+              //   { value: 'ar', label: 'Arabic', countryCode: 'SA' },
+              // ],
               account: _account,
-              contacts: _contacts,
-              workspaces: _workspaces,
+              // workspaces: _workspaces,
               notifications: _notifications,
             }}
             slotsDisplay={{

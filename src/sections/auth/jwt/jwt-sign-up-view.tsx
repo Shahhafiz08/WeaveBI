@@ -1,6 +1,7 @@
 import { z as zod } from 'zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import Link from '@mui/material/Link';
@@ -12,7 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+// import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -23,15 +24,15 @@ import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
 
 import { signUp } from 'src/auth/context/jwt';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export type SignUpSchemaType = zod.infer<typeof SignUpSchema>;
 
 export const SignUpSchema = zod.object({
-  firstName: zod.string().min(1, { message: 'First name is required!' }),
-  lastName: zod.string().min(1, { message: 'Last name is required!' }),
+  name: zod.string().min(1, { message: 'UserName name is required!' }),
+
   email: zod
     .string()
     .min(1, { message: 'Email is required!' })
@@ -45,45 +46,39 @@ export const SignUpSchema = zod.object({
 // ----------------------------------------------------------------------
 
 export function JwtSignUpView() {
-  const { checkUserSession } = useAuthContext();
+  // const { checkUserSession } = useAuthContext();
+  const nevigate = useNavigate();
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const password = useBoolean();
 
   const [errorMsg, setErrorMsg] = useState('');
 
-  const defaultValues = {
-    firstName: 'Hello',
-    lastName: 'Friend',
-    email: 'hello@gmail.com',
-    password: '@demo1',
-  };
-
   const methods = useForm<SignUpSchemaType>({
     resolver: zodResolver(SignUpSchema),
-    defaultValues,
   });
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
+  console.log(errors);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       await signUp({
         email: data.email,
         password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
+        name: data.name,
       });
-      await checkUserSession?.();
+      nevigate('/auth/jwt/sign-in');
 
-      router.refresh();
+      // await checkUserSession?.();
+
+      // router.refresh();
     } catch (error) {
-      console.error(error);
-      setErrorMsg(error instanceof Error ? error.message : error);
+      setErrorMsg(error?.message);
     }
   });
 
@@ -111,8 +106,7 @@ export function JwtSignUpView() {
   const renderForm = (
     <Stack spacing={3}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <Field.Text name="firstName" label="First name" InputLabelProps={{ shrink: true }} />
-        <Field.Text name="lastName" label="Last name" InputLabelProps={{ shrink: true }} />
+        <Field.Text name="name" label="Username" InputLabelProps={{ shrink: true }} />
       </Stack>
 
       <Field.Text name="email" label="Email address" InputLabelProps={{ shrink: true }} />
@@ -169,19 +163,18 @@ export function JwtSignUpView() {
       .
     </Typography>
   );
-
+  console.log('Error msg', errorMsg);
   return (
     <>
       {renderHead}
 
-      {!!errorMsg && (
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {errorMsg}
-        </Alert>
-      )}
-
       <Form methods={methods} onSubmit={onSubmit}>
         {renderForm}
+        {!!errorMsg && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {errorMsg}
+          </Alert>
+        )}
       </Form>
 
       {renderTerms}

@@ -1,7 +1,6 @@
 import axios, { endpoints } from 'src/utils/axios';
 
 import { setSession } from './utils';
-import { STORAGE_KEY } from './constant';
 
 // ----------------------------------------------------------------------
 
@@ -13,23 +12,23 @@ export type SignInParams = {
 export type SignUpParams = {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  name: string;
 };
 
 /** **************************************
  * Sign in
  *************************************** */
 export const signInWithPassword = async ({ email, password }: SignInParams): Promise<void> => {
+  console.log('Endpoints login : ', endpoints.auth.signIn);
   try {
     const params = new FormData();
-    params.append('username', email);
+    params.append('email', email);
     params.append('password', password);
 
-    const res = await axios.post(endpoints.auth.signIn, params);
+    const res = await axios.post(endpoints.auth.signIn, { email, password });
 
     const { access_token } = res.data;
-    console.log(access_token)
+    console.log('Access token', access_token);
     if (!access_token) {
       throw new Error('Access token not found in response');
     }
@@ -44,29 +43,23 @@ export const signInWithPassword = async ({ email, password }: SignInParams): Pro
 /** **************************************
  * Sign up
  *************************************** */
-export const signUp = async ({
-  email,
-  password,
-  firstName,
-  lastName,
-}: SignUpParams): Promise<void> => {
+export const signUp = async ({ name, email, password }: SignUpParams): Promise<void> => {
   const params = {
+    name,
     email,
     password,
-    firstName,
-    lastName,
   };
 
   try {
-    const res = await axios.post(endpoints.auth.signUp, params);
+    await axios.post('/auth/register', params);
 
-    const { accessToken } = res.data;
+    // const { accessToken } = res.data;
 
-    if (!accessToken) {
-      throw new Error('Access token not found in response');
-    }
+    // if (!accessToken) {
+    //   throw new Error('Access token not found in response');
+    // }
 
-    sessionStorage.setItem(STORAGE_KEY, accessToken);
+    // sessionStorage.setItem(STORAGE_KEY, accessToken);
   } catch (error) {
     console.error('Error during sign up:', error);
     throw error;

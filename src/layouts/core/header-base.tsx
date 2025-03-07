@@ -9,20 +9,14 @@ import { paths } from 'src/routes/paths';
 import { Logo } from 'src/components/logo';
 
 import { HeaderSection } from './header-section';
-import { Searchbar } from '../components/searchbar';
 import { MenuButton } from '../components/menu-button';
 import { SignInButton } from '../components/sign-in-button';
 import { AccountDrawer } from '../components/account-drawer';
-import { LanguagePopover } from '../components/language-popover';
-import { ContactsPopover } from '../components/contacts-popover';
-import { WorkspacesPopover } from '../components/workspaces-popover';
 import { NotificationsDrawer } from '../components/notifications-drawer';
 
 import type { HeaderSectionProps } from './header-section';
 import type { AccountDrawerProps } from '../components/account-drawer';
 import type { ContactsPopoverProps } from '../components/contacts-popover';
-import type { LanguagePopoverProps } from '../components/language-popover';
-import type { WorkspacesPopoverProps } from '../components/workspaces-popover';
 import type { NotificationsDrawerProps } from '../components/notifications-drawer';
 
 // ----------------------------------------------------------------------
@@ -59,9 +53,9 @@ export type HeaderBaseProps = HeaderSectionProps & {
   data?: {
     nav?: NavSectionProps['data'];
     account?: AccountDrawerProps['data'];
-    langs?: LanguagePopoverProps['data'];
+
     contacts?: ContactsPopoverProps['data'];
-    workspaces?: WorkspacesPopoverProps['data'];
+
     notifications?: NotificationsDrawerProps['data'];
   };
   slots?: {
@@ -134,11 +128,6 @@ export function HeaderBase({
 
             {/* -- Divider -- */}
             <StyledDivider data-slot="divider" />
-
-            {/* -- Workspace popover -- */}
-            {workspaces && <WorkspacesPopover data-slot="workspaces" data={data?.workspaces} />}
-
-            {slots?.leftAreaEnd}
           </>
         ),
         rightArea: (
@@ -154,18 +143,11 @@ export function HeaderBase({
               }}
             >
               {/* -- Searchbar -- */}
-              {searchbar && <Searchbar data-slot="searchbar" data={data?.nav} />}
-
-              {/* -- Language popover -- */}
-              {localization && <LanguagePopover data-slot="localization" data={data?.langs} />}
 
               {/* -- Notifications popover -- */}
               {notifications && (
                 <NotificationsDrawer data-slot="notifications" data={data?.notifications} />
               )}
-
-              {/* -- Contacts popover -- */}
-              {contacts && <ContactsPopover data-slot="contacts" data={data?.contacts} />}
 
               {/* -- Settings button -- */}
 

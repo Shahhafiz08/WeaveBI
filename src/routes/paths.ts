@@ -42,13 +42,11 @@ export const paths = {
   },
   // DASHBOARD
   dashboard: {
-    root: ROOTS.DASHBOARD,
-    two: `${ROOTS.DASHBOARD}/two`,
-    three: `${ROOTS.DASHBOARD}/three`,
-    group: {
-      root: `${ROOTS.DASHBOARD}/group`,
-      five: `${ROOTS.DASHBOARD}/group/five`,
-      six: `${ROOTS.DASHBOARD}/group/six`,
-    },
+    home: `${ROOTS.DASHBOARD}/home`,
+    databaseConnections: `${ROOTS.DASHBOARD}/database-connection`,
+    dashBoard: `${ROOTS.DASHBOARD}/dashboard`,
+    queryBuilder: `${ROOTS.DASHBOARD}/query-builder`,
+    settings: `${ROOTS.DASHBOARD}/settings`,
+    logut: `${ROOTS.DASHBOARD}/logut`,
   },
 };

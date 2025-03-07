@@ -10,7 +10,7 @@ const axiosInstance = axios.create({ baseURL: CONFIG.site.serverUrl });
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong!')
+  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 
 export default axiosInstance;
@@ -32,14 +32,13 @@ export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
 
 // ----------------------------------------------------------------------
 
-export const 
-endpoints = {
+export const endpoints = {
   chat: '/api/chat',
   kanban: '/api/kanban',
   calendar: '/api/calendar',
   auth: {
     me: '/api/auth/me',
-    signIn: '/users/login',
+    signIn: '/auth/login',
     signUp: '/api/auth/sign-up',
   },
   mail: {
@@ -57,5 +56,11 @@ endpoints = {
     list: '/api/product/list',
     details: '/api/product/details',
     search: '/api/product/search',
+  },
+  create: {
+    databse: '/database',
+  },
+  get: {
+    database: '/database',
   },
 };
