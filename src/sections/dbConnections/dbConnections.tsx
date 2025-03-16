@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Helmet } from 'react-helmet-async';
 
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
@@ -11,6 +10,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import {
   Grow,
   Stack,
+  Alert,
   Button,
   Popper,
   Checkbox,
@@ -20,14 +20,11 @@ import {
   ClickAwayListener,
 } from '@mui/material';
 
-import { CONFIG } from 'src/config-global';
-
 import { Iconify } from 'src/components/iconify';
 
-import { getDatabase } from './api/action';
+import { getDatabase, deleteDatabase } from './api/actions';
+import Sectionheader from '../home/components/Sectionheader';
 
-// ----------------------------------------------------------------------
-const metadata = { title: `Database Connection - ${CONFIG.site.name}` };
 type fetchDataType = {
   id: number;
   connectionName: string;
@@ -55,35 +52,73 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function DatabaseConnections() {
+export default function DatabaseConnectionsView() {
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const [open, setOpen] = React.useState(false);
+  const [refresh, setRefresh] = React.useState<boolean>(false);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
-  const [getData, setGetdata] = React.useState<fetchDataType[]>([]);
 
   const handleClose = (event: Event | React.SyntheticEvent) => {
     if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
     }
-
     setOpen(false);
   };
-  React.useEffect(() => {
-    async function fetchData() {
-      const incommingData = await getDatabase();
-      setGetdata(incommingData.databases);
+  const [getData, setGetdata] = React.useState<fetchDataType[]>([]);
+  //
+  const fetchData = async () => {
+    try {
+      const incomingData = await getDatabase();
+      setGetdata(incomingData.databases);
+    } catch (error) {
+      console.error('Error fetching database:', error);
     }
+  };
+  const [successMsg, setSuccessMsg] = React.useState('');
+  const [errorMsg, setErrorMsg] = React.useState('');
+
+  React.useEffect(() => {
     fetchData();
-  }, []);
+  }, [refresh]);
+
+  const deleteDB = async (id: number) => {
+    try {
+      await deleteDatabase(id);
+      setSuccessMsg(successMsg || 'Database deleted successfully');
+
+      fetchData();
+    } catch (error) {
+      setErrorMsg('Something went wrong');
+    }
+  };
+
+  // eslint-disable-next-line consistent-return
+  React.useEffect(() => {
+    if (successMsg || errorMsg) {
+      const clearResponce = setTimeout(() => {
+        setSuccessMsg('');
+      }, 3000);
+      return () => clearTimeout(clearResponce);
+    }
+  });
 
   return (
     <>
-      <Helmet>
-        <title>{metadata.title}</title>
-      </Helmet>
+      <Sectionheader setRefresh={setRefresh} />
+
+      {!!successMsg && (
+        <Alert severity="success" sx={{ mb: 3 }}>
+          {successMsg}
+        </Alert>
+      )}
+      {!!errorMsg && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {successMsg}
+        </Alert>
+      )}
       <Stack sx={{ marginX: 5, marginY: 10, boxShadow: 2, borderRadius: 1 }}>
         <TableContainer component={Paper} sx={{ marginRight: 30, marginY: 3, postion: 'relative' }}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -127,8 +162,9 @@ export default function DatabaseConnections() {
                     <Popper
                       open={open}
                       anchorEl={anchorRef.current}
-                      placement="right-start"
+                      placement="right-end"
                       transition
+                      id={row.id.toString()}
                       disablePortal
                     >
                       {({ TransitionProps }) => (
@@ -140,8 +176,8 @@ export default function DatabaseConnections() {
                                 id="composition-menu"
                                 aria-labelledby="composition-button"
                               >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
+                                <MenuItem onClick={handleClose}>Edit</MenuItem>
+                                <MenuItem onClick={() => deleteDB(row.id)}>Delete</MenuItem>
                                 <MenuItem onClick={handleClose}>Logout</MenuItem>
                               </MenuList>
                             </ClickAwayListener>

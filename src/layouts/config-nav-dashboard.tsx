@@ -49,7 +49,7 @@ export const navData = [
     items: [
       { title: 'Home', path: paths.dashboard.home, icon: ICONS.label },
       {
-        title: 'DataBase Connection',
+        title: 'Database Connection',
         path: paths.dashboard.databaseConnections,
         icon: ICONS.ecommerce,
       },

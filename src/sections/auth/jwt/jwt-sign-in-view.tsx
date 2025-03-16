@@ -68,7 +68,7 @@ export function JwtSignInView() {
       router.refresh();
     } catch (error) {
       console.error(error);
-      setErrorMsg(error.message);
+      setErrorMsg(error?.message);
     }
   });
 
@@ -133,7 +133,7 @@ export function JwtSignInView() {
         type="submit"
         variant="contained"
         loading={isSubmitting}
-        loadingIndicator="Sign in..."
+        loadingPosition="start"
       >
         Sign in
       </LoadingButton>

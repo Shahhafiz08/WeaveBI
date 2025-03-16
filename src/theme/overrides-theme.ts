@@ -19,5 +19,8 @@ export const overridesTheme: ThemeUpdateOptions = {
       },
     },
   },
+  typography: {
+    fontFamily: 'cursive',
+  },
   shape: { borderRadius: 10 },
 };

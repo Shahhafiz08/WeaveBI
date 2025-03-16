@@ -3,7 +3,6 @@ import type { SettingsState } from 'src/components/settings';
 
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
 
-import { setFont } from './styles/utils';
 import { overridesTheme } from './overrides-theme';
 import { shadows, typography, components, colorSchemes, customShadows } from './core';
 import { updateCoreWithSettings, updateComponentsWithSettings } from './with-settings/update-theme';
@@ -20,7 +19,8 @@ export function createTheme(settings: SettingsState): Theme {
     components,
     typography: {
       ...typography,
-      fontFamily: setFont(settings.fontFamily),
+      // fontFamily: setFont(settings.fontFamily),
+      fontFamily: ['poppins'].join(','),
     },
     cssVarPrefix: '',
     shouldSkipGeneratingVar,

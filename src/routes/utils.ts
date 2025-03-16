@@ -41,3 +41,4 @@ export function removeParams(url: string): string {
 export function isExternalLink(url: string): boolean {
   return url.startsWith('http');
 }
+

@@ -57,10 +57,21 @@ export const endpoints = {
     details: '/api/product/details',
     search: '/api/product/search',
   },
-  create: {
-    databse: '/database',
+  database: {
+    create: '/database',
+    get: '/database',
+    delete: '/database',
+    test: '/database/test',
+    count: '/database/count',
   },
-  get: {
-    database: '/database',
+  dashboard: {
+    listOfDashboards:'/dashboard',
+    totalDashboardCount: '/dashboard/count',
+  },
+  query: {
+    save: '/query',
+    run: '/query/run',
+    get: '/get',
+    totalQueryCount: '/query/count-executed',
   },
 };

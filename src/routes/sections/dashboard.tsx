@@ -10,12 +10,12 @@ import { AuthGuard } from 'src/auth/guard';
 
 // ----------------------------------------------------------------------
 
-const Home = lazy(() => import('src/pages/home/home'));
-const DbConnections = lazy(() => import('src/pages/home/dbConnections'));
-const Dashboard = lazy(() => import('src/pages/home/Dashboard'));
-const QueryBuilder = lazy(() => import('src/pages/home/queryBuilder'));
-const Settings = lazy(() => import('src/pages/home/settings'));
-const Logut = lazy(() => import('src/pages/home/logut'));
+const Home = lazy(() => import('src/pages/home/index'));
+const DbConnections = lazy(() => import('src/pages/database-connections/index'));
+const Dashboard = lazy(() => import('src/sections/Dashboards/Dashboard'));
+const QueryBuilder = lazy(() => import('src/sections/queryBuilder/queryBuilder'));
+const Settings = lazy(() => import('src/sections/settings/settings'));
+const Logut = lazy(() => import('src/sections/logut/logut'));
 
 // ----------------------------------------------------------------------
 
