@@ -1,10 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 
+import { QueryBuilder } from '@mui/icons-material';
+
 import { CONFIG } from 'src/config-global';
 
-import DashboardView from 'src/sections/Dashboards';
-
-const metadata = { title: `Dashboard - ${CONFIG.site.name}` };
+const metadata = { title: `Query Builder ${CONFIG.site.name}` };
 
 export default function Page() {
   return (
@@ -13,7 +13,7 @@ export default function Page() {
         <title> {metadata.title}</title>
       </Helmet>
 
-      <DashboardView />
+      <QueryBuilder />
     </>
   );
 }

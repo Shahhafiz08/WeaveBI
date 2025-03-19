@@ -6,16 +6,20 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
+import OpenDashboard from 'src/sections/Dashboards/components/open-dashboard';
+
 import { AuthGuard } from 'src/auth/guard';
+
+import { paths } from '../paths';
 
 // ----------------------------------------------------------------------
 
 const Home = lazy(() => import('src/pages/home/index'));
 const DbConnections = lazy(() => import('src/pages/database-connections/index'));
-const Dashboard = lazy(() => import('src/sections/Dashboards/Dashboard'));
+const Dashboard = lazy(() => import('src/sections/Dashboards'));
 const QueryBuilder = lazy(() => import('src/sections/queryBuilder/queryBuilder'));
 const Settings = lazy(() => import('src/sections/settings/settings'));
-const Logut = lazy(() => import('src/sections/logut/logut'));
+const Logout = lazy(() => import('src/sections/logout/logout'));
 
 // ----------------------------------------------------------------------
 
@@ -33,11 +37,18 @@ export const dashboardRoutes = [
     element: CONFIG.auth.skip ? <>{layoutContent}</> : <AuthGuard>{layoutContent}</AuthGuard>,
     children: [
       { path: 'home', element: <Home /> },
-      { path: 'database-connection', element: <DbConnections /> },
-      { path: 'dashboard', element: <Dashboard /> },
-      { path: 'query-builder', element: <QueryBuilder /> },
-      { path: 'settings', element: <Settings /> },
-      { path: 'logut', element: <Logut /> },
+      { path: paths.dashboard.databaseConnections, element: <DbConnections /> },
+      {
+        path: paths.dashboard.dashBoard,
+        element: <Dashboard />,
+      },
+      {
+        path: paths.dashboard.OpenDashboard,
+        element: <OpenDashboard />,
+      },
+      { path: paths.dashboard.queryBuilder, element: <QueryBuilder /> },
+      { path: paths.dashboard.settings, element: <Settings /> },
+      { path: paths.dashboard.logout, element: <Logout /> },
     ],
   },
 ];

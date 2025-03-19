@@ -1,10 +1,11 @@
+
 import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
 
-import DatabaseConnectionsView from 'src/sections/dbConnections/dbConnections';
+import LogoutView from 'src/sections/logout/logout';
 
-const metadata = { title: `404 page not found! | Error - ${CONFIG.site.name}` };
+const metadata = { title: `Logout  - ${CONFIG.site.name}` };
 
 export default function Page() {
   return (
@@ -13,7 +14,7 @@ export default function Page() {
         <title> {metadata.title}</title>
       </Helmet>
 
-      <DatabaseConnectionsView />
+      <LogoutView />
     </>
   );
 }

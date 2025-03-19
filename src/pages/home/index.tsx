@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
 
-import HomeView from 'src/sections/home/home';
+import HomeView from 'src/sections/home';
 
 const metadata = { title: `Home- ${CONFIG.site.name}` };
 

@@ -56,7 +56,7 @@ export const navData = [
       { title: 'Dashboard', path: paths.dashboard.dashBoard, icon: ICONS.analytics },
       { title: 'Query Builder', path: paths.dashboard.queryBuilder, icon: ICONS.folder },
       { title: 'Setting', path: paths.dashboard.settings, icon: ICONS.banking },
-      { title: 'Logut', path: paths.dashboard.logut, icon: ICONS.menuItem },
+      { title: 'Logut', path: paths.dashboard.logout, icon: ICONS.menuItem },
     ],
   },
   /**

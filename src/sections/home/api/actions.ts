@@ -39,7 +39,7 @@ export const connectDatabase = async ({
 };
 
 // Test Database connection
-export type testDatabaseParms = {
+export type testDatabaseParams = {
   connectionName: string;
   description: string;
   name: string;
@@ -58,7 +58,7 @@ export const testDatabase = async ({
   host,
   provider,
   port,
-}: testDatabaseParms): Promise<void> => {
+}: testDatabaseParams): Promise<void> => {
   try {
     await axios.post(endpoints.database.test, {
       connectionName,
@@ -78,8 +78,8 @@ export const testDatabase = async ({
 // Get database count
 export async function totalDatabaseCount() {
   try {
-    const responce = await axios.get(endpoints.database.count);
-    return responce.data;
+    const response = await axios.get(endpoints.database.count);
+    return response.data;
   } catch (error) {
     console.log(error);
     throw error;
@@ -88,8 +88,8 @@ export async function totalDatabaseCount() {
 // Get Total query count of a user across all databases
 export async function totalQueryCount() {
   try {
-    const responce = await axios.get(endpoints.query.totalQueryCount);
-    return responce.data;
+    const response = await axios.get(endpoints.query.totalQueryCount);
+    return response.data;
   } catch (error) {
     console.log(error);
     throw error;
@@ -99,20 +99,44 @@ export async function totalQueryCount() {
 
 export async function totalDashboardCount() {
   try {
-    const responce = await axios.get(endpoints.dashboard.totalDashboardCount);
-    return responce.data;
+    const response = await axios.get(endpoints.dashboard.totalDashboardCount);
+    return response.data;
   } catch (error) {
     console.log(error);
     throw error;
   }
 }
 // get total dashboard details
-export async function getDashboardResponce() {
+export async function getDashboardResponse() {
   try {
-    const responce = await axios.get(endpoints.dashboard.listOfDashboards);
-    return responce.data;
+    const response = await axios.get(endpoints.dashboard.listOfDashboards);
+    return response.data;
   } catch (error) {
-    const {message} = error
-   throw message;
+    const { message } = error;
+    throw message;
   }
+}
+// Delete a dashboard
+export async function deleteDashboardResponse(id: number) {
+  try {
+    await axios.delete(`${endpoints.dashboard.delete}/${id}`);
+  } catch (error) {
+    throw new Error('Unable to delete dashboard');
+  }
+}
+// Pin Dashboard
+export async function pinDashboardResponse(id: number) {
+  try {
+    await axios.patch(`${endpoints.dashboard.pin}/${id}`);
+  } catch (error) {
+    throw error(error);
+  }
+}
+// Get Pinned dashboards
+export async function pinnedDashboardsResponse(pageNo: number, isPinned: boolean) {
+  const response = await axios.get(
+    `${endpoints.dashboard.pinnedDashboards}?page=${pageNo}&limit=10&isPinned=${isPinned}`
+  );
+  console.log(response.data);
+  return response.data;
 }

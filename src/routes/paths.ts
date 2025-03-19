@@ -47,6 +47,7 @@ export const paths = {
     dashBoard: `${ROOTS.DASHBOARD}/dashboard`,
     queryBuilder: `${ROOTS.DASHBOARD}/query-builder`,
     settings: `${ROOTS.DASHBOARD}/settings`,
-    logut: `${ROOTS.DASHBOARD}/logut`,
+    logout: `${ROOTS.DASHBOARD}/logut`,
+    OpenDashboard: `${ROOTS.DASHBOARD}/dashboard/open-dashboard`,
   },
 };

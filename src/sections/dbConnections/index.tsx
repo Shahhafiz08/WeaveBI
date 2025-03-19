@@ -68,7 +68,7 @@ export default function DatabaseConnectionsView() {
     setOpen(false);
   };
   const [getData, setGetdata] = React.useState<fetchDataType[]>([]);
-  //
+
   const fetchData = async () => {
     try {
       const incomingData = await getDatabase();

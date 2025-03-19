@@ -2,9 +2,9 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
 
-import DatabaseConnectionsView from 'src/sections/dbConnections/dbConnections';
+import DatabaseConnectionsView from 'src/sections/dbConnections';
 
-const metadata = { title: `404 page not found! | Error - ${CONFIG.site.name}` };
+const metadata = { title: `Database connections - ${CONFIG.site.name}` };
 
 export default function Page() {
   return (

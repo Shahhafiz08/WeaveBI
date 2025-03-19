@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-import ScheduleIcon from '@mui/icons-material/Schedule';
 import { TabList, TabPanel, TabContext } from '@mui/lab';
 import { Tab, Grid, Stack, Typography } from '@mui/material';
 
@@ -8,7 +7,8 @@ import { primary } from 'src/theme/core';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { KeyPoints } from './components/keypoints-home';
-import DashboradList from './components/total-dashboards';
+import PinnedDashboardList from './components/pinned-dashboard-list';
+import RecentDashboardList from './components/recent-dashboard-list';
 import { totalQueryCount, totalDatabaseCount, totalDashboardCount } from './api/actions';
 
 // ----------------------------------------------------------------------
@@ -47,7 +47,6 @@ export default function HomeView() {
   getDatabaseCount();
   getQueryCount();
   getDashboardCount();
-  useEffect(() => {}, []);
 
   const user = 'Application User';
   const data = [
@@ -79,7 +78,7 @@ export default function HomeView() {
 
   return (
     <DashboardContent maxWidth="xl">
-      <Stack sx={{ height: '90vh' }}>
+      <Stack sx={{ height: '40vh' }}>
         <Typography variant="h3" fontWeight="bold" marginBottom="3%" color={primary.main}>
           Welcome, {user}
         </Typography>
@@ -92,17 +91,21 @@ export default function HomeView() {
             ))}
         </Grid>
       </Stack>
-      <TabContext value={value}>
-        <TabList onChange={handleChange}>
-          <Tab icon={ScheduleIcon} label=" Recent" value="1" />
-          <Tab label="Pinned" value="2" />
-        </TabList>
+      <Stack sx={{ height: '1000px' }}>
+        <TabContext value={value}>
+          <TabList onChange={handleChange}>
+            <Tab label=" Recent" value="1" />
+            <Tab label="Pinned" value="2" />
+          </TabList>
 
-        <TabPanel value="1">
-          <DashboradList />
-        </TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
-      </TabContext>
+          <TabPanel value="1">
+            <RecentDashboardList />
+          </TabPanel>
+          <TabPanel value="2">
+            <PinnedDashboardList />
+          </TabPanel>
+        </TabContext>
+      </Stack>
     </DashboardContent>
   );
 }

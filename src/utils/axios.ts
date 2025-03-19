@@ -65,13 +65,17 @@ export const endpoints = {
     count: '/database/count',
   },
   dashboard: {
-    listOfDashboards:'/dashboard',
+    listOfDashboards: '/dashboard',
     totalDashboardCount: '/dashboard/count',
+    delete: 'dashboard',
+    pin: 'dashboard/pin',
+    pinnedDashboards: '/dashboard',
+    info: 'dashboard/info',
   },
   query: {
     save: '/query',
     run: '/query/run',
     get: '/get',
-    totalQueryCount: '/query/count-executed',
+    totalQueryCount: '/query/count-database',
   },
 };
