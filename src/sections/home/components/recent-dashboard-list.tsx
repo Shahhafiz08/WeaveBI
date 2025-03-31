@@ -164,14 +164,14 @@ export default function RecentDashboardList() {
                   />
                 </StyledTableCell>
 
-                <StyledTableCell component="th" scope="data">
+                <StyledTableCell sx={{ width: '20%' }} component="th" scope="data">
                   <Link
                     className="open-dashboard"
                     style={{
                       textDecoration: 'none',
                       color: 'black',
                     }}
-                    to={paths.dashboard.OpenDashboard}
+                    to={paths.dashboard.OpenDashboard(data.id)}
                   >
                     {data.name}
                   </Link>

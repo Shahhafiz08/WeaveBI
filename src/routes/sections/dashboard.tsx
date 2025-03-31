@@ -6,7 +6,7 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import OpenDashboard from 'src/sections/Dashboards/components/open-dashboard';
+import OpenDashboard from 'src/sections/Dashboards/open-dashboard';
 
 import { AuthGuard } from 'src/auth/guard';
 
@@ -43,7 +43,7 @@ export const dashboardRoutes = [
         element: <Dashboard />,
       },
       {
-        path: paths.dashboard.OpenDashboard,
+        path: `${paths.dashboard.dashBoard}/:id`,
         element: <OpenDashboard />,
       },
       { path: paths.dashboard.queryBuilder, element: <QueryBuilder /> },
