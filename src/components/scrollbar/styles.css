@@ -1,4 +1,6 @@
 @import 'simplebar-react/dist/simplebar.min.css';
+@import '/node_modules/react-grid-layout/css/styles.css';
+@import '/node_modules/react-resizable/css/styles.css';
 
 .simplebar-scrollbar:before {
   background-color: var(--palette-text-disabled);

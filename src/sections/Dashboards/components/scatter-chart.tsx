@@ -8,6 +8,8 @@ import {
   Chart as ChartJS,
 } from 'chart.js';
 
+import { Paper, Typography } from '@mui/material';
+
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 type incommingDataType = {
   chartData: Array<{
@@ -15,10 +17,13 @@ type incommingDataType = {
     data: Array<{ x: string; y: string }>;
   }>;
   backgroundcolor: Array<string>;
+  queryId: number;
+  title: string;
 };
 
-export const ScatterChart = ({ chartData, backgroundcolor }: incommingDataType) => {
+export const ScatterChart = ({ queryId, title, chartData, backgroundcolor }: incommingDataType) => {
   const options = {
+    maintainAspectRatio: true,
     scales: {
       y: {
         beginAtZero: true,
@@ -29,7 +34,7 @@ export const ScatterChart = ({ chartData, backgroundcolor }: incommingDataType) 
     datasets: chartData.map((chart) => ({
       label: chart.label,
       data: chart.data.map((item) => ({
-        x: item.y,
+        x: item.x,
         y: item.y,
       })),
       backgroundColor: backgroundcolor,
@@ -37,7 +42,12 @@ export const ScatterChart = ({ chartData, backgroundcolor }: incommingDataType) 
     })),
   };
 
-  return <Scatter data={data} options={options} />;
+  return (
+    <Paper key={queryId} sx={{ textAlign: 'start', p: 3, borderRadius: 2 }}>
+      <Typography gutterBottom>{title}</Typography>
+      <Scatter data={data} options={options} />
+    </Paper>
+  );
 };
 
 export default ScatterChart;

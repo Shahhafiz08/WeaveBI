@@ -10,18 +10,23 @@ import {
   Chart as ChartJS,
 } from 'chart.js';
 
+import { Paper, Typography } from '@mui/material';
+
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 type incommingDataType = {
   datasetLabel?: string;
   labels: Array<string>;
   values: Array<number>;
   backgroundcolor: Array<string>;
+  title: string;
+  queryId: number;
 };
 
 export const LineChart = ({
   labels,
   values,
-
+  title,
+  queryId,
   datasetLabel,
   backgroundcolor,
 }: incommingDataType) => {
@@ -49,5 +54,14 @@ export const LineChart = ({
     ],
   };
 
-  return <Line options={options} data={data} />;
+  return (
+    <Paper
+      key={queryId}
+      elevation={2}
+      sx={{ textAlign: 'start', p: 3, borderRadius: 2, height: '100%' }}
+    >
+      <Typography gutterBottom>{title}</Typography>
+      <Line options={options} data={data} />;
+    </Paper>
+  );
 };

@@ -9,30 +9,35 @@ import {
   Chart as ChartJS,
 } from 'chart.js';
 
+import { Paper, Typography } from '@mui/material';
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 type incommingDataType = {
   chartData: Array<string>;
   labels: Array<string>;
-
+  title: string;
+  queryId: number;
   backgroundcolor: Array<string>;
 };
 
 export const BarChart = ({
   labels,
   chartData,
+  queryId,
+  title,
 
   backgroundcolor,
 }: incommingDataType) => {
-
   const options = {
+    maintainAspectRatio: false,
     responsive: true,
-    plugins: {
-      legend: {
-        position: 'top' as const,
-      },
-      title: {
-        display: true,
+    layout: {
+      padding: {
+        top: 10,
+        bottom: 40,
+        left: 10,
+        right: 10,
       },
     },
   };
@@ -45,14 +50,21 @@ export const BarChart = ({
       backgroundColor: backgroundcolor,
       borderColor: backgroundcolor,
     })),
-
-    // [
-    //   {
-    //     label: datasetLabel,
-    //     data: values,
-    //     backgroundColor: backgroundcolor,
-    //   },
-    // ],
   };
-  return <Bar data={data} options={options} />;
+  return (
+    <Paper
+      key={queryId}
+      elevation={2}
+      sx={{
+        width: '100%',
+        textAlign: 'start',
+        p: 3,
+        borderRadius: 2,
+        height: '100%',
+      }}
+    >
+      <Typography>{title}</Typography>
+      <Bar data={data} options={options} />
+    </Paper>
+  );
 };

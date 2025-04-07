@@ -6,7 +6,7 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import OpenDashboard from 'src/sections/Dashboards/open-dashboard';
+import OpenDashboard from 'src/sections/Dashboards/dashboard';
 
 import { AuthGuard } from 'src/auth/guard';
 

@@ -128,3 +128,10 @@ export const merge = (target: any, ...sources: any[]): any => {
 
   return merge(target, ...sources);
 };
+
+export const truncateString = (str: string, len: number) => {
+  if (str.length > 20) {
+    return `${str.slice(0, len)}...`;
+  }
+  return str;
+};

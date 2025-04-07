@@ -1,13 +1,17 @@
 import { Pie } from 'react-chartjs-2';
 import { Legend, Tooltip, ArcElement, Chart as ChartJS } from 'chart.js';
 
+import { Paper, Typography } from '@mui/material';
+
 ChartJS.register(ArcElement, Tooltip, Legend);
-type incommingDataType = {
+
+type IncommingDataType = {
   title?: string;
   datasetLabel?: string;
   labelss: Array<string>;
   values: Array<number>;
   backgroundcolor: Array<string>;
+  queryId: number;
 };
 
 export const PieChart = ({
@@ -16,7 +20,8 @@ export const PieChart = ({
   values,
   datasetLabel,
   backgroundcolor,
-}: incommingDataType) => {
+  queryId,
+}: IncommingDataType) => {
   const data = {
     labels: labelss,
     datasets: [
@@ -30,5 +35,43 @@ export const PieChart = ({
     ],
   };
 
-  return <Pie data={data} />;
+  const options = {
+    maintainAspectRatio: false,
+    responsive: true,
+    layout: {
+      padding: {
+        top: 1,
+        bottom: 1,
+        left: 10,
+        right: 10,
+      },
+    },
+
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+    },
+  };
+
+  return (
+    <Paper
+      key={queryId}
+      elevation={2}
+      sx={{
+        textAlign: 'start',
+        p: 3,
+        borderRadius: 2,
+        height: '100%',
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'column',
+      }}
+    >
+      <Typography gutterBottom>{title}</Typography>
+      <div style={{ flexGrow: 1, position: 'relative' }}>
+        <Pie data={data} options={options} />
+      </div>
+    </Paper>
+  );
 };
