@@ -1,6 +1,4 @@
 import { useParams } from 'react-router';
-import { Responsive, WidthProvider } from 'react-grid-layout';
-// import { Responsive, WidthProvider } from 'react-grid-layout';
 import {
   Title,
   Legend,
@@ -14,7 +12,7 @@ import {
   Chart as ChartJS,
 } from 'chart.js';
 
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { DashboardContent } from 'src/layouts/dashboard';
 
@@ -22,6 +20,7 @@ import Tabular from './components/tabular';
 import { BarChart } from './components/bar-chart';
 import { PieChart } from './components/pie-chart';
 import Descriptive from './components/descriptive';
+import SingeValue from './components/signle-value';
 import { LineChart } from './components/line-chart';
 import { ScatterChart } from './components/scatter-chart';
 import { StackedChart } from './components/stacked-chart';
@@ -56,9 +55,24 @@ ChartJS.register(
 
 const Dashboard = () => {
   const { id } = useParams();
-  const ResponsiveGridLayout = WidthProvider(Responsive);
 
-  const { chartColors, dashboardData, errors, loading } = useDashboardDetails({ id: id as string });
+  const {
+    chartColors,
+    dashboardData,
+    errors,
+    editDashboard,
+    edit,
+    loading,
+    handleClose,
+    anchorRef,
+    handleToggle,
+    open,
+    renderableQueries,
+    layouts,
+    ResponsiveGridLayout,
+  } = useDashboardDetails({
+    id: id as string,
+  });
 
   const renderChart = (query: any) => {
     if (!query.data) {
@@ -75,36 +89,7 @@ const Dashboard = () => {
     // for singleValue
 
     if (query.outputType.toLowerCase() === 'singlevalue') {
-      return (
-        <Stack
-          sx={{
-            width: '100%',
-            height: '100%',
-            textAlign: 'start',
-            p: 3,
-            borderRadius: 2,
-            bgcolor: 'white',
-          }}
-        >
-          <Typography sx={{ marginBottom: '15px' }}>{query.name}</Typography>
-
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              mt: 2,
-              p: 2,
-              bgcolor: '#F5F5F5',
-
-              borderRadius: 1,
-            }}
-          >
-            <Typography color="primary" variant="h1">
-              {Object.values(query.data[0])}
-            </Typography>
-          </Box>
-        </Stack>
-      );
+      return <SingeValue qeryName={query.name} queryData={query.data} />;
     }
     // For tabular data
     if (
@@ -209,46 +194,7 @@ const Dashboard = () => {
     return <Typography color="error">{errors}</Typography>;
   }
 
-  const renderableQueries = dashboardData?.queries.filter(
-    (query: { data: any; outputType: string }) =>
-      query.data &&
-      (query.outputType.toLowerCase() === 'tabular' ||
-        query.outputType.toLowerCase() === 'descriptive' ||
-        query.outputType.toLowerCase() === 'singlevalue' ||
-        (query.data.graph_type &&
-          ['bar', 'pie', 'line', 'stacked', 'scatter', 'doughnut', 'singleValue'].includes(
-            query.data.graph_type.toLowerCase()
-          )))
-  );
-  const chartLayoutConfig: Record<string, { w?: number; h?: number }> = {
-    bar: { w: 12, h: 6 },
-    'scatter plot': { w: 22, h: 6 },
-    pie: { w: 15, h: 7 },
-    doughnut: { w: 15, h: 7 },
-    line: { w: 16, h: 4 },
-    Stacked: { w: 22, h: 5 },
-    tabular: { w: 30, h: 7 },
-    descriptive: { w: 14, h: 5 },
-    singlevalue: { w: 8, h: 4 },
-  };
-  const layouts = {
-    lg:
-      renderableQueries?.map((query: any, index: number) => {
-        const { w, h } = chartLayoutConfig[query.outputType.toLowerCase().trim()] || {
-          w: 15,
-          h: 6,
-        };
-        const perRow = Math.floor(50 / 15);
-
-        return {
-          i: query.id.toString(),
-          x: (index % perRow) * 15,
-          y: Math.floor(index / perRow) * 6,
-          w,
-          h,
-        };
-      }) || [],
-  };
+  // Initial sizes of the charts
 
   return (
     <DashboardContent
@@ -258,7 +204,15 @@ const Dashboard = () => {
         backgroundColor: '#f2f2f2',
       }}
     >
-      <DashboardHeader renderableQueries={renderableQueries} dashboardData={dashboardData?.name} />
+      <DashboardHeader
+        anchorRef={anchorRef}
+        editDashboard={editDashboard}
+        handleClose={handleClose}
+        handleToggle={handleToggle}
+        open={open}
+        renderableQueries={renderableQueries}
+        dashboardData={dashboardData?.name}
+      />
 
       <ResponsiveGridLayout
         className="layout"
@@ -266,8 +220,11 @@ const Dashboard = () => {
         cols={{ lg: 50, md: 50, sm: 16, xs: 10 }}
         rowHeight={50}
         autoSize
-        isDraggable
-        isResizable
+        isDraggable={edit}
+        isResizable={edit}
+        onLayoutChange={(currentLayout) => {
+          console.log('Updated Layout:', currentLayout);
+        }}
       >
         {renderableQueries?.map((query: any, index: number) => (
           <div key={query.id.toString()} data-grid={layouts.lg[index]}>
