@@ -2,6 +2,8 @@ import 'src/global.css';
 
 // ----------------------------------------------------------------------
 
+import { ToastContainer } from 'react-toastify';
+
 import { Router } from 'src/routes/sections';
 
 import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
@@ -25,6 +27,7 @@ export default function App() {
         <ThemeProvider>
           <MotionLazy>
             <ProgressBar />
+            <ToastContainer autoClose={3000} pauseOnHover={false} />
             <SettingsDrawer />
             <Router />
           </MotionLazy>

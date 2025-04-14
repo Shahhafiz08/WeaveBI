@@ -103,3 +103,14 @@ input[type='number']::-webkit-inner-spin-button {
 .open-dashboard:hover {
   font-weight: 600;
 }
+.spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}

@@ -2,6 +2,7 @@ import { Pie } from 'react-chartjs-2';
 import { Legend, Tooltip, ArcElement, Chart as ChartJS } from 'chart.js';
 
 import { Paper, Typography } from '@mui/material';
+import QueryOptions from './query-options';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -36,7 +37,7 @@ export const PieChart = ({
   };
 
   const options = {
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     responsive: true,
     layout: {
       padding: {
@@ -68,7 +69,10 @@ export const PieChart = ({
         flexDirection: 'column',
       }}
     >
-      <Typography gutterBottom>{title}</Typography>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography style={{ display: 'inline' }}>{title}</Typography>
+        <QueryOptions queryId={queryId} />
+      </div>
       <div style={{ flexGrow: 1, position: 'relative' }}>
         <Pie data={data} options={options} />
       </div>

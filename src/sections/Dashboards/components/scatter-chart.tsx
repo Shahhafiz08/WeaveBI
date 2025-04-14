@@ -10,6 +10,8 @@ import {
 
 import { Paper, Typography } from '@mui/material';
 
+import QueryOptions from './query-options';
+
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 type incommingDataType = {
   chartData: Array<{
@@ -44,7 +46,10 @@ export const ScatterChart = ({ queryId, title, chartData, backgroundcolor }: inc
 
   return (
     <Paper key={queryId} sx={{ textAlign: 'start', p: 3, borderRadius: 2 }}>
-      <Typography gutterBottom>{title}</Typography>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography style={{ display: 'inline' }}>{title}</Typography>
+        <QueryOptions queryId={queryId} />
+      </div>
       <Scatter data={data} options={options} />
     </Paper>
   );

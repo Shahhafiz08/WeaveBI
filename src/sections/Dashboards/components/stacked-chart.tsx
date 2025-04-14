@@ -10,6 +10,7 @@ import {
 } from 'chart.js';
 
 import { Paper, Typography } from '@mui/material';
+import QueryOptions from './query-options';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -62,7 +63,10 @@ export const StackedChart = ({
         borderRadius: 2,
       }}
     >
-      <Typography>{title}</Typography>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography style={{ display: 'inline' }}>{title}</Typography>
+        <QueryOptions queryId={queryId} />
+      </div>
 
       <Bar data={data} options={options} />
     </Paper>

@@ -11,6 +11,7 @@ import {
 } from 'chart.js';
 
 import { Paper, Typography } from '@mui/material';
+import QueryOptions from './query-options';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 type incommingDataType = {
@@ -60,7 +61,11 @@ export const LineChart = ({
       elevation={2}
       sx={{ textAlign: 'start', p: 3, borderRadius: 2, height: '100%' }}
     >
-      <Typography gutterBottom>{title}</Typography>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography style={{ display: 'inline' }}>{title}</Typography>
+        <QueryOptions queryId={queryId} />
+      </div>
+
       <Line options={options} data={data} />;
     </Paper>
   );

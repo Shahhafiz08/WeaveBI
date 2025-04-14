@@ -71,11 +71,15 @@ export const endpoints = {
     pin: 'dashboard/pin',
     pinnedDashboards: '/dashboard',
     info: 'dashboard/info',
+    positions: 'dashboard/position',
   },
   query: {
     save: '/query',
     run: '/query/run',
     get: '/get',
     totalQueryCount: '/query/count-database',
+    runAllQueriesAgain: 'query/sync',
+    downloadCharts: '/query/download-json/',
+    downloadTabular: '/query/download-csv/',
   },
 };

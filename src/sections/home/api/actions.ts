@@ -137,6 +137,6 @@ export async function pinnedDashboardsResponse(pageNo: number, isPinned: boolean
   const response = await axios.get(
     `${endpoints.dashboard.pinnedDashboards}?page=${pageNo}&limit=10&isPinned=${isPinned}`
   );
-  console.log(response.data);
+
   return response.data;
 }

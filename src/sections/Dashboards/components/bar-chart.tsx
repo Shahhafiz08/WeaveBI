@@ -11,6 +11,8 @@ import {
 
 import { Paper, Typography } from '@mui/material';
 
+import QueryOptions from './query-options';
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 type incommingDataType = {
@@ -63,7 +65,11 @@ export const BarChart = ({
         height: '100%',
       }}
     >
-      <Typography>{title}</Typography>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography style={{ display: 'inline' }}>{title}</Typography>
+        <QueryOptions queryId={queryId} />
+      </div>
+
       <Bar data={data} options={options} />
     </Paper>
   );

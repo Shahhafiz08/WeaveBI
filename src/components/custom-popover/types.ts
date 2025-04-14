@@ -20,7 +20,8 @@ export type PopoverArrow = {
     | 'left-bottom'
     | 'right-top'
     | 'right-center'
-    | 'right-bottom';
+    | 'right-bottom'
+    | 'bottom-bottom';
 };
 
 export type UsePopoverReturn = {
