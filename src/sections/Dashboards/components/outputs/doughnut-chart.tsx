@@ -11,7 +11,8 @@ import {
 } from 'chart.js';
 
 import { Paper, Typography } from '@mui/material';
-import QueryOptions from './query-options';
+
+import QueryOptions from '../query-options';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -64,9 +65,9 @@ export const DoughnutChart = ({
     <Paper key={queryId} elevation={2} sx={{ textAlign: 'start', p: 3, borderRadius: 2 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline' }}>{title}</Typography>
-        <QueryOptions queryId={queryId} />
+        <QueryOptions title={title} queryId={queryId} />
       </div>
-  
+
       <Doughnut options={options} data={data} />
     </Paper>
   );

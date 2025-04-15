@@ -1,53 +1,32 @@
 import React from 'react';
 
-import { Paper, Button, MenuItem, MenuList, ClickAwayListener } from '@mui/material';
+import { Paper, Button, Drawer, MenuItem, MenuList, ClickAwayListener } from '@mui/material';
 
 import { Iconify } from 'src/components/iconify';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
-import useDashboardDetails from '../hooks/dashboard-details';
-import { downloadChartData, downloadTabularData } from '../api/actions';
+import { Insights } from './insights';
+import { useInsights } from '../hooks/insight-hook';
 
-const QueryOptions = ({ queryId, querytype }: { queryId: number; querytype?: string }) => {
+const QueryOptions = ({
+  title,
+  queryId,
+  querytype,
+}: {
+  title?: string;
+  queryId: number;
+  querytype?: string;
+}) => {
   const popover = usePopover();
- 
-  const { anchorRef } = useDashboardDetails({});
 
-  const downloadQueryData = async () => {
-    function convertToFile(blob: any) {
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `query_data-${queryId}`;
-      document.body.appendChild(a);
-      a.click();
-
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-    try {
-      if (querytype === 'tabular') {
-        const downloadTabular = await downloadTabularData(queryId);
-        const blob = new Blob([downloadTabular], {
-          type: 'text/csv',
-        });
-        convertToFile(blob);
-      } else {
-        const downloadChart = await downloadChartData(queryId);
-        const blob = new Blob([JSON.stringify(downloadChart)], {
-          type: 'application/json',
-        });
-        convertToFile(blob);
-      }
-    } catch (error) {
-      alert('Download failed');
-    }
-  };
+  const { showInsights, downloadQueryData, toggleDrawer, open, insights, loading } = useInsights(
+    queryId,
+    querytype as string
+  );
 
   return (
     <>
-      <Button type="button" ref={anchorRef} onClick={popover.onOpen}>
+      <Button type="button" onClick={popover.onOpen}>
         <Iconify icon="uil:ellipsis-v" />
       </Button>
 
@@ -72,8 +51,8 @@ const QueryOptions = ({ queryId, querytype }: { queryId: number; querytype?: str
               </MenuItem>
               <MenuItem
                 onClick={() => {
-          
-
+                  showInsights(queryId);
+                  toggleDrawer(true);
                   popover.onClose();
                 }}
               >
@@ -92,6 +71,9 @@ const QueryOptions = ({ queryId, querytype }: { queryId: number; querytype?: str
           </ClickAwayListener>
         </Paper>
       </CustomPopover>
+      <Drawer anchor="right" open={open} onClose={() => toggleDrawer(false)}>
+        <Insights queryId={queryId} loading={loading} showInsights={showInsights} title={title} insights={insights} />
+      </Drawer>
     </>
   );
 };

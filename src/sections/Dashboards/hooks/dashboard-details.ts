@@ -13,6 +13,7 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
   const [edit, setEdit] = useState(false);
   const [renderableQueries, setRenderableQueries] = useState<any[]>([]);
   const gridContainerRef = useRef<HTMLDivElement | null>(null);
+  
 
   const chartColors = [
     'rgba(84, 133, 135, 0.8)',
@@ -73,7 +74,7 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
       fetchDashboardInfo();
     }
   }, [id, fetchDashboardInfo]);
-
+  
   // Intitial size of charts
   const chartLayoutConfig: Record<
     string,
@@ -92,7 +93,7 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
     }),
     []
   );
-
+  // layout design
   const layouts = {
     lg:
       renderableQueries?.map((query: any, index: number) => {
@@ -112,7 +113,6 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
         };
       }) || [],
   };
-
   const ResponsiveGridLayout = WidthProvider(Responsive);
 
   return {
@@ -126,7 +126,7 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
     refreshDashboardQueries,
     setLoading,
     setOpen,
-    gridContainerRef,
+gridContainerRef,
     saveDashboard,
     editDashboard,
     edit,
@@ -134,6 +134,7 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
     fetchDashboardInfo,
     layouts,
     ResponsiveGridLayout,
+
   };
 };
 

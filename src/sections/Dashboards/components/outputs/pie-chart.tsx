@@ -2,7 +2,8 @@ import { Pie } from 'react-chartjs-2';
 import { Legend, Tooltip, ArcElement, Chart as ChartJS } from 'chart.js';
 
 import { Paper, Typography } from '@mui/material';
-import QueryOptions from './query-options';
+
+import QueryOptions from '../query-options';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -71,7 +72,7 @@ export const PieChart = ({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline' }}>{title}</Typography>
-        <QueryOptions queryId={queryId} />
+        <QueryOptions title={title} queryId={queryId} />
       </div>
       <div style={{ flexGrow: 1, position: 'relative' }}>
         <Pie data={data} options={options} />

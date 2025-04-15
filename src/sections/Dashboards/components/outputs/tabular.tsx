@@ -13,7 +13,7 @@ import {
 
 import { truncateString } from 'src/utils/helper';
 
-import QueryOptions from './query-options';
+import QueryOptions from '../query-options';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,12 +34,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 const Tabular = ({
+  title,
   queryGraphData,
   queryid,
   queryName,
   queryData,
   heading,
 }: {
+  title: string;
   queryGraphData: string;
   queryid: number;
   queryName: string;
@@ -50,7 +52,7 @@ const Tabular = ({
     <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
       <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline' }}>{queryName}</Typography>
-        <QueryOptions querytype={queryGraphData} queryId={queryid} />
+        <QueryOptions querytype={queryGraphData} queryId={queryid} title={title} />
       </div>
       <TableContainer sx={{ position: 'relative' }} component={Paper}>
         <Table sx={{ width: '100%' }}>

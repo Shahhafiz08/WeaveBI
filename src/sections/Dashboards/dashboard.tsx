@@ -19,17 +19,17 @@ import { DashboardContent } from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import Tabular from './components/tabular';
-import { BarChart } from './components/bar-chart';
-import { PieChart } from './components/pie-chart';
-import Descriptive from './components/descriptive';
-import SingeValue from './components/signle-value';
-import { LineChart } from './components/line-chart';
-import { ScatterChart } from './components/scatter-chart';
-import { StackedChart } from './components/stacked-chart';
-import { DoughnutChart } from './components/doughnut-chart';
+import Tabular from './components/outputs/tabular';
+import { PieChart } from './components/outputs/pie-chart';
+import { BarChart } from './components/outputs/bar-chart';
+import Descriptive from './components/outputs/descriptive';
+import SingeValue from './components/outputs/signle-value';
+import { LineChart } from './components/outputs/line-chart';
 import useDashboardDetails from './hooks/dashboard-details';
 import DashboardHeader from './components/dashboard-header';
+import { StackedChart } from './components/outputs/stacked-chart';
+import { ScatterChart } from './components/outputs/scatter-chart';
+import { DoughnutChart } from './components/outputs/doughnut-chart';
 
 export interface Query {
   id: number;
@@ -80,16 +80,12 @@ const Dashboard = () => {
       if (!query.data) {
         return null;
       }
-
       const _heading = Array.isArray(query.data) ? Object.keys(query.data[0]) : [];
-
       // for descriptive
       if (query.outputType.toLowerCase() === 'descriptive') {
         return <Descriptive queryid={query.id} queryName={query.name} queryData={query.data} />;
       }
-
       // for singleValue
-
       if (query.outputType.toLowerCase() === 'singlevalue') {
         return <SingeValue qeryName={query.name} queryData={query.data} />;
       }
@@ -100,6 +96,7 @@ const Dashboard = () => {
       ) {
         return (
           <Tabular
+            title={query.title}
             queryGraphData={query.outputType}
             queryData={query.data}
             queryName={query.name}
@@ -225,7 +222,7 @@ const Dashboard = () => {
           isDraggable={edit}
           isResizable={edit}
           onLayoutChange={(currentLayout) => {
-            console.log('Updated Layout:', currentLayout);
+            // console.log('Updated Layout:', currentLayout);
           }}
         >
           {renderableQueries?.map((query: any, index: number) => (

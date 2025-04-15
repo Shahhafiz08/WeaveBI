@@ -35,6 +35,18 @@ export const downloadTabularData = async (id: number) => {
   const response = await axios.get(`${endpoints.query.downloadTabular}${id}`);
   return response.data;
 };
+// generate query insights
+export const generateQueryInsights = async (
+  id: number,
+  browseOnline?: boolean,
+  customInstructions?: string
+) => {
+  const response = await axios.get(
+    `${endpoints.query.insights}/${id}?search=${browseOnline ?? null}&customInstructions=${customInstructions ?? null}`
+  );
+
+  return response.data;
+};
 
 // Update query positions.
 export const updateQueryPosition = async ({
@@ -57,7 +69,7 @@ export const updateQueryPosition = async ({
 
     return response.data;
   } catch (error) {
-    console.error('Error updating query position:', error);
-    throw error;
+    alert(error);
   }
+  return null;
 };

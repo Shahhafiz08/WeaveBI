@@ -81,5 +81,6 @@ export const endpoints = {
     runAllQueriesAgain: 'query/sync',
     downloadCharts: '/query/download-json/',
     downloadTabular: '/query/download-csv/',
+    insights: 'query/insights',
   },
 };
