@@ -1,8 +1,8 @@
 import axios, { endpoints } from 'src/utils/axios';
 
 type DashboardPosition = {
-  dashboardId: number;
-  queryId: number;
+  dashboardId: string;
+  queryId: string;
   x: number;
   y: number;
   z: number;
@@ -48,7 +48,7 @@ export const generateQueryInsights = async (
   return response.data;
 };
 
-// Update query positions.
+// Update query positions
 export const updateQueryPosition = async ({
   dashboardId,
   queryId,
@@ -57,19 +57,17 @@ export const updateQueryPosition = async ({
   z,
   h,
 }: DashboardPosition) => {
-  try {
-    const response = await axios.put(endpoints.dashboard.positions, {
-      dashboardId,
-      queryId,
-      x,
-      y,
-      z,
-      h,
-    });
-
-    return response.data;
-  } catch (error) {
-    alert(error);
-  }
-  return null;
+  const response = await axios.put(endpoints.dashboard.positions, {
+    positions: [
+      {
+        dashboardId: +dashboardId,
+        queryId: +queryId,
+        x,
+        y,
+        z,
+        h,
+      },
+    ],
+  });
+  return response?.data;
 };

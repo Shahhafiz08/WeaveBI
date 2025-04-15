@@ -30,7 +30,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
     id,
   });
 
-  // eslint-disable-next-line consistent-return
+
 
   const dashboardName = dashboardData?.name || '';
 

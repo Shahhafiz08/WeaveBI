@@ -20,10 +20,11 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { LoadingScreen } from 'src/components/loading-screen';
 
 import Tabular from './components/outputs/tabular';
+import SingeValue from './components/signle-value';
+import { updateQueryPosition } from './api/actions';
 import { PieChart } from './components/outputs/pie-chart';
 import { BarChart } from './components/outputs/bar-chart';
 import Descriptive from './components/outputs/descriptive';
-import SingeValue from './components/outputs/signle-value';
 import { LineChart } from './components/outputs/line-chart';
 import useDashboardDetails from './hooks/dashboard-details';
 import DashboardHeader from './components/dashboard-header';
@@ -66,6 +67,7 @@ const Dashboard = () => {
     loading,
     renderableQueries,
     layouts,
+    setEdit,
     editDashboard,
     refreshDashboardQueries,
     refreshLoading,
@@ -75,6 +77,27 @@ const Dashboard = () => {
     id: id as string,
   });
 
+  async function saveDashboardPositon({
+    dashboardId,
+    queryId,
+    x,
+    y,
+    z,
+    h,
+  }: {
+    dashboardId: string;
+    queryId: string;
+    x: number;
+    y: number;
+    z: number;
+    h: number;
+  }) {
+    setEdit(false);
+    const response = await updateQueryPosition({ dashboardId, queryId, x, y, z, h });
+    return response;
+  }
+
+  // Render chart
   const renderChart = useCallback(
     (query: any) => {
       if (!query.data) {
@@ -222,7 +245,18 @@ const Dashboard = () => {
           isDraggable={edit}
           isResizable={edit}
           onLayoutChange={(currentLayout) => {
-            // console.log('Updated Layout:', currentLayout);
+            currentLayout.map((chart) => {
+              saveDashboardPositon({
+                h: chart.h,
+                x: chart.x,
+                y: chart.y,
+                z: chart.w,
+                queryId: chart.i,
+                dashboardId: id,
+              });
+              return null;
+            });
+            return null;
           }}
         >
           {renderableQueries?.map((query: any, index: number) => (
