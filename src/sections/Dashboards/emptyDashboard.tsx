@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Grid, Stack, Button, Typography } from '@mui/material';
 
 const EmptyDashboard = () => (

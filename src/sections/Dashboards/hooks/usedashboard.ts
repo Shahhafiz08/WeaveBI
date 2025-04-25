@@ -2,9 +2,9 @@ import { toast } from 'react-toastify';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import React, { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 
-import { getDashboardInfo, parallellyRunAllQueries } from '../api/actions';
+import { getDashboardInfo, updateQueryPosition, parallellyRunAllQueries } from '../api/actions';
 
-const useDashboardDetails = ({ id }: { id?: string | number }) => {
+const useDashboardDetails = (id: string | number) => {
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [refreshLoading, setRefreshLoading] = useState(false);
@@ -15,18 +15,19 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
   const gridContainerRef = useRef<HTMLDivElement | null>(null);
 
   const chartColors = [
-    'rgba(84, 133, 135, 0.8)',
-    'rgba(235, 100, 119, 0.8)',
-    'rgba(242, 200, 92, 0.8)',
-    'rgba(84, 133, 135, 0.5)',
-    'rgba(235, 100, 120, 0.5)',
-    'rgba(242, 200, 92, 0.5)',
+    '#253f69',
+    '#DDE3EF',
+    '#B8C7DF',
+    '#92AACF',
+    '#6C8EBF',
+    '#4771AF',
+    '#325F9F',
+    '#2C548F',
+    '#274A80',
+    '#213F70',
   ];
   function editDashboard() {
     setEdit(true);
-  }
-  function saveDashboard() {
-    setEdit(false);
   }
   // fetch dashboard data
   const fetchDashboardInfo = useCallback(async () => {
@@ -34,7 +35,6 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
       setLoading(true);
       const response = await getDashboardInfo(id as unknown as string);
       setDashboardData(response);
-
       const _renderableQueries = response?.queries.filter(
         (query: { data: any; outputType: string }) =>
           query.data &&
@@ -61,8 +61,7 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
       await fetchDashboardInfo();
       toast.success('Dashboard refreshed');
     } catch (err) {
-      toast.error('Something went wrong');
-      console.log(err);
+      toast.error(err);
     } finally {
       setRefreshLoading(false);
     }
@@ -72,7 +71,7 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
     if (id) {
       fetchDashboardInfo();
     }
-  }, [id, fetchDashboardInfo]);
+  }, [fetchDashboardInfo, id]);
 
   // Intitial size of charts
   const chartLayoutConfig: Record<
@@ -113,8 +112,34 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
       }) || [],
   };
   const ResponsiveGridLayout = WidthProvider(Responsive);
+  const layout = useRef<any[]>([]);
+  // Save dashboard positions
+  const saveLayout = useCallback(async () => {
+    const promises = layout.current.map((position) => {
+      const { i, x, y, w, h } = position;
+
+      return updateQueryPosition({
+        dashboardId: id,
+        queryId: i,
+        x,
+        y,
+        z: w,
+        h,
+      });
+    });
+
+    try {
+      await Promise.all(promises);
+      setEdit(false);
+      fetchDashboardInfo();
+      toast.success('Dashboard saved sucessfully');
+    } catch (error) {
+      toast.error('Failed to save dashboard');
+    }
+  }, [fetchDashboardInfo, id, setEdit]);
 
   return {
+    saveLayout,
     setEdit,
     refreshLoading,
     chartColors,
@@ -122,13 +147,12 @@ const useDashboardDetails = ({ id }: { id?: string | number }) => {
     setDashboardData,
     loading,
     anchorRef,
+    layout,
     open,
     refreshDashboardQueries,
     setLoading,
     setOpen,
-
     gridContainerRef,
-    saveDashboard,
     editDashboard,
     edit,
     renderableQueries,

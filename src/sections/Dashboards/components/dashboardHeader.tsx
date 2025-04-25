@@ -6,33 +6,28 @@ import { Iconify } from 'src/components/iconify';
 import { StyledArrow } from 'src/components/custom-popover/styles';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
-import useDashboardDetails from '../hooks/dashboard-details';
-
 type DashboardProps = {
   id: string | number;
   edit?: boolean;
   editDashboard: () => void;
-  saveDashboard: () => void;
+  dashboardName: string;
   refreshLoading: boolean;
   refreshDashboardQueries: () => void;
+  saveLayout: () => void;
+  renderableQueries: any[];
 };
 
 const DashboardHeader: React.FC<DashboardProps> = ({
+  dashboardName,
   id,
+  saveLayout,
   edit,
   editDashboard,
   refreshLoading,
-  saveDashboard,
+  renderableQueries,
   refreshDashboardQueries,
 }) => {
   const popover = usePopover();
-  const { dashboardData, renderableQueries, anchorRef } = useDashboardDetails({
-    id,
-  });
-
-
-
-  const dashboardName = dashboardData?.name || '';
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -46,7 +41,9 @@ const DashboardHeader: React.FC<DashboardProps> = ({
         <div style={{ marginTop: '10px' }}>
           {edit ? (
             <Button
-              onClick={saveDashboard}
+              onClick={() => {
+                saveLayout();
+              }}
               type="button"
               variant="contained"
               sx={{
@@ -83,7 +80,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
             <Iconify icon="ic:baseline-autorenew" className={`${refreshLoading ? 'spin' : ''}`} />
           </Button>
 
-          <Button type="button" ref={anchorRef} onClick={popover.onOpen}>
+          <Button type="button" onClick={popover.onOpen}>
             <Iconify icon="uil:ellipsis-v" />
           </Button>
 

@@ -84,8 +84,8 @@ export default function HomeView() {
         </Typography>
         <Grid container direction="row">
           {data &&
-            data.map((card) => (
-              <Grid item xs={8} md={3}>
+            data.map((card, index) => (
+              <Grid key={index} item xs={8} md={3}>
                 <KeyPoints total={card.total} image={card.image} title={card.title} />
               </Grid>
             ))}

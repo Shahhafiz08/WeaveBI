@@ -1,8 +1,8 @@
 import axios, { endpoints } from 'src/utils/axios';
 
 type DashboardPosition = {
-  dashboardId: string;
-  queryId: string;
+  dashboardId: any;
+  queryId:  number;
   x: number;
   y: number;
   z: number;
@@ -71,3 +71,9 @@ export const updateQueryPosition = async ({
   });
   return response?.data;
 };
+// delete a query 
+export const deleteQuery = async (queryId: number) => {
+  const responce = await axios.delete(`${endpoints.query.delete}/${queryId}`)
+  return responce;
+  
+}

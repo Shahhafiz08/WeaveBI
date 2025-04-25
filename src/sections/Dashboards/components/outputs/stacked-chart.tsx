@@ -12,6 +12,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
+import { useColorPicker } from '../../hooks/useColorPicker';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -30,6 +31,8 @@ export const StackedChart = ({
   chartData,
   backgroundcolor,
 }: IncommingDataType) => {
+  const { titleColor, setTitleColor } = useColorPicker();
+
   const options = {
     maintainAspectRatio: false,
     responsive: true,
@@ -66,7 +69,7 @@ export const StackedChart = ({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline' }}>{title}</Typography>
-        <QueryOptions title={title} queryId={queryId} />
+        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
       </div>
 
       <Bar data={data} options={options} />

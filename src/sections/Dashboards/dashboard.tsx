@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useParams } from 'react-router';
 import {
   Title,
@@ -19,15 +18,15 @@ import { DashboardContent } from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
+import EmptyDashboard from './emptyDashboard';
 import Tabular from './components/outputs/tabular';
-import SingeValue from './components/signle-value';
-import { updateQueryPosition } from './api/actions';
+import useDashboardDetails from './hooks/usedashboard';
 import { PieChart } from './components/outputs/pie-chart';
 import { BarChart } from './components/outputs/bar-chart';
+import SingeValue from './components/outputs/singleValue';
 import Descriptive from './components/outputs/descriptive';
+import DashboardHeader from './components/dashboardHeader';
 import { LineChart } from './components/outputs/line-chart';
-import useDashboardDetails from './hooks/dashboard-details';
-import DashboardHeader from './components/dashboard-header';
 import { StackedChart } from './components/outputs/stacked-chart';
 import { ScatterChart } from './components/outputs/scatter-chart';
 import { DoughnutChart } from './components/outputs/doughnut-chart';
@@ -56,160 +55,144 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
 const Dashboard = () => {
   const { id } = useParams();
-
   const {
     chartColors,
     edit,
-    saveDashboard,
     loading,
     renderableQueries,
+    dashboardData,
+    saveLayout,
     layouts,
-    setEdit,
     editDashboard,
     refreshDashboardQueries,
     refreshLoading,
-
+    layout,
     ResponsiveGridLayout,
-  } = useDashboardDetails({
-    id: id as string,
-  });
-
-  async function saveDashboardPositon({
-    dashboardId,
-    queryId,
-    x,
-    y,
-    z,
-    h,
-  }: {
-    dashboardId: string;
-    queryId: string;
-    x: number;
-    y: number;
-    z: number;
-    h: number;
-  }) {
-    setEdit(false);
-    const response = await updateQueryPosition({ dashboardId, queryId, x, y, z, h });
-    return response;
-  }
+  } = useDashboardDetails(id as string);
 
   // Render chart
-  const renderChart = useCallback(
-    (query: any) => {
-      if (!query.data) {
-        return null;
-      }
-      const _heading = Array.isArray(query.data) ? Object.keys(query.data[0]) : [];
-      // for descriptive
-      if (query.outputType.toLowerCase() === 'descriptive') {
-        return <Descriptive queryid={query.id} queryName={query.name} queryData={query.data} />;
-      }
-      // for singleValue
-      if (query.outputType.toLowerCase() === 'singlevalue') {
-        return <SingeValue qeryName={query.name} queryData={query.data} />;
-      }
-      // For tabular data
-      if (
-        query.outputType.toLowerCase() === 'tabular' &&
-        (!query.data.graph_type || typeof query.data !== 'object')
-      ) {
-        return (
-          <Tabular
-            title={query.title}
-            queryGraphData={query.outputType}
-            queryData={query.data}
-            queryName={query.name}
-            queryid={query.id}
-            heading={_heading}
-          />
-        );
-      }
-      // For chart data
-      if (query.data && query.data.graph_type) {
-        const { title, labels, datasets, values, datasetLabel } = query.data;
+  const renderChart = (query: any) => {
+    if (!query) {
+      return <EmptyDashboard />;
+    }
+    if (!query.data) {
+      return null;
+    }
+    // for descriptive
+    const _heading = Array.isArray(query.data) ? Object.keys(query.data[0]) : [];
+    if (query.outputType.toLowerCase() === 'descriptive') {
+      return <Descriptive queryId={query.id} queryName={query.name} queryData={query.data} />;
+    }
+    // for singleValue
+    if (query.outputType.toLowerCase() === 'singlevalue') {
+      return (
+        <SingeValue
+          chartColors={chartColors}
+          queryId={query.id}
+          qeryName={query.name}
+          queryData={query.data}
+        />
+      );
+    }
+    // For tabular data
+    if (
+      query.outputType.toLowerCase() === 'tabular' &&
+      (!query.data.graph_type || typeof query.data !== 'object')
+    ) {
+      return (
+        <Tabular
+          queryId={query.id}
+          title={query.title}
+          queryGraphData={query.outputType}
+          queryData={query.data}
+          queryName={query.name}
+          heading={_heading}
+        />
+      );
+    }
+    // For chart data
+    if (query.data && query.data.graph_type) {
+      const { title, labels, datasets, values, datasetLabel } = query.data;
 
-        switch (query.data.graph_type.toLowerCase()) {
-          case 'bar':
-            if (query.outputType.toLowerCase() === 'stacked chart') {
-              return (
-                <StackedChart
-                  labels={labels}
-                  chartData={query.data.datasets}
-                  queryId={query.id}
-                  title={title}
-                  backgroundcolor={chartColors.slice(0, datasets.data?.length)}
-                />
-              );
-            }
-
+      switch (query.data.graph_type.toLowerCase()) {
+        case 'bar':
+          if (query.outputType.toLowerCase() === 'stacked chart') {
             return (
-              <BarChart
-                chartData={query.data.datasets}
+              <StackedChart
                 labels={labels}
-                title={title}
+                chartData={query.data.datasets}
                 queryId={query.id}
+                title={title}
                 backgroundcolor={chartColors.slice(0, datasets.data?.length)}
               />
             );
+          }
 
-          case 'doughnut':
-            return (
-              <DoughnutChart
-                queryId={query.id}
-                title={title}
-                labels={labels}
-                values={values}
-                backgroundcolor={chartColors.slice(0, values.length)}
-                datasetLabel={datasetLabel}
-              />
-            );
+          return (
+            <BarChart
+              chartData={query.data.datasets}
+              labels={labels}
+              title={title}
+              queryId={query.id}
+              backgroundcolor={chartColors.slice(0, datasets.data?.length)}
+            />
+          );
 
-          case 'pie':
-            return (
-              <PieChart
-                labelss={labels}
-                values={values}
-                backgroundcolor={chartColors.slice(0, values.length)}
-                datasetLabel={datasetLabel}
-                queryId={query.id}
-                title={title}
-              />
-            );
+        case 'doughnut':
+          return (
+            <DoughnutChart
+              queryId={query.id}
+              title={title}
+              labels={labels}
+              values={values}
+              backgroundcolor={chartColors.slice(0, values.length)}
+              datasetLabel={datasetLabel}
+            />
+          );
 
-          case 'line':
-            return (
-              <LineChart
-                title={title}
-                queryId={query.id}
-                labels={labels}
-                values={values}
-                backgroundcolor={chartColors.slice(0, values.length)}
-                datasetLabel={datasetLabel}
-              />
-            );
+        case 'pie':
+          return (
+            <PieChart
+              labelss={labels}
+              values={values}
+              backgroundcolor={chartColors.slice(0, values.length)}
+              datasetLabel={datasetLabel}
+              queryId={query.id}
+              title={title}
+            />
+          );
 
-          case 'scatter':
-            return (
-              <ScatterChart
-                title={title}
-                queryId={query.id}
-                chartData={query.data.datasets}
-                backgroundcolor={chartColors.slice(0, values?.length)}
-              />
-            );
+        case 'line':
+          return (
+            <LineChart
+              title={title}
+              queryId={query.id}
+              labels={labels}
+              values={values}
+              backgroundcolor={chartColors.slice(0, values.length)}
+              datasetLabel={datasetLabel}
+            />
+          );
 
-          default:
-            return null;
-        }
+        case 'scatter':
+          return (
+            <ScatterChart
+              title={title}
+              queryId={query.id}
+              chartData={query.data?.datasets}
+              backgroundcolor={chartColors.slice(0, values?.length)}
+            />
+          );
+
+        default:
+          return null;
       }
-      return null;
-    },
-    [chartColors]
-  );
+    }
+
+    return null;
+  };
 
   if (loading) {
     return <LoadingScreen />;
@@ -224,39 +207,29 @@ const Dashboard = () => {
       }}
     >
       <DashboardHeader
+      
+        dashboardName={dashboardData?.name}
         id={id as unknown as any}
+        saveLayout={saveLayout}
+        renderableQueries={renderableQueries}
         edit={edit}
         editDashboard={editDashboard}
-        saveDashboard={saveDashboard}
-        refreshDashboardQueries={() => {
-          refreshDashboardQueries();
-        }}
+        refreshDashboardQueries={refreshDashboardQueries}
         refreshLoading={refreshLoading}
       />
       {refreshLoading ? (
         <LoadingScreen />
       ) : (
         <ResponsiveGridLayout
-          className="layout"
-          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480 }}
-          cols={{ lg: 50, md: 50, sm: 16, xs: 10 }}
+          className="layouts"
+          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 200 }}
+          cols={{ lg: 50, md: 50, sm: 50, xs: 50 }}
           rowHeight={50}
           autoSize
           isDraggable={edit}
           isResizable={edit}
           onLayoutChange={(currentLayout) => {
-            currentLayout.map((chart) => {
-              saveDashboardPositon({
-                h: chart.h,
-                x: chart.x,
-                y: chart.y,
-                z: chart.w,
-                queryId: chart.i,
-                dashboardId: id,
-              });
-              return null;
-            });
-            return null;
+            layout.current = currentLayout;
           }}
         >
           {renderableQueries?.map((query: any, index: number) => (

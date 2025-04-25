@@ -13,6 +13,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
+import { useColorPicker } from '../../hooks/useColorPicker';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -32,6 +33,8 @@ export const DoughnutChart = ({
   datasetLabel,
   backgroundcolor,
 }: ChartDataType) => {
+  const { titleColor, setTitleColor } = useColorPicker();
+
   const options = {
     layout: {
       padding: {
@@ -64,8 +67,8 @@ export const DoughnutChart = ({
   return (
     <Paper key={queryId} elevation={2} sx={{ textAlign: 'start', p: 3, borderRadius: 2 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ display: 'inline' }}>{title}</Typography>
-        <QueryOptions title={title} queryId={queryId} />
+        <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
+        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
       </div>
 
       <Doughnut options={options} data={data} />

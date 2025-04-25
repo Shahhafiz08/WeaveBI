@@ -142,14 +142,16 @@ export default function RecentDashboardList() {
                 />
               </StyledTableCell>
               {tableHeadItems &&
-                tableHeadItems.map((item) => (
-                  <StyledTableCell align="left">{item}</StyledTableCell>
+                tableHeadItems.map((item, index) => (
+                  <StyledTableCell key={index} align="left">
+                    {item}
+                  </StyledTableCell>
                 ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {getData.map((data) => (
-              <StyledTableRow key={data.id}>
+            {getData.map((data, index) => (
+              <StyledTableRow key={index}>
                 <StyledTableCell>
                   <Checkbox
                     checked={selected.includes(data.id)}
@@ -190,8 +192,9 @@ export default function RecentDashboardList() {
                       width: '300px',
                     }}
                   >
-                    {data.tags.map((tag) => (
+                    {data.tags.map((tag, i) => (
                       <Chip
+                        key={i}
                         size="small"
                         label={tag}
                         sx={{

@@ -1,17 +1,23 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
-import { downloadChartData, downloadTabularData, generateQueryInsights } from '../api/actions';
+import {
+  deleteQuery,
+  downloadChartData,
+  downloadTabularData,
+  generateQueryInsights,
+} from '../api/actions';
 
 // show insights
-export const useInsights = (queryid: number, querytype?: string) => {
+export const useQueryOptions = (queryid: number, querytype?: string) => {
   const [insights, setInsights] = useState<string>('');
   const [loading, setLoading] = useState(true);
-
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newBool: boolean) => {
     setOpen(newBool);
   };
+  
   const showInsights = async (
     queryId: number,
     browseOnline?: boolean,
@@ -29,10 +35,10 @@ export const useInsights = (queryid: number, querytype?: string) => {
     return null;
   };
 
+  // download query data
   const downloadQueryData = async () => {
     function convertToFile(blob: any) {
       const url = URL.createObjectURL(blob);
-
       const a = document.createElement('a');
       a.href = url;
       a.download = `query_data-${queryid}`;
@@ -60,11 +66,24 @@ export const useInsights = (queryid: number, querytype?: string) => {
       alert('Download failed');
     }
   };
+  // delete query
+  const deleteDashboardQuery = async (queryId: number) => {
+    try {
+      const response = await deleteQuery(queryId);
+      toast.success('Query deleted sucessfully');
+
+      return response;
+    } catch (error) {
+      toast.error(error);
+    }
+    return null;
+  };
 
   return {
     setInsights,
     insights,
     downloadQueryData,
+    deleteDashboardQuery,
     loading,
     showInsights,
     open,

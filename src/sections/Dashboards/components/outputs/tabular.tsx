@@ -14,6 +14,7 @@ import {
 import { truncateString } from 'src/utils/helper';
 
 import QueryOptions from '../query-options';
+import { useColorPicker } from '../../hooks/useColorPicker';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,48 +37,58 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const Tabular = ({
   title,
   queryGraphData,
-  queryid,
+  queryId,
   queryName,
   queryData,
   heading,
 }: {
   title: string;
   queryGraphData: string;
-  queryid: number;
+  queryId: number;
   queryName: string;
   queryData: object[];
   heading: string[];
-}) => (
-  <div>
-    <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
-      <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ display: 'inline' }}>{queryName}</Typography>
-        <QueryOptions querytype={queryGraphData} queryId={queryid} title={title} />
-      </div>
-      <TableContainer sx={{ position: 'relative' }} component={Paper}>
-        <Table sx={{ width: '100%' }}>
-          <TableHead>
-            <TableRow>
-              {heading.map((item, i) => (
-                <StyledTableCell key={i}>
-                  {item.charAt(0).toUpperCase() + item.slice(1).replace('_', ' ')}
-                </StyledTableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {queryData.map((rowItem: any, i) => (
-              <StyledTableRow key={i}>
-                {Object.keys(rowItem).map((item, _) => (
-                  <StyledTableCell key={_}>{truncateString(rowItem[item], 20)}</StyledTableCell>
+}) => {
+  const { titleColor, setTitleColor } = useColorPicker();
+  return (
+    <div>
+      <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
+        <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
+          <Typography style={{ display: 'inline', color: `${titleColor}` }}>{queryName}</Typography>
+
+          <QueryOptions
+            querytype={queryGraphData}
+            title={title}
+            queryId={queryId}
+            titleColor={titleColor}
+            setTitleColor={setTitleColor}
+          />
+        </div>
+        <TableContainer sx={{ position: 'relative', maxHeight: '300px' }} component={Paper}>
+          <Table sx={{ width: '100%' }}>
+            <TableHead style={{ position: 'relative' }}>
+              <TableRow style={{ position: 'sticky', top: '-4px' }}>
+                {heading.map((item, i) => (
+                  <StyledTableCell key={i}>
+                    {item.charAt(0).toUpperCase() + item.slice(1).replace('_', ' ')}
+                  </StyledTableCell>
                 ))}
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
-  </div>
-);
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {queryData.map((rowItem: any, i) => (
+                <StyledTableRow key={i}>
+                  {Object.keys(rowItem).map((item, _) => (
+                    <StyledTableCell key={_}>{truncateString(rowItem[item], 20)}</StyledTableCell>
+                  ))}
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    </div>
+  );
+};
 
 export default Tabular;

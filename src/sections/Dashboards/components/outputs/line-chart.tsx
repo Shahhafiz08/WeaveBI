@@ -13,7 +13,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
-
+import { useColorPicker } from '../../hooks/useColorPicker';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 type incommingDataType = {
@@ -33,8 +33,12 @@ export const LineChart = ({
   datasetLabel,
   backgroundcolor,
 }: incommingDataType) => {
+  const { titleColor, setTitleColor } = useColorPicker();
+
+
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top' as const,
@@ -64,10 +68,10 @@ export const LineChart = ({
       sx={{ textAlign: 'start', p: 3, borderRadius: 2, height: '100%' }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ display: 'inline' }}>{title}</Typography>
-        <QueryOptions title={title} queryId={queryId} />
+        <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
+        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
       </div>
-      <Line options={options} data={data} />;
+      <Line options={options} data={data} />
     </Paper>
   );
 };

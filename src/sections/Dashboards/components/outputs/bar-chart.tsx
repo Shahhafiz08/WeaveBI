@@ -12,6 +12,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
+import { useColorPicker } from '../../hooks/useColorPicker';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -28,9 +29,9 @@ export const BarChart = ({
   chartData,
   queryId,
   title,
-
   backgroundcolor,
 }: incommingDataType) => {
+    const { titleColor, setTitleColor } = useColorPicker();
   const options = {
     maintainAspectRatio: false,
     responsive: true,
@@ -53,6 +54,7 @@ export const BarChart = ({
       borderColor: backgroundcolor,
     })),
   };
+
   return (
     <Paper
       key={queryId}
@@ -66,8 +68,8 @@ export const BarChart = ({
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ display: 'inline' }}>{title}</Typography>
-        <QueryOptions title={title} queryId={queryId} />
+        <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
+        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
       </div>
 
       <Bar data={data} options={options} />

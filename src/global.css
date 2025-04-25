@@ -66,7 +66,6 @@ img {
 ul {
   margin: 0;
   padding: 0;
-  list-style-type: none;
 }
 input[type='number'] {
   -moz-appearance: textfield;
@@ -102,6 +101,19 @@ input[type='number']::-webkit-inner-spin-button {
 }
 .open-dashboard:hover {
   font-weight: 600;
+}
+.hideScroll::-webkit-scrollbar {
+  display: none;
+}
+.color-box {
+  border: 2px solid transparent;
+  transition:
+    transform 0.2s,
+    border 0.2s;
+}
+
+.color-box:hover {
+  transform: scale(1.1);
 }
 .spin {
   animation: spin 1s linear infinite;

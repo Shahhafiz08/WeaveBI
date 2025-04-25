@@ -1,5 +1,5 @@
 import React from 'react';
-import Markdown from 'react-markdown';
+import Markdown from 'markdown-to-jsx';
 
 import {
   Box,
@@ -43,6 +43,7 @@ export const Insights = ({
       setCustomInstructions('');
     }
   };
+
   const handleIsHidden = () => {
     setAddInstructions((prev) => !prev);
 
@@ -95,7 +96,7 @@ export const Insights = ({
         {loading ? (
           <CircularProgress sx={{ position: 'absolute', top: '40%', left: '45%' }} size="40px" />
         ) : (
-          <Markdown>{insights}</Markdown>
+          <Markdown style={{ padding: '10px' }}>{insights}</Markdown>
         )}
       </Box>
       <FormControlLabel

@@ -4,6 +4,7 @@ import { Legend, Tooltip, ArcElement, Chart as ChartJS } from 'chart.js';
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
+import { useColorPicker } from '../../hooks/useColorPicker';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -24,6 +25,9 @@ export const PieChart = ({
   backgroundcolor,
   queryId,
 }: IncommingDataType) => {
+  const { titleColor, setTitleColor } = useColorPicker();
+  
+
   const data = {
     labels: labelss,
     datasets: [
@@ -72,7 +76,7 @@ export const PieChart = ({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline' }}>{title}</Typography>
-        <QueryOptions title={title} queryId={queryId} />
+        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
       </div>
       <div style={{ flexGrow: 1, position: 'relative' }}>
         <Pie data={data} options={options} />

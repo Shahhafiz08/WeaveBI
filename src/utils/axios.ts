@@ -74,6 +74,7 @@ export const endpoints = {
     positions: 'dashboard/position',
   },
   query: {
+    delete: 'query',
     save: '/query',
     run: '/query/run',
     get: '/get',
