@@ -31,7 +31,7 @@ export const BarChart = ({
   title,
   backgroundcolor,
 }: incommingDataType) => {
-    const { titleColor, setTitleColor } = useColorPicker();
+  const { titleColor, chartColor, setTitleColor, setChartColor, blueGradient } = useColorPicker();
   const options = {
     maintainAspectRatio: false,
     responsive: true,
@@ -50,8 +50,8 @@ export const BarChart = ({
     datasets: chartData.map((chart: any) => ({
       label: chart.label,
       data: chart.data,
-      backgroundColor: backgroundcolor,
-      borderColor: backgroundcolor,
+      backgroundColor: !chartColor ? blueGradient : chartColor,
+      borderColor: !chartColor ? blueGradient : chartColor,
     })),
   };
 
@@ -69,7 +69,12 @@ export const BarChart = ({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
-        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
+        <QueryOptions
+          setChartColor={setChartColor}
+          queryId={queryId}
+          titleColor={titleColor}
+          setTitleColor={setTitleColor}
+        />
       </div>
 
       <Bar data={data} options={options} />

@@ -33,8 +33,7 @@ export const LineChart = ({
   datasetLabel,
   backgroundcolor,
 }: incommingDataType) => {
-  const { titleColor, setTitleColor } = useColorPicker();
-
+  const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
 
   const options = {
     responsive: true,
@@ -55,8 +54,8 @@ export const LineChart = ({
       {
         label: datasetLabel,
         data: values,
-        borderColor: backgroundcolor,
-        backgroundColor: backgroundcolor,
+        borderColor: !chartColor ? blueGradient : chartColor,
+        backgroundColor: !chartColor ? blueGradient : chartColor,
       },
     ],
   };
@@ -69,7 +68,12 @@ export const LineChart = ({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
-        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
+        <QueryOptions
+          setChartColor={setChartColor}
+          queryId={queryId}
+          titleColor={titleColor}
+          setTitleColor={setTitleColor}
+        />
       </div>
       <Line options={options} data={data} />
     </Paper>

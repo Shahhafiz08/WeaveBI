@@ -14,12 +14,18 @@ const Descriptive = ({
   queryName: string;
   queryData: string;
 }) => {
-  const { titleColor, setTitleColor } = useColorPicker();
+  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker();
+
   return (
     <Paper key={queryId} elevation={2} sx={{ p: 3, borderRadius: 2, height: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ color: `${titleColor}` }}>{queryName}</Typography>
-        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
+        <QueryOptions
+          setChartColor={setChartColor}
+          queryId={queryId}
+          titleColor={titleColor}
+          setTitleColor={setTitleColor}
+        />
       </div>
 
       <Box
@@ -31,6 +37,7 @@ const Descriptive = ({
           borderRadius: 1,
           maxHeight: '250px',
           overflow: 'scroll',
+          color: Array.isArray(chartColor) ? chartColor[0] : '#193E6D',
         }}
       >
         <Markdown>

@@ -14,7 +14,7 @@ const SingeValue = ({
   queryData: Array<object>;
   chartColors: Array<string>;
 }) => {
-  const { titleColor, setTitleColor } = useColorPicker();
+  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker();
 
   return (
     <Stack
@@ -29,7 +29,12 @@ const SingeValue = ({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ color: `${titleColor}` }}>{qeryName}</Typography>
-        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
+        <QueryOptions
+          setChartColor={setChartColor}
+          queryId={queryId}
+          titleColor={titleColor}
+          setTitleColor={setTitleColor}
+        />
       </div>
 
       <Box
@@ -43,7 +48,12 @@ const SingeValue = ({
           borderRadius: 1,
         }}
       >
-        <Typography style={{ color: `${chartColors[0]}` }} variant="h1">
+        <Typography
+          style={{
+            color: Array.isArray(chartColor) ? chartColor[0] : '#193E6D',
+          }}
+          variant="h1"
+        >
           {Object.values(queryData?.[0])}
         </Typography>
       </Box>

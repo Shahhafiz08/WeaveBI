@@ -12,10 +12,12 @@ import { useQueryOptions } from '../hooks/useQueryOptions';
 const QueryOptions = ({
   titleColor,
   setTitleColor,
+  setChartColor,
   title,
   queryId,
   querytype,
 }: {
+  setChartColor?: React.Dispatch<React.SetStateAction<string[]>>;
   titleColor: string;
   setTitleColor: React.Dispatch<React.SetStateAction<string>>;
   title?: string;
@@ -111,7 +113,12 @@ const QueryOptions = ({
           />
         )}
         {value.current === 'properties' && (
-          <Properties setTitleColor={setTitleColor} titleColor={titleColor} queryId={queryId} />
+          <Properties
+            setTitleColor={setTitleColor}
+            setChartColor={setChartColor}
+            titleColor={titleColor}
+            queryId={queryId}
+          />
         )}
       </Drawer>
     </>

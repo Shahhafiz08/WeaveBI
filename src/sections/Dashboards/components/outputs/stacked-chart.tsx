@@ -31,7 +31,7 @@ export const StackedChart = ({
   chartData,
   backgroundcolor,
 }: IncommingDataType) => {
-  const { titleColor, setTitleColor } = useColorPicker();
+  const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
 
   const options = {
     maintainAspectRatio: false,
@@ -50,8 +50,8 @@ export const StackedChart = ({
     datasets: chartData.map((chart) => ({
       label: chart.label,
       data: chart.data,
-      backgroundColor: backgroundcolor,
-      borderColor: backgroundcolor,
+      backgroundColor: !chartColor ? blueGradient : chartColor,
+      borderColor: !chartColor ? blueGradient : chartColor,
     })),
   };
 
@@ -69,7 +69,12 @@ export const StackedChart = ({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline' }}>{title}</Typography>
-        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
+        <QueryOptions
+          setChartColor={setChartColor}
+          queryId={queryId}
+          titleColor={titleColor}
+          setTitleColor={setTitleColor}
+        />
       </div>
 
       <Bar data={data} options={options} />

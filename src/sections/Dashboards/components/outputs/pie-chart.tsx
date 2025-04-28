@@ -25,8 +25,7 @@ export const PieChart = ({
   backgroundcolor,
   queryId,
 }: IncommingDataType) => {
-  const { titleColor, setTitleColor } = useColorPicker();
-  
+  const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
 
   const data = {
     labels: labelss,
@@ -34,8 +33,8 @@ export const PieChart = ({
       {
         label: datasetLabel,
         data: values,
-        backgroundColor: backgroundcolor,
-        borderColor: backgroundcolor,
+        backgroundColor: !chartColor ? blueGradient : chartColor,
+        borderColor: !chartColor ? blueGradient : chartColor,
         borderWidth: 1,
       },
     ],
@@ -76,7 +75,12 @@ export const PieChart = ({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline' }}>{title}</Typography>
-        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
+        <QueryOptions
+          queryId={queryId}
+          setChartColor={setChartColor}
+          titleColor={titleColor}
+          setTitleColor={setTitleColor}
+        />
       </div>
       <div style={{ flexGrow: 1, position: 'relative' }}>
         <Pie data={data} options={options} />

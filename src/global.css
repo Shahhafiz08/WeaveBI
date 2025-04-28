@@ -115,6 +115,9 @@ input[type='number']::-webkit-inner-spin-button {
 .color-box:hover {
   transform: scale(1.1);
 }
+.color-box:focus {
+  border: 2px solid black;
+}
 .spin {
   animation: spin 1s linear infinite;
 }

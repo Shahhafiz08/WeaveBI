@@ -33,7 +33,8 @@ export const DoughnutChart = ({
   datasetLabel,
   backgroundcolor,
 }: ChartDataType) => {
-  const { titleColor, setTitleColor } = useColorPicker();
+    const { titleColor, chartColor, setTitleColor, setChartColor, blueGradient } = useColorPicker();
+
 
   const options = {
     layout: {
@@ -57,8 +58,8 @@ export const DoughnutChart = ({
       {
         label: datasetLabel,
         data: values,
-        backgroundColor: backgroundcolor,
-        borderColor: backgroundcolor,
+        backgroundColor: !chartColor ? blueGradient : chartColor,
+        borderColor: !chartColor ? blueGradient : chartColor,
         borderWidth: 1,
       },
     ],
@@ -68,7 +69,12 @@ export const DoughnutChart = ({
     <Paper key={queryId} elevation={2} sx={{ textAlign: 'start', p: 3, borderRadius: 2 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
-        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
+        <QueryOptions
+          setChartColor={setChartColor}
+          queryId={queryId}
+          titleColor={titleColor}
+          setTitleColor={setTitleColor}
+        />
       </div>
 
       <Doughnut options={options} data={data} />

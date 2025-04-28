@@ -177,14 +177,7 @@ const Dashboard = () => {
           );
 
         case 'scatter':
-          return (
-            <ScatterChart
-              title={title}
-              queryId={query.id}
-              chartData={query.data?.datasets}
-              backgroundcolor={chartColors.slice(0, values?.length)}
-            />
-          );
+          return <ScatterChart title={title} queryId={query.id} chartData={query.data?.datasets} />;
 
         default:
           return null;
@@ -207,7 +200,6 @@ const Dashboard = () => {
       }}
     >
       <DashboardHeader
-      
         dashboardName={dashboardData?.name}
         id={id as unknown as any}
         saveLayout={saveLayout}

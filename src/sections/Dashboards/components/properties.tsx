@@ -1,17 +1,20 @@
 import { Box, Button, TextField } from '@mui/material';
 
 import { TitleColorPicker } from './TitleColorPicker';
+import { ChartColorPicker } from './chartColorPicker';
 
 const Properties = ({
   queryId,
   titleColor,
   setTitleColor,
+  setChartColor,
 }: {
   queryId: number;
   setTitleColor: React.Dispatch<React.SetStateAction<string>>;
+  setChartColor?: any;
   titleColor: string;
 }) => {
-  const defaultColors = [
+  const defaultTitle = [
     '#EB6477',
     '#81D4FA',
     '#BA68C8',
@@ -59,16 +62,11 @@ const Properties = ({
         <div style={{ fontFamily: 'sans-serif' }}>
           <TitleColorPicker
             label="Title color"
-            defaultColors={defaultColors}
+            defaultColors={defaultTitle}
             selectedColor={titleColor}
             setTitleColor={setTitleColor}
           />
-          {/* <ColorPicker
-            label="Chart color"
-            colors={defaultColors}
-            selectedColor={chartColor}
-            onSelect={setChartColor}
-          /> */}
+          <ChartColorPicker label="Chart Color" setChartColor={setChartColor} />
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <Button sx={{ width: 'fit-content', fontWeight: '500' }} variant="contained">

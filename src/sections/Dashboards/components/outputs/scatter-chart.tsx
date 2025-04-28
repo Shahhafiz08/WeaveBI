@@ -19,13 +19,14 @@ type incommingDataType = {
     label: string;
     data: Array<{ x: string; y: string }>;
   }>;
-  backgroundcolor: Array<string>;
+ 
   queryId: number;
   title: string;
 };
 
-export const ScatterChart = ({ queryId, title, chartData, backgroundcolor }: incommingDataType) => {
-  const { titleColor, setTitleColor } = useColorPicker();
+export const ScatterChart = ({ queryId, title, chartData }: incommingDataType) => {
+  const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
+
 
   const options = {
     maintainAspectRatio: true,
@@ -51,8 +52,8 @@ export const ScatterChart = ({ queryId, title, chartData, backgroundcolor }: inc
         x: item.x,
         y: item.y,
       })),
-      backgroundColor: backgroundcolor,
-      borderColor: backgroundcolor,
+      backgroundColor: !chartColor ? blueGradient : chartColor,
+      borderColor: !chartColor ? blueGradient : chartColor,
     })),
   };
 
@@ -60,7 +61,12 @@ export const ScatterChart = ({ queryId, title, chartData, backgroundcolor }: inc
     <Paper key={queryId} sx={{ textAlign: 'start', p: 3, borderRadius: 2 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
-        <QueryOptions queryId={queryId} titleColor={titleColor} setTitleColor={setTitleColor} />
+        <QueryOptions
+          queryId={queryId}
+          setChartColor={setChartColor}
+          titleColor={titleColor}
+          setTitleColor={setTitleColor}
+        />
       </div>
       <Scatter data={data} options={options} />
     </Paper>
