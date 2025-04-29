@@ -4,11 +4,11 @@ type Props = {
   setChartColor: React.Dispatch<React.SetStateAction<string[]>>;
   label: string;
 };
-const defaultChartColors = [
+const displayingColors = [
   '#EB6477',
-  '#81D4FA',
-  '#BA68C8',
-  '#FFB74D',
+  '#0886C9',
+  '#1c252e',
+  '#F2C85C',
   '#548587',
   '#6D4C41',
   '#21518F',
@@ -26,7 +26,7 @@ export const ChartColorPicker: React.FC<Props> = ({ setChartColor, label }) => (
         width: 'fit-content',
       }}
     >
-      {defaultChartColors?.map((color) => (
+      {displayingColors?.map((color) => (
         <div
           key={color}
           role="button"
@@ -38,71 +38,75 @@ export const ChartColorPicker: React.FC<Props> = ({ setChartColor, label }) => (
               case '#EB6477':
                 shades = [
                   '#EB6477',
-                  '#FAD4D9',
-                  '#F7B3BC',
-                  '#F5919E',
-                  '#F27081',
-                  '#D85A6B',
-                  '#C3505F',
-                  '#AD4653',
-                  '#973C47',
+                  '#ED7586',
+                  '#EF8695',
+                  '#F298A4',
+                  '#F4A9B3',
+                  '#F6BAC3',
+                  '#F8CBD2',
+                  '#FBDDE1',
+                  '#FDEEF0',
                 ];
+
                 break;
 
-              case '#81D4FA':
+              case '#0886C9':
                 shades = [
-                  '#81D4FA',
-                  '#E1F5FE',
-                  '#B3E5FC',
-                  '#4FC3F7',
-                  '#29B6F6',
-                  '#03A9F4',
-                  '#039BE5',
-                  '#0288D1',
-                  '#0277BD',
+                  '#0886C9',
+                  '#099BE9',
+                  '#1EABF6',
+                  '#3EB7F7',
+                  '#5EC3F9',
+                  '#7ECFFA',
+                  '#9FDBFB',
+                  '#BFE7FC',
+                  '#DFF3FE',
                 ];
+
                 break;
 
-              case '#BA68C8':
+              case '#1c252e':
                 shades = [
-                  '#BA68C8',
-                  '#F3E5F5',
-                  '#E1BEE7',
-                  '#CE93D8',
-                  '#AB47BC',
-                  '#9C27B0',
-                  '#8E24AA',
-                  '#7B1FA2',
-                  '#6A1B9A',
+                  '#1c252e',
+                  '#2E3D4C',
+                  '#41556A',
+                  '#536E88',
+                  '#6886A3',
+                  '#879EB6',
+                  '#A5B6C8',
+                  '#C3CFDA',
+                  '#E1E7ED',
                 ];
+
                 break;
 
-              case '#FFB74D':
+              case '#F2C85C':
                 shades = [
-                  '#FFB74D',
-                  '#FFF3E0',
-                  '#FFE0B2',
-                  '#FFCC80',
-                  '#FFA726',
-                  '#FF9800',
-                  '#FB8C00',
-                  '#F57C00',
-                  '#EF6C00',
+                  '#F2C85C',
+                  '#F3CE6E',
+                  '#F5D480',
+                  '#F6DA92',
+                  '#F8E0A4',
+                  '#F9E7B7',
+                  '#FBEDC9',
+                  '#FCF3DB',
+                  '#FEF9ED',
                 ];
                 break;
 
               case '#548587':
                 shades = [
                   '#548587',
-                  '#a3c4c5',
-                  '#8fb2b3',
-                  '#7ba1a2',
-                  '#679090',
-                  '#4b7779',
-                  '#426a6b',
-                  '#395d5e',
-                  '#305051',
+                  '#60999B',
+                  '#73A6A8',
+                  '#87B3B5',
+                  '#9BC0C1',
+                  '#AFCCCD',
+                  '#C3D9DA',
+                  '#D7E6E6',
+                  '#EBF2F3',
                 ];
+
                 break;
 
               case '#6D4C41':

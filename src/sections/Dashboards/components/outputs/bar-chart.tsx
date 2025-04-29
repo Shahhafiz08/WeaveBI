@@ -62,12 +62,19 @@ export const BarChart = ({
       sx={{
         width: '100%',
         textAlign: 'start',
-        p: 3,
+
         borderRadius: 2,
         height: '100%',
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          padding: '20px',
+          paddingBottom: '0px',
+        }}
+      >
         <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
         <QueryOptions
           setChartColor={setChartColor}
@@ -77,7 +84,17 @@ export const BarChart = ({
         />
       </div>
 
-      <Bar data={data} options={options} />
+      <div
+        style={{
+          padding: 20,
+          paddingLeft: '40px',
+          paddingRight: '40px',
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        <Bar data={data} options={options} />
+      </div>
     </Paper>
   );
 };

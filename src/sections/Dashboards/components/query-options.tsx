@@ -40,7 +40,7 @@ const QueryOptions = ({
 
   return (
     <>
-      <Button type="button" onClick={popover.onOpen}>
+      <Button type="button" onClick={popover.onOpen} style={{ justifyContent: 'end' }}>
         <Iconify icon="uil:ellipsis-v" />
       </Button>
 

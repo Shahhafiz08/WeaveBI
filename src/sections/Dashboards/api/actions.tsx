@@ -1,8 +1,10 @@
+import { toast } from 'react-toastify';
+
 import axios, { endpoints } from 'src/utils/axios';
 
 type DashboardPosition = {
   dashboardId: any;
-  queryId:  number;
+  queryId: number;
   x: number;
   y: number;
   z: number;
@@ -20,8 +22,14 @@ export const getDashboardInfo = async (id: string) => {
 };
 // Updadate dashboard Queries
 export const parallellyRunAllQueries = async (id: string) => {
-  const dashboardinfo = await axios.get(`${endpoints.query.runAllQueriesAgain}/${id}`);
-  return dashboardinfo;
+  try {
+    const dashboardinfo = await axios.get(`${endpoints.query.runAllQueriesAgain}/${id}`);
+    toast.success('Dashboard refreshed');
+    return dashboardinfo;
+  } catch (error) {
+    toast.error(error);
+  }
+  return null;
 };
 // download chart data
 export const downloadChartData = async (id: number) => {
@@ -71,9 +79,8 @@ export const updateQueryPosition = async ({
   });
   return response?.data;
 };
-// delete a query 
+// delete a query
 export const deleteQuery = async (queryId: number) => {
-  const responce = await axios.delete(`${endpoints.query.delete}/${queryId}`)
+  const responce = await axios.delete(`${endpoints.query.delete}/${queryId}`);
   return responce;
-  
-}
+};

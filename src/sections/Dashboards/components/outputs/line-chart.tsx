@@ -20,19 +20,12 @@ type incommingDataType = {
   datasetLabel?: string;
   labels: Array<string>;
   values: Array<number>;
-  backgroundcolor: Array<string>;
+
   title: string;
   queryId: number;
 };
 
-export const LineChart = ({
-  labels,
-  values,
-  title,
-  queryId,
-  datasetLabel,
-  backgroundcolor,
-}: incommingDataType) => {
+export const LineChart = ({ labels, values, title, queryId, datasetLabel }: incommingDataType) => {
   const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
 
   const options = {
@@ -61,12 +54,15 @@ export const LineChart = ({
   };
 
   return (
-    <Paper
-      key={queryId}
-      elevation={2}
-      sx={{ textAlign: 'start', p: 3, borderRadius: 2, height: '100%' }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <Paper key={queryId} elevation={2} sx={{ textAlign: 'start', borderRadius: 2, height: '100%' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          padding: '20px',
+          paddingBottom: '0px',
+        }}
+      >
         <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
         <QueryOptions
           setChartColor={setChartColor}
@@ -75,7 +71,18 @@ export const LineChart = ({
           setTitleColor={setTitleColor}
         />
       </div>
-      <Line options={options} data={data} />
+      <div
+        style={{
+          paddingLeft: '40px',
+          paddingRight: '40px',
+          paddingBottom: '40px',
+          display: 'flex',
+          alignItems: 'center',
+          height: '90%',
+        }}
+      >
+        <Line options={options} data={data} />
+      </div>
     </Paper>
   );
 };

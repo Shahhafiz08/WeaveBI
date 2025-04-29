@@ -19,7 +19,7 @@ type incommingDataType = {
     label: string;
     data: Array<{ x: string; y: string }>;
   }>;
- 
+
   queryId: number;
   title: string;
 };
@@ -27,10 +27,9 @@ type incommingDataType = {
 export const ScatterChart = ({ queryId, title, chartData }: incommingDataType) => {
   const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
 
-
   const options = {
-    maintainAspectRatio: true,
-    // responsive: true,
+    maintainAspectRatio: false,
+    responsive: true,
     layout: {
       padding: {
         top: 10,
@@ -58,8 +57,15 @@ export const ScatterChart = ({ queryId, title, chartData }: incommingDataType) =
   };
 
   return (
-    <Paper key={queryId} sx={{ textAlign: 'start', p: 3, borderRadius: 2 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <Paper key={queryId} sx={{ borderRadius: 2, width: '100%', height: '100%' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          padding: '20px',
+          paddingBottom: '0px',
+        }}
+      >
         <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
         <QueryOptions
           queryId={queryId}
@@ -68,7 +74,18 @@ export const ScatterChart = ({ queryId, title, chartData }: incommingDataType) =
           setTitleColor={setTitleColor}
         />
       </div>
-      <Scatter data={data} options={options} />
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          paddingLeft: '40px',
+          paddingRight: '40px',
+          paddingBottom: '30px',
+        }}
+      >
+        {' '}
+        <Scatter data={data} options={options} />
+      </div>
     </Paper>
   );
 };

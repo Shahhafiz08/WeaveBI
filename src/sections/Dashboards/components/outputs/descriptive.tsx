@@ -31,8 +31,9 @@ const Descriptive = ({
       <Box
         className="hideScroll"
         sx={{
-          mt: 2,
-          p: 2,
+          marginTop: '10px',
+          padding: '20px',
+          paddingBottom: '0px',
           bgcolor: '#f5f5f5',
           borderRadius: 1,
           maxHeight: '250px',
@@ -40,9 +41,11 @@ const Descriptive = ({
           color: Array.isArray(chartColor) ? chartColor[0] : '#193E6D',
         }}
       >
-        <Markdown>
-          {typeof queryData === 'string' ? queryData : JSON.stringify(queryData, null, 2)}
-        </Markdown>
+        <div style={{}}>
+          <Markdown>
+            {typeof queryData === 'string' ? queryData : JSON.stringify(queryData, null, 2)}
+          </Markdown>
+        </div>
       </Box>
     </Paper>
   );

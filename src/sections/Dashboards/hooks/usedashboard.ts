@@ -59,9 +59,8 @@ const useDashboardDetails = (id: string | number) => {
       setRefreshLoading(true);
       await parallellyRunAllQueries(id as string);
       await fetchDashboardInfo();
-      toast.success('Dashboard refreshed');
     } catch (err) {
-      toast.error(err);
+      console.log(err);
     } finally {
       setRefreshLoading(false);
     }

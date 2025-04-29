@@ -44,15 +44,16 @@ const SingeValue = ({
           mt: 2,
           p: 2,
           bgcolor: '#F5F5F5',
-
+          position: 'relative',
           borderRadius: 1,
         }}
       >
         <Typography
           style={{
             color: Array.isArray(chartColor) ? chartColor[0] : '#193E6D',
+            fontSize: '3.2rem',
+            fontWeight: 'bold',
           }}
-          variant="h1"
         >
           {Object.values(queryData?.[0])}
         </Typography>

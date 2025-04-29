@@ -147,7 +147,6 @@ const Dashboard = () => {
               title={title}
               labels={labels}
               values={values}
-              backgroundcolor={chartColors.slice(0, values.length)}
               datasetLabel={datasetLabel}
             />
           );
@@ -171,7 +170,6 @@ const Dashboard = () => {
               queryId={query.id}
               labels={labels}
               values={values}
-              backgroundcolor={chartColors.slice(0, values.length)}
               datasetLabel={datasetLabel}
             />
           );

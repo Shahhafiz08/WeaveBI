@@ -8,12 +8,12 @@ import { useColorPicker } from '../../hooks/useColorPicker';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-type IncommingDataType = {
+type IncomingDataType = {
   title?: string;
   datasetLabel?: string;
-  labelss: Array<string>;
-  values: Array<number>;
-  backgroundcolor: Array<string>;
+  labelss: string[];
+  values: number[];
+  backgroundcolor: string[];
   queryId: number;
 };
 
@@ -24,39 +24,63 @@ export const PieChart = ({
   datasetLabel,
   backgroundcolor,
   queryId,
-}: IncommingDataType) => {
+}: IncomingDataType) => {
   const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: 20,
+    },
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+        labels: {
+          color: '#666',
+          padding: 15,
+          font: {
+            size: 12,
+            weight: 'bold' as const,
+          },
+        },
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        titleColor: '#fff',
+        bodyColor: '#fff',
+        padding: 10,
+
+        bodySpacing: 8,
+        titleFont: {
+          weight: 'bold' as const,
+          size: 14,
+        },
+        bodyFont: {
+          size: 12,
+        },
+      },
+      title: {
+        display: false,
+      },
+    },
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+    },
+  };
 
   const data = {
     labels: labelss,
     datasets: [
       {
-        label: datasetLabel,
+        label: datasetLabel || '',
         data: values,
-        backgroundColor: !chartColor ? blueGradient : chartColor,
-        borderColor: !chartColor ? blueGradient : chartColor,
+        backgroundColor: chartColor || backgroundcolor || blueGradient,
+        borderColor: chartColor || backgroundcolor || blueGradient,
         borderWidth: 1,
       },
     ],
-  };
-
-  const options = {
-    maintainAspectRatio: true,
-    responsive: true,
-    layout: {
-      padding: {
-        top: 1,
-        bottom: 1,
-        left: 10,
-        right: 10,
-      },
-    },
-
-    plugins: {
-      legend: {
-        position: 'top' as const,
-      },
-    },
   };
 
   return (
@@ -65,16 +89,35 @@ export const PieChart = ({
       elevation={2}
       sx={{
         textAlign: 'start',
-        p: 3,
         borderRadius: 2,
+        padding: 2,
         height: '100%',
         display: 'flex',
-        width: '100%',
         flexDirection: 'column',
+        justifyContent: 'space-between',
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ display: 'inline' }}>{title}</Typography>
+      {/* Header */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '10px',
+        }}
+      >
+        <Typography
+          sx={{
+            color: titleColor,
+
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {title}
+        </Typography>
+
         <QueryOptions
           queryId={queryId}
           setChartColor={setChartColor}
@@ -82,7 +125,14 @@ export const PieChart = ({
           setTitleColor={setTitleColor}
         />
       </div>
-      <div style={{ flexGrow: 1, position: 'relative' }}>
+
+      <div
+        style={{
+          flexGrow: 1,
+          minHeight: '200px',
+          position: 'relative',
+        }}
+      >
         <Pie data={data} options={options} />
       </div>
     </Paper>
