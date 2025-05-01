@@ -11,6 +11,7 @@ type DashboardProps = {
   edit?: boolean;
   editDashboard: () => void;
   dashboardName: string;
+
   refreshLoading: boolean;
   refreshDashboardQueries: () => void;
   saveLayout: () => void;

@@ -7,18 +7,20 @@ import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 import { Insights } from './insights';
 import Properties from './properties';
-import { useQueryOptions } from '../hooks/useQueryOptions';
+import { useQueryOptions } from '../hooks/useQuery-options';
 
 const QueryOptions = ({
   titleColor,
   setTitleColor,
   setChartColor,
+  chartColor,
   title,
   queryId,
   querytype,
 }: {
   setChartColor?: React.Dispatch<React.SetStateAction<string[]>>;
   titleColor: string;
+  chartColor?: string;
   setTitleColor: React.Dispatch<React.SetStateAction<string>>;
   title?: string;
   queryId: number;
@@ -116,6 +118,7 @@ const QueryOptions = ({
           <Properties
             setTitleColor={setTitleColor}
             setChartColor={setChartColor}
+            chartColor={chartColor}
             titleColor={titleColor}
             queryId={queryId}
           />

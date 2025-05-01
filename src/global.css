@@ -102,6 +102,9 @@ input[type='number']::-webkit-inner-spin-button {
 .open-dashboard:hover {
   font-weight: 600;
 }
+.open-dashboard {
+  text-transform: capitalize;
+}
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
@@ -118,6 +121,7 @@ input[type='number']::-webkit-inner-spin-button {
 .color-box:focus {
   border: 2px solid black;
 }
+
 .spin {
   animation: spin 1s linear infinite;
 }

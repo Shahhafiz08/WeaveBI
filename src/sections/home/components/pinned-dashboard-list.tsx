@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
@@ -12,16 +13,17 @@ import {
   Chip,
   Stack,
   Button,
-  Divider,
   Checkbox,
   MenuList,
   MenuItem,
   TableBody,
+  ClickAwayListener,
 } from '@mui/material';
 
-import { usePopover, CustomPopover } from 'src/layouts/components/custom-popover';
+import { paths } from 'src/routes/paths';
 
 import { Iconify } from 'src/components/iconify';
+import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 import {
   pinDashboardResponse,
@@ -52,7 +54,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
     backgroundColor: theme.palette.action.hover,
   },
-
   '&:last-child td, &:last-child th': {
     border: 0,
   },
@@ -60,41 +61,40 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function PinnedDashboardList() {
   const popover = usePopover();
-
   const [getData, setGetData] = React.useState<fetchDataType[]>([]);
+  const [selected, setSelected] = React.useState<number[]>([]);
+  const tableHeadItems = ['Name', 'Description', 'Domain', 'Created', 'Action'];
 
   const maxDescriptionLength = 60;
-  function truncateDescription(description: string) {
-    const truncatedDescription =
-      description.length > maxDescriptionLength
-        ? `${description.slice(0, maxDescriptionLength)}...`
-        : description;
-    return truncatedDescription;
-  }
-  function formatfetchedDate(fetchedDate: string) {
+  const truncateDescription = (description: string) =>
+    description.length > maxDescriptionLength
+      ? `${description.slice(0, maxDescriptionLength)}...`
+      : description;
+
+  const formatFetchedDate = (fetchedDate: string) => {
     const date = new Date(fetchedDate);
-    const formateDate = date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'numeric',
       day: 'numeric',
     });
-    return formateDate;
-  }
+  };
 
-  // Handle Pin Dashboard
-  async function handlePin(dashboardId: number) {
+  const handlePin = async (dashboardId: number) => {
     setGetData((prevData) =>
       prevData.map((dashboard) =>
         dashboard.id === dashboardId ? { ...dashboard, isPinned: !dashboard.isPinned } : dashboard
       )
     );
     await pinDashboardResponse(dashboardId);
-  }
-  async function handleGetPinnedDashboards(page: number, isPinned: boolean) {
+  };
+
+  const handleGetPinnedDashboards = async (page: number, isPinned: boolean) => {
     const incomingData = await pinnedDashboardsResponse(page, isPinned);
     setGetData(incomingData.dashboards);
-  }
-  async function handleDeleteDashboard(dashboardId: number) {
+  };
+
+  const handleDeleteDashboard = async (dashboardId: number) => {
     try {
       await deleteDashboardResponse(dashboardId);
       popover.onClose();
@@ -102,135 +102,149 @@ export default function PinnedDashboardList() {
     } catch (error) {
       alert(error);
     }
-  }
+  };
 
   React.useEffect(() => {
     handleGetPinnedDashboards(1, true);
-  }, [getData]);
-
-  const [selected, setSelected] = React.useState<number[]>([]);
-  const tableHeadItems = ['Name', 'Description', 'Domain', 'Created', 'Action'];
+  }, []);
 
   return (
-    <Stack sx={{ marginX: 1, marginY: 4, boxShadow: 2, borderRadius: 1 }}>
+    <Stack sx={{ boxShadow: 2, height: '400px', borderRadius: 1 }}>
       <TableContainer component={Paper} sx={{ marginRight: 30 }}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
+          <TableHead sx={{ position: 'sticky', top: '0.1px', zIndex: 10 }}>
             <TableRow>
               <StyledTableCell>
                 <Checkbox
                   checked={selected.length === getData.length}
                   indeterminate={selected.length > 0 && selected.length < getData.length}
-                  onChange={(event: any) => {
+                  onChange={(event) => {
                     const { checked } = event.target;
-                    if (checked) {
-                      setSelected(getData.map((item) => item.id));
-                    } else {
-                      setSelected([]);
-                    }
+                    setSelected(checked ? getData.map((item) => item.id) : []);
                   }}
                 />
               </StyledTableCell>
-              {tableHeadItems &&
-                tableHeadItems.map((item) => <StyledTableCell>{item}</StyledTableCell>)}
+              {tableHeadItems.map((item) => (
+                <StyledTableCell key={item}>{item}</StyledTableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {}
-            {getData.map((data) => (
-              <StyledTableRow key={data.id}>
-                <StyledTableCell>
-                  <Checkbox
-                    checked={selected.includes(data.id)}
-                    onChange={(event: any) => {
-                      console.log(event);
-                      const abc = event.target.checked;
-                      if (abc) {
-                        setSelected((prev) => [...prev, data.id]);
-                      } else {
-                        setSelected((prev) => prev?.filter((item) => item !== data.id));
-                      }
-                    }}
-                  />
-                </StyledTableCell>
-
-                <StyledTableCell component="th" scope="data">
-                  {data.name}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {truncateDescription(data.description)}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'start',
-                      flexWrap: 'wrap',
-
-                      overflow: 'hidden',
-                      width: '300px',
-                    }}
-                  >
-                    {data.tags.map((tag) => (
-                      <Chip
-                        size="small"
-                        label={tag}
-                        sx={{
-                          fontWeight: 'normal',
-                          fontFamily: 'poppins',
-                          marginRight: '4px',
-                          marginBottom: '4px',
-                          backgroundColor: 'grey',
-                        }}
-                      />
-                    ))}
-                  </Box>
-                </StyledTableCell>
-                <StyledTableCell align="left">{formatfetchedDate(data.createdAt)}</StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  sx={{ display: 'flex', flexDirection: 'row-reverse' }}
-                >
-                  <Button
-                    sx={{ maxWidth: '12px', padding: '5px' }}
-                    onClick={(event) => popover.setAnchorEl(event.currentTarget)}
-                  >
-                    <Iconify icon="mdi:dots-vertical" />
-                  </Button>
-
-                  <Button onClick={() => handlePin(data.id)}>
-                    {data.isPinned ? (
-                      <Iconify icon="ic:sharp-push-pin" sx={{ rotate: '45deg' }} />
-                    ) : (
-                      <Iconify icon="ic:outline-push-pin" sx={{ rotate: '45deg' }} />
-                    )}
-                  </Button>
-
-                  <CustomPopover
-                    open={popover.open}
-                    anchorEl={popover.anchorEl}
-                    onClose={popover.onClose}
-                    slotProps={{ arrow: { placement: 'right-top' } }}
-                  >
-                    <MenuList>
-                      <MenuItem>
-                        <Iconify icon="ic:baseline-file-open" />
-                        Open
-                      </MenuItem>
-                      <MenuItem>
-                        <Iconify icon="ic:baseline-edit" />
-                        Edit
-                      </MenuItem>
-                      <MenuItem onClick={() => handleDeleteDashboard(data.id)}>
-                        <Iconify icon="ic:baseline-delete" />
-                        Delete
-                      </MenuItem>
-                      <Divider sx={{ borderStyle: 'dashed' }} />
-                    </MenuList>
-                  </CustomPopover>
+            {getData.length === 0 ? (
+              <StyledTableRow>
+                <StyledTableCell colSpan={6} align="center">
+                  No pinned dashboards found.
                 </StyledTableCell>
               </StyledTableRow>
-            ))}
+            ) : (
+              getData.map((data) => (
+                <StyledTableRow key={data.id}>
+                  <StyledTableCell>
+                    <Checkbox
+                      checked={selected.includes(data.id)}
+                      onChange={(event) => {
+                        const { checked } = event.target;
+                        setSelected((prev) =>
+                          checked ? [...prev, data.id] : prev.filter((id) => id !== data.id)
+                        );
+                      }}
+                    />
+                  </StyledTableCell>
+
+                  <StyledTableCell sx={{ width: '25%' }}>
+                    <Link
+                      className="open-dashboard"
+                      style={{ textDecoration: 'none', color: 'black' }}
+                      to={paths.dashboard.OpenDashboard(data.id)}
+                    >
+                      {data.name}
+                    </Link>
+                  </StyledTableCell>
+
+                  <StyledTableCell align="left">
+                    {truncateDescription(data.description)}
+                  </StyledTableCell>
+
+                  <StyledTableCell align="left">
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'start',
+                        flexWrap: 'wrap',
+                        overflow: 'hidden',
+                        width: '300px',
+                      }}
+                    >
+                      {data.tags.map((tag) => (
+                        <Chip
+                          key={tag}
+                          size="small"
+                          label={tag}
+                          sx={{
+                            fontWeight: 'normal',
+                            fontFamily: 'poppins',
+                            marginRight: '4px',
+                            marginBottom: '4px',
+                            backgroundColor: 'grey',
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  </StyledTableCell>
+
+                  <StyledTableCell align="left">
+                    {formatFetchedDate(data.createdAt)}
+                  </StyledTableCell>
+
+                  <StyledTableCell
+                    align="left"
+                    sx={{ display: 'flex', flexDirection: 'row-reverse' }}
+                  >
+                    <Button
+                      sx={{ maxWidth: '12px', padding: '5px' }}
+                      onClick={(event) => popover.setAnchorEl(event.currentTarget)}
+                    >
+                      <Iconify icon="mdi:dots-vertical" />
+                    </Button>
+
+                    <Button onClick={() => handlePin(data.id)}>
+                      {data.isPinned ? (
+                        <Iconify icon="ic:sharp-push-pin" sx={{ rotate: '45deg' }} />
+                      ) : (
+                        <Iconify icon="ic:outline-push-pin" sx={{ rotate: '45deg' }} />
+                      )}
+                    </Button>
+
+                    <CustomPopover
+                      open={popover.open}
+                      anchorEl={popover.anchorEl}
+                      onClose={popover.onClose}
+                      sx={{ marginTop: '10px' }}
+                    >
+                      <Paper>
+                        <ClickAwayListener onClickAway={popover.onClose}>
+                          <MenuList>
+                            <MenuItem>
+                              <Iconify icon="ic:baseline-file-open" /> Open
+                            </MenuItem>
+                            <MenuItem onClick={() => console.log(data.id)}>
+                              <Iconify icon="ic:baseline-edit" /> Edit
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                handleDeleteDashboard(data.id);
+                              }}
+                            >
+                              <Iconify icon="ic:baseline-delete" /> Delete
+                            </MenuItem>
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </CustomPopover>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

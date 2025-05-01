@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 import Table from '@mui/material/Table';
@@ -13,18 +14,17 @@ import {
   Chip,
   Stack,
   Button,
-  Divider,
   Checkbox,
   MenuList,
   MenuItem,
   TableBody,
+  ClickAwayListener,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
-import { usePopover, CustomPopover } from 'src/layouts/components/custom-popover';
-
 import { Iconify } from 'src/components/iconify';
+import { CustomPopover } from 'src/components/custom-popover';
 
 import {
   getDashboardResponse,
@@ -43,7 +43,7 @@ type fetchDataType = {
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.grey,
+    backgroundColor: theme.palette.grey[200],
     color: theme.palette.common.black,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -55,33 +55,32 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
     backgroundColor: theme.palette.action.hover,
   },
-
   '&:last-child td, &:last-child th': {
     border: 0,
   },
 }));
 
 export default function RecentDashboardList() {
-  const popover = usePopover();
-
   const [getData, setGetData] = React.useState<fetchDataType[]>([]);
+  const [selected, setSelected] = React.useState<number[]>([]);
+  const [popoverAnchor, setPopoverAnchor] = React.useState<HTMLElement | null>(null);
+  const [activeDashboardId, setActiveDashboardId] = React.useState<number | null>(null);
 
   const maxDescriptionLength = 60;
+
   function truncateDescription(description: string) {
-    const truncatedDescription =
-      description.length > maxDescriptionLength
-        ? `${description.slice(0, maxDescriptionLength)}...`
-        : description;
-    return truncatedDescription;
+    return description.length > maxDescriptionLength
+      ? `${description.slice(0, maxDescriptionLength)}...`
+      : description;
   }
-  function formatfetchedDate(fetchedDate: string) {
+
+  function formatFetchedDate(fetchedDate: string) {
     const date = new Date(fetchedDate);
-    const formateDate = date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'numeric',
       day: 'numeric',
     });
-    return formateDate;
   }
 
   const fetchData = async () => {
@@ -89,22 +88,20 @@ export default function RecentDashboardList() {
       const incomingData = await getDashboardResponse();
       setGetData(incomingData.dashboards);
     } catch (error) {
-      console.error('Error fetching database:', error);
+      toast.error('Error fetching dashboard:', error);
     }
   };
 
-  // Individually Delete dashboard
   async function handleDeleteDashboard(dashboardId: number) {
     try {
       await deleteDashboardResponse(dashboardId);
-      popover.onClose();
+      handlePopoverClose();
       fetchData();
     } catch (error) {
       alert(error);
     }
   }
 
-  // Handle Pin Dashboard
   async function handlePin(dashboardId: number) {
     setGetData((prevData) =>
       prevData.map((dashboard) =>
@@ -114,150 +111,148 @@ export default function RecentDashboardList() {
     await pinDashboardResponse(dashboardId);
   }
 
+  function handlePopoverOpen(event: React.MouseEvent<HTMLElement>, dashboardId: number) {
+    setPopoverAnchor(event.currentTarget);
+    setActiveDashboardId(dashboardId);
+  }
+
+  function handlePopoverClose() {
+    setPopoverAnchor(null);
+    setActiveDashboardId(null);
+  }
+
   React.useEffect(() => {
     fetchData();
   }, []);
 
-  const [selected, setSelected] = React.useState<number[]>([]);
   const tableHeadItems = ['Name', 'Description', 'Domain', 'Created', 'Action'];
 
   return (
-    <Stack sx={{ marginX: 1, marginY: 4, boxShadow: 2, borderRadius: 1 }}>
-      <TableContainer component={Paper} sx={{ marginRight: 30 }}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
+    <Stack sx={{ boxShadow: 2, height: '400px', borderRadius: 1 }}>
+      <TableContainer component={Paper}>
+        <Table aria-label="customized table">
+          <TableHead sx={{ position: 'sticky', top: '0.1px', zIndex: 10 }}>
             <TableRow>
               <StyledTableCell>
                 <Checkbox
                   checked={selected.length === getData.length}
                   indeterminate={selected.length > 0 && selected.length < getData.length}
-                  onChange={(event: any) => {
+                  onChange={(event) => {
                     const { checked } = event.target;
-                    if (checked) {
-                      setSelected(getData.map((item) => item.id));
-                    } else {
-                      setSelected([]);
-                    }
+                    setSelected(checked ? getData.map((item) => item.id) : []);
                   }}
                 />
               </StyledTableCell>
-              {tableHeadItems &&
-                tableHeadItems.map((item, index) => (
-                  <StyledTableCell key={index} align="left">
-                    {item}
-                  </StyledTableCell>
-                ))}
+              {tableHeadItems.map((item, index) => (
+                <StyledTableCell key={index}>{item}</StyledTableCell>
+              ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {getData.map((data, index) => (
-              <StyledTableRow key={index}>
-                <StyledTableCell>
-                  <Checkbox
-                    checked={selected.includes(data.id)}
-                    onChange={(event: any) => {
-                      const abc = event.target.checked;
-                      if (abc) {
-                        setSelected((prev) => [...prev, data.id]);
-                      } else {
-                        setSelected((prev) => prev?.filter((item) => item !== data.id));
-                      }
-                    }}
-                  />
-                </StyledTableCell>
+          {getData.length <= 0 ? (
+            <StyledTableRow>
+              <StyledTableCell colSpan={6} align="center">
+                No dashboards found.
+              </StyledTableCell>
+            </StyledTableRow>
+          ) : (
+            <TableBody>
+              {getData.map((data) => (
+                <StyledTableRow key={data.id}>
+                  <StyledTableCell>
+                    <Checkbox
+                      checked={selected.includes(data.id)}
+                      onChange={(event) => {
+                        const isChecked = event.target.checked;
+                        setSelected((prev) =>
+                          isChecked ? [...prev, data.id] : prev.filter((id) => id !== data.id)
+                        );
+                      }}
+                    />
+                  </StyledTableCell>
 
-                <StyledTableCell sx={{ width: '20%' }} component="th" scope="data">
-                  <Link
-                    className="open-dashboard"
-                    style={{
-                      textDecoration: 'none',
-                      color: 'black',
-                    }}
-                    to={paths.dashboard.OpenDashboard(data.id)}
-                  >
-                    {data.name}
-                  </Link>
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {truncateDescription(data.description)}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'start',
-                      flexWrap: 'wrap',
+                  <StyledTableCell sx={{ width: '25%' }}>
+                    <Link
+                      className="open-dashboard"
+                      style={{ textDecoration: 'none', color: 'black' }}
+                      to={paths.dashboard.OpenDashboard(data.id)}
+                    >
+                      {data.name}
+                    </Link>
+                  </StyledTableCell>
 
-                      overflow: 'hidden',
-                      width: '300px',
-                    }}
-                  >
-                    {data.tags.map((tag, i) => (
-                      <Chip
-                        key={i}
-                        size="small"
-                        label={tag}
-                        sx={{
-                          fontWeight: 'normal',
-                          fontFamily: 'poppins',
-                          marginRight: '4px',
-                          marginBottom: '4px',
-                          backgroundColor: 'grey',
-                        }}
+                  <StyledTableCell>{truncateDescription(data.description)}</StyledTableCell>
+
+                  <StyledTableCell align="left">
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'start',
+                        flexWrap: 'wrap',
+                        overflow: 'hidden',
+                        width: '300px',
+                      }}
+                    >
+                      {data.tags.map((tag) => (
+                        <Chip
+                          key={tag}
+                          size="small"
+                          label={tag}
+                          sx={{
+                            fontWeight: 'normal',
+                            fontFamily: 'poppins',
+                            marginRight: '4px',
+                            marginBottom: '4px',
+                            backgroundColor: 'grey',
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  </StyledTableCell>
+
+                  <StyledTableCell>{formatFetchedDate(data.createdAt)}</StyledTableCell>
+
+                  <StyledTableCell sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button onClick={(e) => handlePopoverOpen(e, data.id)}>
+                      <Iconify icon="mdi:dots-vertical" />
+                    </Button>
+
+                    <Button onClick={() => handlePin(data.id)}>
+                      <Iconify
+                        icon={data.isPinned ? 'ic:sharp-push-pin' : 'ic:outline-push-pin'}
+                        sx={{ rotate: '45deg' }}
                       />
-                    ))}
-                  </Box>
-                </StyledTableCell>
-                <StyledTableCell align="left">{formatfetchedDate(data.createdAt)}</StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row-reverse',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Button onClick={(event) => popover.setAnchorEl(event.currentTarget)}>
-                    <Iconify icon="mdi:dots-vertical" />
-                  </Button>
-
-                  <Button onClick={() => handlePin(data.id)}>
-                    {data.isPinned ? (
-                      <Iconify icon="ic:sharp-push-pin" sx={{ rotate: '45deg' }} />
-                    ) : (
-                      <Iconify icon="ic:outline-push-pin" sx={{ rotate: '45deg' }} />
-                    )}
-                  </Button>
-
-                  <CustomPopover
-                    open={popover.open}
-                    anchorEl={popover.anchorEl}
-                    onClose={popover.onClose}
-                    slotProps={{ arrow: { placement: 'right-top' } }}
-                  >
-                    <MenuList>
-                      <MenuItem>
-                        <Iconify icon="ic:baseline-file-open" />
-                        Open
-                      </MenuItem>
-                      <MenuItem>
-                        <Iconify icon="ic:baseline-edit" />
-                        Edit
-                      </MenuItem>
-                      <MenuItem onClick={() => handleDeleteDashboard(data.id)}>
-                        <Iconify icon="ic:baseline-delete" />
-                        Delete
-                      </MenuItem>
-                      <Divider sx={{ borderStyle: 'dashed' }} />
-                    </MenuList>
-                  </CustomPopover>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
+                    </Button>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
       </TableContainer>
+
+      <CustomPopover
+        open={Boolean(popoverAnchor)}
+        anchorEl={popoverAnchor}
+        onClose={() => handlePopoverClose()}
+        sx={{ marginTop: '10px' }}
+      >
+        <ClickAwayListener onClickAway={() => handlePopoverClose()}>
+          <MenuList>
+            <MenuItem>
+              <Iconify icon="ic:baseline-file-open" />
+              Open
+            </MenuItem>
+            <MenuItem onClick={() => console.log('Edit:', activeDashboardId)}>
+              <Iconify icon="ic:baseline-edit" />
+              Edit
+            </MenuItem>
+            <MenuItem onClick={() => activeDashboardId && handleDeleteDashboard(activeDashboardId)}>
+              <Iconify icon="ic:baseline-delete" />
+              Delete
+            </MenuItem>
+          </MenuList>
+        </ClickAwayListener>
+      </CustomPopover>
     </Stack>
   );
 }

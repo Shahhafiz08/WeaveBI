@@ -22,8 +22,8 @@ import {
 
 import { Iconify } from 'src/components/iconify';
 
+import Sectionheader from './Sectionheader';
 import { getDatabase, deleteDatabase } from './api/actions';
-import Sectionheader from '../home/components/Sectionheader';
 
 type fetchDataType = {
   id: number;

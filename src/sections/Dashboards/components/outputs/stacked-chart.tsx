@@ -12,7 +12,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
-import { useColorPicker } from '../../hooks/useColorPicker';
+import { useColorPicker } from '../../hooks/useColor-picker';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -47,12 +47,15 @@ export const StackedChart = ({
   };
   const data = {
     labels,
-    datasets: chartData.map((chart) => ({
-      label: chart.label,
-      data: chart.data,
-      backgroundColor: !chartColor ? blueGradient : chartColor,
-      borderColor: !chartColor ? blueGradient : chartColor,
-    })),
+    datasets: chartData.map((chart, index) => {
+      const colorIndex = index % blueGradient.length;
+      return {
+        label: chart.label,
+        data: chart.data,
+        backgroundColor: !chartColor ? blueGradient[colorIndex] : chartColor[colorIndex],
+        borderColor: !chartColor ? blueGradient[colorIndex] : chartColor[colorIndex],
+      };
+    }),
   };
 
   return (

@@ -3,7 +3,7 @@ import Markdown from 'react-markdown';
 import { Box, Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
-import { useColorPicker } from '../../hooks/useColorPicker';
+import { useColorPicker } from '../../hooks/useColor-picker';
 
 const Descriptive = ({
   queryId,

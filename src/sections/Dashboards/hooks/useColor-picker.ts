@@ -13,6 +13,7 @@ export const useColorPicker = () => {
     '#BBD2EF',
     '#DDE9F7',
   ];
+  console.log('Chart color in hook', chartColor);
 
   return { titleColor, setTitleColor, setChartColor, chartColor, blueGradient };
 };

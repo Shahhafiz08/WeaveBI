@@ -1,18 +1,20 @@
 import { Box, Button, TextField } from '@mui/material';
 
-import { TitleColorPicker } from './TitleColorPicker';
-import { ChartColorPicker } from './chartColorPicker';
+import { TitleColorPicker } from './title-color-picker';
+import { ChartColorPicker } from './chart-color-picker';
 
 const Properties = ({
   queryId,
   titleColor,
   setTitleColor,
   setChartColor,
+  chartColor,
 }: {
   queryId: number;
   setTitleColor: React.Dispatch<React.SetStateAction<string>>;
   setChartColor?: any;
   titleColor: string;
+  chartColor?: string;
 }) => (
   <Box
     display="flex"

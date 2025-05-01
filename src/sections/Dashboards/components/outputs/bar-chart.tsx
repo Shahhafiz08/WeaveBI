@@ -12,7 +12,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
-import { useColorPicker } from '../../hooks/useColorPicker';
+import { useColorPicker } from '../../hooks/useColor-picker';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -21,16 +21,9 @@ type incommingDataType = {
   labels: Array<string>;
   title: string;
   queryId: number;
-  backgroundcolor: Array<string>;
 };
 
-export const BarChart = ({
-  labels,
-  chartData,
-  queryId,
-  title,
-  backgroundcolor,
-}: incommingDataType) => {
+export const BarChart = ({ labels, chartData, queryId, title }: incommingDataType) => {
   const { titleColor, chartColor, setTitleColor, setChartColor, blueGradient } = useColorPicker();
   const options = {
     maintainAspectRatio: false,

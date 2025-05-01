@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
+import Grid2 from '@mui/material/Unstable_Grid2';
+import { Tab, Stack, Typography } from '@mui/material';
 import { TabList, TabPanel, TabContext } from '@mui/lab';
-import { Tab, Grid, Stack, Typography } from '@mui/material';
 
 import { primary } from 'src/theme/core';
 import { DashboardContent } from 'src/layouts/dashboard';
@@ -9,6 +10,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { KeyPoints } from './components/keypoints-home';
 import PinnedDashboardList from './components/pinned-dashboard-list';
 import RecentDashboardList from './components/recent-dashboard-list';
+import { FrequeryntlyAskedQueries } from './components/ferquentyl-asked-queries';
 import { totalQueryCount, totalDatabaseCount, totalDashboardCount } from './api/actions';
 
 // ----------------------------------------------------------------------
@@ -48,7 +50,6 @@ export default function HomeView() {
   getQueryCount();
   getDashboardCount();
 
-  const user = 'Application User';
   const data = [
     {
       total: totalDatabases,
@@ -78,20 +79,30 @@ export default function HomeView() {
 
   return (
     <DashboardContent maxWidth="xl">
-      <Stack sx={{ height: '40vh' }}>
-        <Typography variant="h3" fontWeight="bold" marginBottom="3%" color={primary.main}>
-          Welcome, {user}
-        </Typography>
-        <Grid container direction="row">
+      <Stack marginBottom={5}>
+        <Grid2 container direction="row" rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           {data &&
             data.map((card, index) => (
-              <Grid key={index} item xs={8} md={3}>
+              <Grid2 key={index} xs={12} sm={6} md={3} lg={3}>
                 <KeyPoints total={card.total} image={card.image} title={card.title} />
-              </Grid>
+              </Grid2>
             ))}
-        </Grid>
+        </Grid2>
       </Stack>
-      <Stack sx={{ height: '1000px' }}>
+
+      <Stack height="50vh" style={{ marginBottom: '40px' }} flexDirection="row" gap={5}>
+        <div style={{ width: '50%' }}>
+          <FrequeryntlyAskedQueries color="pink" />
+        </div>
+        <div style={{ width: '50%' }}>
+          <FrequeryntlyAskedQueries color="red" />
+        </div>
+      </Stack>
+
+      <Stack>
+        <Typography variant="h3" style={{ color: primary.main }}>
+          Dashboards
+        </Typography>
         <TabContext value={value}>
           <TabList onChange={handleChange}>
             <Tab label=" Recent" value="1" />

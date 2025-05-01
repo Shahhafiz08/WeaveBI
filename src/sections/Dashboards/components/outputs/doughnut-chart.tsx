@@ -14,7 +14,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
-import { useColorPicker } from '../../hooks/useColorPicker';
+import { useColorPicker } from '../../hooks/useColor-picker';
 
 ChartJS.register(
   CategoryScale,

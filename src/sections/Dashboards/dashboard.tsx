@@ -18,14 +18,14 @@ import { DashboardContent } from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import EmptyDashboard from './emptyDashboard';
+import EmptyDashboard from './empty-dashboard';
 import Tabular from './components/outputs/tabular';
 import useDashboardDetails from './hooks/usedashboard';
 import { PieChart } from './components/outputs/pie-chart';
 import { BarChart } from './components/outputs/bar-chart';
-import SingeValue from './components/outputs/singleValue';
+import SingeValue from './components/outputs/single-value';
 import Descriptive from './components/outputs/descriptive';
-import DashboardHeader from './components/dashboardHeader';
+import DashboardHeader from './components/dashborad-header';
 import { LineChart } from './components/outputs/line-chart';
 import { StackedChart } from './components/outputs/stacked-chart';
 import { ScatterChart } from './components/outputs/scatter-chart';
@@ -74,12 +74,10 @@ const Dashboard = () => {
 
   // Render chart
   const renderChart = (query: any) => {
-    if (!query) {
-      return <EmptyDashboard />;
-    }
     if (!query.data) {
       return null;
     }
+
     // for descriptive
     const _heading = Array.isArray(query.data) ? Object.keys(query.data[0]) : [];
     if (query.outputType.toLowerCase() === 'descriptive') {
@@ -136,7 +134,6 @@ const Dashboard = () => {
               labels={labels}
               title={title}
               queryId={query.id}
-              backgroundcolor={chartColors.slice(0, datasets.data?.length)}
             />
           );
 
@@ -197,17 +194,31 @@ const Dashboard = () => {
         backgroundColor: '#f2f2f2',
       }}
     >
-      <DashboardHeader
-        dashboardName={dashboardData?.name}
-        id={id as unknown as any}
-        saveLayout={saveLayout}
-        renderableQueries={renderableQueries}
-        edit={edit}
-        editDashboard={editDashboard}
-        refreshDashboardQueries={refreshDashboardQueries}
-        refreshLoading={refreshLoading}
-      />
-      {refreshLoading ? (
+      <div
+        style={{
+          // position: 'sticky',
+          top: '72px',
+          zIndex: '9',
+          paddingLeft: '40px',
+          paddingRight: '20px',
+          // backgroundColor: 'rgba(255,255,255,0.8)',
+          // backdropFilter: 'blur(5px)',
+        }}
+      >
+        <DashboardHeader
+          dashboardName={dashboardData?.name}
+          id={id as unknown as any}
+          saveLayout={saveLayout}
+          renderableQueries={renderableQueries}
+          edit={edit}
+          editDashboard={editDashboard}
+          refreshDashboardQueries={refreshDashboardQueries}
+          refreshLoading={refreshLoading}
+        />
+      </div>
+      {renderableQueries.length === 0 ? (
+        <EmptyDashboard />
+      ) : refreshLoading ? (
         <LoadingScreen />
       ) : (
         <ResponsiveGridLayout
@@ -222,7 +233,7 @@ const Dashboard = () => {
             layout.current = currentLayout;
           }}
         >
-          {renderableQueries?.map((query: any, index: number) => (
+          {renderableQueries.map((query: any, index: number) => (
             <div
               key={query.id.toString()}
               data-grid={

@@ -111,28 +111,30 @@ export const ChartColorPicker: React.FC<Props> = ({ setChartColor, label }) => (
 
               case '#6D4C41':
                 shades = [
-                  '#6D4C41',
-                  '#d4bcb4',
-                  '#c1a39a',
-                  '#ad8b80',
-                  '#997267',
-                  '#85594d',
-                  '#5e4239',
-                  '#4f3831',
                   '#402f29',
+                  '#4f3831',
+                  '#5e4239',
+                  '#85594d',
+                  '#997267',
+                  '#ad8b80',
+                  '#c1a39a',
+                  '#d4bcb4',
+                  '#6D4C41',
                 ];
+
                 break;
 
               case '#21518F':
                 shades = [
                   '#21518F',
-                  '#DDE9F7',
-                  '#BBD2EF',
-                  '#99BCE8',
-                  '#77A5E0',
-                  '#558FD8',
-                  '#3378D0',
                   '#2965B1',
+                  '#3378D0',
+                  '#558FD8',
+                  '#77A5E0',
+                  '#99BCE8',
+                  '#BBD2EF',
+                  '#DDE9F7',
+                  '#F0F6FC',
                 ];
                 break;
 

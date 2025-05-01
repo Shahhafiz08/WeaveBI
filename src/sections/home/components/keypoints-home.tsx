@@ -31,7 +31,7 @@ export function KeyPoints({ title, total, image, sx, ...other }: Props) {
       sx={{
         display: 'flex',
         p: 3,
-        width: '80%',
+        width: '100%',
         height: '144px',
 
         ...sx,
@@ -47,7 +47,9 @@ export function KeyPoints({ title, total, image, sx, ...other }: Props) {
         }}
       >
         {kpi}
-        <Box sx={{ typography: 'subtitle2' }}>{title}</Box>
+        <Box color={primary.main} sx={{ fontWeight: '500' }}>
+          {title}
+        </Box>
       </Box>
     </Card>
   );
