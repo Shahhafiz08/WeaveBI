@@ -16,6 +16,16 @@ import { truncateString } from 'src/utils/helper';
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
+type Props = {
+  title: string;
+  queryGraphData: string;
+  queryId: number;
+  queryName: string;
+  queryData: object[];
+  heading: string[];
+  incommingTitleColor: string;
+  incommingChartColor: string;
+};
 const Tabular = ({
   title,
   queryGraphData,
@@ -23,18 +33,16 @@ const Tabular = ({
   queryName,
   queryData,
   heading,
-}: {
-  title: string;
-  queryGraphData: string;
-  queryId: number;
-  queryName: string;
-  queryData: object[];
-  heading: string[];
-}) => {
-  const { titleColor, setTitleColor, chartColor, setChartColor } = useColorPicker();
+  incommingTitleColor,
+  incommingChartColor,
+}: Props) => {
+  const { titleColor, setTitleColor, chartColor, setChartColor } = useColorPicker({
+    incommingTitleColor,
+    incommingChartColor,
+  });
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: Array.isArray(chartColor) ? chartColor[7] : '#F0F0F0',
+      backgroundColor: chartColor,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -43,7 +51,7 @@ const Tabular = ({
 
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(even)': {
-      backgroundColor: Array.isArray(chartColor) ? chartColor[7] : '#F0F0F0',
+      backgroundColor: chartColor,
     },
 
     '&:last-child td, &:last-child th': {
@@ -64,6 +72,8 @@ const Tabular = ({
             setTitleColor={setTitleColor}
             setChartColor={setChartColor}
             chartColor={chartColor}
+            incommingChartColor={chartColor}
+            incommingTitleColor={titleColor}
           />
         </div>
         <TableContainer sx={{ position: 'relative', maxHeight: '320px' }} component={Paper}>

@@ -1,11 +1,18 @@
 import type { AxiosRequestConfig } from 'axios';
 
+// ----------------------------------------------------------------------
 import axios from 'axios';
 
 import { CONFIG } from 'src/config-global';
 
-// ----------------------------------------------------------------------
-
+// const axiosInstance = axios.create({
+//   baseURL: CONFIG.site.serverUrl,
+//   httpsAgent: new https.Agent({
+//     rejectUnauthorized: false,
+//     // ca: fs.readFileSync('C:UsersshahhDownloads'),
+//     ca: fs.readFileSync('/public/assets/nginx.crt'),
+//   }),
+// });
 const axiosInstance = axios.create({ baseURL: CONFIG.site.serverUrl });
 
 axiosInstance.interceptors.response.use(
@@ -72,6 +79,7 @@ export const endpoints = {
     pinnedDashboards: '/dashboard',
     info: 'dashboard/info',
     positions: 'dashboard/position',
+    colors: 'dashboard/color',
   },
   query: {
     delete: 'query',

@@ -21,10 +21,23 @@ type incommingDataType = {
   labels: Array<string>;
   title: string;
   queryId: number;
+
+  incommingChartColor: string;
+  incommingTitleColor: string;
 };
 
-export const BarChart = ({ labels, chartData, queryId, title }: incommingDataType) => {
-  const { titleColor, chartColor, setTitleColor, setChartColor, blueGradient } = useColorPicker();
+export const BarChart = ({
+  labels,
+  chartData,
+  queryId,
+  title,
+  incommingTitleColor,
+  incommingChartColor,
+}: incommingDataType) => {
+  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker({
+    incommingTitleColor,
+    incommingChartColor,
+  });
   const options = {
     maintainAspectRatio: false,
     responsive: true,
@@ -43,8 +56,8 @@ export const BarChart = ({ labels, chartData, queryId, title }: incommingDataTyp
     datasets: chartData.map((chart: any) => ({
       label: chart.label,
       data: chart.data,
-      backgroundColor: !chartColor ? blueGradient : chartColor,
-      borderColor: !chartColor ? blueGradient : chartColor,
+      backgroundColor: chartColor,
+      borderColor: chartColor,
     })),
   };
 
@@ -70,10 +83,13 @@ export const BarChart = ({ labels, chartData, queryId, title }: incommingDataTyp
       >
         <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
         <QueryOptions
+          chartColor={chartColor}
           setChartColor={setChartColor}
           queryId={queryId}
           titleColor={titleColor}
           setTitleColor={setTitleColor}
+          incommingTitleColor={incommingTitleColor}
+          incommingChartColor={incommingChartColor}
         />
       </div>
 

@@ -13,8 +13,10 @@ type IncomingDataType = {
   datasetLabel?: string;
   labelss: string[];
   values: number[];
-  backgroundcolor: string[];
+
   queryId: number;
+  incommingChartColor: string;
+  incommingTitleColor: string;
 };
 
 export const PieChart = ({
@@ -22,10 +24,15 @@ export const PieChart = ({
   labelss,
   values,
   datasetLabel,
-  backgroundcolor,
+
   queryId,
+  incommingChartColor,
+  incommingTitleColor,
 }: IncomingDataType) => {
-  const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
+  const { titleColor, setTitleColor, setChartColor, chartColor } = useColorPicker({
+    incommingChartColor,
+    incommingTitleColor,
+  });
 
   const options = {
     responsive: true,
@@ -76,8 +83,8 @@ export const PieChart = ({
       {
         label: datasetLabel || '',
         data: values,
-        backgroundColor: chartColor || backgroundcolor || blueGradient,
-        borderColor: chartColor || backgroundcolor || blueGradient,
+        backgroundColor: chartColor,
+        borderColor: chartColor,
         borderWidth: 1,
       },
     ],
@@ -119,6 +126,9 @@ export const PieChart = ({
         </Typography>
 
         <QueryOptions
+          chartColor={chartColor}
+          incommingChartColor={incommingChartColor}
+          incommingTitleColor={incommingTitleColor}
           queryId={queryId}
           setChartColor={setChartColor}
           titleColor={titleColor}

@@ -22,10 +22,21 @@ type incommingDataType = {
 
   queryId: number;
   title: string;
+  incommingTitleColor: string;
+  incommingChartColor: string;
 };
 
-export const ScatterChart = ({ queryId, title, chartData }: incommingDataType) => {
-  const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
+export const ScatterChart = ({
+  incommingTitleColor,
+  incommingChartColor,
+  queryId,
+  title,
+  chartData,
+}: incommingDataType) => {
+  const { titleColor, setTitleColor, setChartColor, chartColor } = useColorPicker({
+    incommingTitleColor,
+    incommingChartColor,
+  });
 
   const options = {
     maintainAspectRatio: false,
@@ -51,8 +62,8 @@ export const ScatterChart = ({ queryId, title, chartData }: incommingDataType) =
         x: item.x,
         y: item.y,
       })),
-      backgroundColor: !chartColor ? blueGradient : chartColor,
-      borderColor: !chartColor ? blueGradient : chartColor,
+      backgroundColor: chartColor,
+      borderColor: chartColor,
     })),
   };
 
@@ -68,10 +79,13 @@ export const ScatterChart = ({ queryId, title, chartData }: incommingDataType) =
       >
         <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
         <QueryOptions
+          chartColor={chartColor}
           queryId={queryId}
           setChartColor={setChartColor}
           titleColor={titleColor}
           setTitleColor={setTitleColor}
+          incommingChartColor={chartColor}
+          incommingTitleColor={titleColor}
         />
       </div>
       <div

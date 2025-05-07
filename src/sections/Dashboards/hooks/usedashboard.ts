@@ -114,7 +114,7 @@ const useDashboardDetails = (id: string | number) => {
   const layout = useRef<any[]>([]);
   // Save dashboard positions
   const saveLayout = useCallback(async () => {
-    const promises = layout.current.map((position) => {
+    const positions = layout.current.map((position) => {
       const { i, x, y, w, h } = position;
 
       return updateQueryPosition({
@@ -128,7 +128,7 @@ const useDashboardDetails = (id: string | number) => {
     });
 
     try {
-      await Promise.all(promises);
+      await Promise.all(positions);
       setEdit(false);
       fetchDashboardInfo();
       toast.success('Dashboard saved sucessfully');

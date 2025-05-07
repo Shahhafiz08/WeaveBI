@@ -27,16 +27,29 @@ ChartJS.register(
   Legend
 );
 
-type ChartDataType = {
+type Props = {
   datasetLabel?: string;
   labels: string[];
   values: number[];
   queryId: number;
   title: string;
+  incommingChartColor: string;
+  incommingTitleColor: string;
 };
 
-export const DoughnutChart = ({ labels, queryId, title, values, datasetLabel }: ChartDataType) => {
-  const { titleColor, chartColor, setTitleColor, setChartColor, blueGradient } = useColorPicker();
+export const DoughnutChart = ({
+  labels,
+  queryId,
+  title,
+  values,
+  datasetLabel,
+  incommingChartColor,
+  incommingTitleColor,
+}: Props) => {
+  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker({
+    incommingTitleColor,
+    incommingChartColor,
+  });
 
   const options = {
     responsive: true,
@@ -88,8 +101,8 @@ export const DoughnutChart = ({ labels, queryId, title, values, datasetLabel }: 
       {
         label: datasetLabel || '',
         data: values,
-        backgroundColor: chartColor || blueGradient,
-        borderColor: chartColor || blueGradient,
+        backgroundColor: chartColor,
+        borderColor: chartColor,
         borderWidth: 1,
       },
     ],
@@ -133,8 +146,11 @@ export const DoughnutChart = ({ labels, queryId, title, values, datasetLabel }: 
         <QueryOptions
           setChartColor={setChartColor}
           queryId={queryId}
+          chartColor={chartColor}
           titleColor={titleColor}
           setTitleColor={setTitleColor}
+          incommingChartColor={incommingChartColor}
+          incommingTitleColor={incommingTitleColor}
         />
       </div>
 

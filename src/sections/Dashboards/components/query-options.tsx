@@ -17,14 +17,18 @@ const QueryOptions = ({
   title,
   queryId,
   querytype,
+  incommingTitleColor,
+  incommingChartColor,
 }: {
   setChartColor?: React.Dispatch<React.SetStateAction<string[]>>;
   titleColor: string;
-  chartColor?: string;
+  chartColor: any;
   setTitleColor: React.Dispatch<React.SetStateAction<string>>;
   title?: string;
   queryId: number;
   querytype?: string;
+  incommingTitleColor: string;
+  incommingChartColor: string;
 }) => {
   const popover = usePopover();
 
@@ -118,6 +122,8 @@ const QueryOptions = ({
           <Properties
             setTitleColor={setTitleColor}
             setChartColor={setChartColor}
+            incommingTitleColor={incommingTitleColor}
+            incommingChartColor={incommingChartColor}
             chartColor={chartColor}
             titleColor={titleColor}
             queryId={queryId}

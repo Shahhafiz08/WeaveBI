@@ -17,11 +17,12 @@ import { useColorPicker } from '../../hooks/useColor-picker';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 type IncommingDataType = {
-  chartData: Array<{ label: string; data: Array<Number> }>;
-  labels: Array<string>;
-  backgroundcolor?: Array<string>;
+  chartData: Array<{ label: string; data: number[] }>;
+  labels: string[];
   queryId: number;
   title: string;
+  incommingChartColor: string;
+  incommingTitleColor: string;
 };
 
 export const StackedChart = ({
@@ -29,9 +30,13 @@ export const StackedChart = ({
   queryId,
   title,
   chartData,
-  backgroundcolor,
+  incommingChartColor,
+  incommingTitleColor,
 }: IncommingDataType) => {
-  const { titleColor, setTitleColor, setChartColor, chartColor, blueGradient } = useColorPicker();
+  const { titleColor, setTitleColor, setChartColor, chartColor } = useColorPicker({
+    incommingTitleColor,
+    incommingChartColor,
+  });
 
   const options = {
     maintainAspectRatio: false,
@@ -44,16 +49,41 @@ export const StackedChart = ({
         right: 10,
       },
     },
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: false,
+      },
+    },
   };
+
+  const finalChartColor =
+    Array.isArray(chartColor) && chartColor.length > 0
+      ? chartColor
+      : [
+          '#EB6477',
+          '#ED7586',
+          '#EF8695',
+          '#F298A4',
+          '#F4A9B3',
+          '#F6BAC3',
+          '#F8CBD2',
+          '#FBDDE1',
+          '#FDEEF0',
+        ];
+  console.log(chartColor);
   const data = {
     labels,
     datasets: chartData.map((chart, index) => {
-      const colorIndex = index % blueGradient.length;
+      const color = finalChartColor[index % finalChartColor.length];
       return {
         label: chart.label,
         data: chart.data,
-        backgroundColor: !chartColor ? blueGradient[colorIndex] : chartColor[colorIndex],
-        borderColor: !chartColor ? blueGradient[colorIndex] : chartColor[colorIndex],
+        backgroundColor: color,
+        borderColor: color,
+        borderWidth: 1,
       };
     }),
   };
@@ -71,8 +101,11 @@ export const StackedChart = ({
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ display: 'inline' }}>{title}</Typography>
+        <Typography style={{ color: titleColor }}>{title}</Typography>
         <QueryOptions
+          chartColor={chartColor}
+          incommingChartColor={chartColor}
+          incommingTitleColor={titleColor}
           setChartColor={setChartColor}
           queryId={queryId}
           titleColor={titleColor}

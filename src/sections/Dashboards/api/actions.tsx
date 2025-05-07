@@ -10,6 +10,12 @@ type DashboardPosition = {
   z: number;
   h: number;
 };
+type DashboardColors = {
+  dashboardId: number;
+  queryId: number;
+  titleColor: string;
+  chartColor: string;
+};
 // Get dashboard queries
 export const getDashboardInfo = async (id: string) => {
   try {
@@ -55,6 +61,11 @@ export const generateQueryInsights = async (
 
   return response.data;
 };
+// delete a query
+export const deleteQuery = async (queryId: number) => {
+  const responce = await axios.delete(`${endpoints.query.delete}/${queryId}`);
+  return responce;
+};
 
 // Update query positions
 export const updateQueryPosition = async ({
@@ -79,8 +90,24 @@ export const updateQueryPosition = async ({
   });
   return response?.data;
 };
-// delete a query
-export const deleteQuery = async (queryId: number) => {
-  const responce = await axios.delete(`${endpoints.query.delete}/${queryId}`);
-  return responce;
+// Update colors
+
+export const updateQueryColors = async ({
+  dashboardId,
+  queryId,
+  titleColor,
+  chartColor,
+}: DashboardColors) => {
+  const response = await axios.patch(endpoints.dashboard.colors, {
+    colors: [
+      {
+        dashboardId,
+        queryId,
+        titleColor,
+        chartColor,
+      },
+    ],
+  });
+
+  return response.data;
 };

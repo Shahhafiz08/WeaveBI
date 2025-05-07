@@ -4,6 +4,7 @@ type Props = {
   label: string;
 
   selectedColor: string;
+  incommingTitleColor: string;
 
   setTitleColor: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -13,6 +14,7 @@ export const TitleColorPicker: React.FC<Props> = ({
 
   selectedColor,
   setTitleColor,
+  incommingTitleColor,
 }) => {
   const titleColors = ['#ef8695', '#2965b1', '#000000', '#d98311', '#73a6a8', '#99523A', '#0886c9'];
 

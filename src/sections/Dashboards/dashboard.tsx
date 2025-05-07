@@ -21,14 +21,14 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import EmptyDashboard from './empty-dashboard';
 import Tabular from './components/outputs/tabular';
 import useDashboardDetails from './hooks/usedashboard';
-import { PieChart } from './components/outputs/pie-chart';
 import { BarChart } from './components/outputs/bar-chart';
+import { PieChart } from './components/outputs/pie-chart';
 import SingeValue from './components/outputs/single-value';
 import Descriptive from './components/outputs/descriptive';
 import DashboardHeader from './components/dashborad-header';
 import { LineChart } from './components/outputs/line-chart';
-import { StackedChart } from './components/outputs/stacked-chart';
 import { ScatterChart } from './components/outputs/scatter-chart';
+import { StackedChart } from './components/outputs/stacked-chart';
 import { DoughnutChart } from './components/outputs/doughnut-chart';
 
 export interface Query {
@@ -58,7 +58,7 @@ ChartJS.register(
 const Dashboard = () => {
   const { id } = useParams();
   const {
-    chartColors,
+    // chartColors,
     edit,
     loading,
     renderableQueries,
@@ -81,13 +81,22 @@ const Dashboard = () => {
     // for descriptive
     const _heading = Array.isArray(query.data) ? Object.keys(query.data[0]) : [];
     if (query.outputType.toLowerCase() === 'descriptive') {
-      return <Descriptive queryId={query.id} queryName={query.name} queryData={query.data} />;
+      return (
+        <Descriptive
+          incommingChartColor={query.colors?.chartColor}
+          incommingTitleColor={query.colors?.titleColor}
+          queryId={query.id}
+          queryName={query.name}
+          queryData={query.data}
+        />
+      );
     }
-    // for singleValue
+    // For singleValue
     if (query.outputType.toLowerCase() === 'singlevalue') {
       return (
         <SingeValue
-          chartColors={chartColors}
+          incommingChartColor={query.colors.chartColor}
+          incommingTitleColor={query.colors.titleColor}
           queryId={query.id}
           qeryName={query.name}
           queryData={query.data}
@@ -101,6 +110,8 @@ const Dashboard = () => {
     ) {
       return (
         <Tabular
+          incommingChartColor={query.colors.chartColor}
+          incommingTitleColor={query.colors.titleColor}
           queryId={query.id}
           title={query.title}
           queryGraphData={query.outputType}
@@ -119,17 +130,20 @@ const Dashboard = () => {
           if (query.outputType.toLowerCase() === 'stacked chart') {
             return (
               <StackedChart
+                incommingChartColor={query.colors?.chartColor}
+                incommingTitleColor={query.colors?.titleColor}
                 labels={labels}
-                chartData={query.data.datasets}
+                chartData={datasets}
                 queryId={query.id}
                 title={title}
-                backgroundcolor={chartColors.slice(0, datasets.data?.length)}
               />
             );
           }
 
           return (
             <BarChart
+              incommingChartColor={query.colors.chartColor}
+              incommingTitleColor={query.colors.titleColor}
               chartData={query.data.datasets}
               labels={labels}
               title={title}
@@ -140,6 +154,8 @@ const Dashboard = () => {
         case 'doughnut':
           return (
             <DoughnutChart
+              incommingChartColor={query.colors?.chartColor}
+              incommingTitleColor={query.colors?.titleColor}
               queryId={query.id}
               title={title}
               labels={labels}
@@ -151,9 +167,10 @@ const Dashboard = () => {
         case 'pie':
           return (
             <PieChart
+              incommingChartColor={query.colors.chartColor}
+              incommingTitleColor={query.colors.titleColor}
               labelss={labels}
               values={values}
-              backgroundcolor={chartColors.slice(0, values.length)}
               datasetLabel={datasetLabel}
               queryId={query.id}
               title={title}
@@ -163,6 +180,8 @@ const Dashboard = () => {
         case 'line':
           return (
             <LineChart
+              incommingChartColor={query.colors.chartColor}
+              incommingTitleColor={query.colors.titleColor}
               title={title}
               queryId={query.id}
               labels={labels}
@@ -172,7 +191,15 @@ const Dashboard = () => {
           );
 
         case 'scatter':
-          return <ScatterChart title={title} queryId={query.id} chartData={query.data?.datasets} />;
+          return (
+            <ScatterChart
+              incommingChartColor={query.colors.chartColor}
+              incommingTitleColor={query.colors.titleColor}
+              title={title}
+              queryId={query.id}
+              chartData={query.data?.datasets}
+            />
+          );
 
         default:
           return null;
@@ -255,6 +282,10 @@ const Dashboard = () => {
           ))}
         </ResponsiveGridLayout>
       )}
+      {/* <div style={{ height: '40vh' }}>
+        Hello
+        <AddWegit />
+      </div> */}
     </DashboardContent>
   );
 };

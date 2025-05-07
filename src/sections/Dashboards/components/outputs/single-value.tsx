@@ -3,18 +3,26 @@ import { Box, Stack, Typography } from '@mui/material';
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
+type Props = {
+  qeryName: string;
+  queryId: number;
+  queryData: Array<object>;
+  
+  incommingChartColor: string;
+  incommingTitleColor: string;
+};
 const SingeValue = ({
   queryData,
   queryId,
   qeryName,
-  chartColors,
-}: {
-  qeryName: string;
-  queryId: number;
-  queryData: Array<object>;
-  chartColors: Array<string>;
-}) => {
-  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker();
+
+  incommingTitleColor,
+  incommingChartColor,
+}: Props) => {
+  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker({
+    incommingTitleColor,
+    incommingChartColor,
+  });
 
   return (
     <Stack
@@ -30,10 +38,13 @@ const SingeValue = ({
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography style={{ color: `${titleColor}` }}>{qeryName}</Typography>
         <QueryOptions
+          chartColor={chartColor}
           setChartColor={setChartColor}
           queryId={queryId}
           titleColor={titleColor}
           setTitleColor={setTitleColor}
+          incommingChartColor={chartColor}
+          incommingTitleColor={titleColor}
         />
       </div>
 
