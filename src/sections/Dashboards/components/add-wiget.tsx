@@ -1,4 +1,6 @@
 import { z as zod } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Paper, Button, TextField, Typography, IconButton } from '@mui/material';
@@ -7,9 +9,18 @@ import { Form, Field } from 'src/components/hook-form';
 
 const BottomSheet = () => {
   const addWegit = zod.object({
-    limit: zod.number().min(1, "Set an output limit"),
-    query: zod.string().min(1, "Enter a valid query"),
-    connectionName: zod.string().min(1, "Enter a valid query"),
+    limit: zod.number().min(1, 'Set an output limit'),
+    query: zod.string().min(1, 'Enter a valid query'),
+    connectionName: zod.string().min(1, 'Enter a valid query'),
+  });
+  type addWedgitSchema = zod.infer<typeof addWegit>;
+  const methods = useForm<addWedgitSchema>({
+    resolver: zodResolver(addWegit),
+    defaultValues: {
+      limit: 0,
+      query: '',
+      connectionName: '',
+    },
   });
   return (
     <Box
