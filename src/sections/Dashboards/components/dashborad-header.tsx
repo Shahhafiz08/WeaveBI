@@ -57,6 +57,9 @@ const DashboardHeader: React.FC<DashboardProps> = ({
             </Button>
           ) : (
             <Button
+              onClick={() => {
+                console.log('add widget');
+              }}
               type="button"
               variant="contained"
               sx={{

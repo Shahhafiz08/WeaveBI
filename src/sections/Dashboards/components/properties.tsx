@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router';
 
+import { LoadingButton } from '@mui/lab';
 import { Box, Button, TextField } from '@mui/material';
-
-import { usePopover } from 'src/components/custom-popover';
 
 import { updateQueryColors } from '../api/actions';
 import { TitleColorPicker } from './title-color-picker';
@@ -26,12 +26,15 @@ const Properties = ({
   incommingTitleColor: string;
   incommingChartColor: string;
 }) => {
-  const popover = usePopover();
+  // const popover = usePopover();
 
   const { id } = useParams();
-
+  const [applying, setApplying] = useState(false);
+  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
   const applyQueryColor = async () => {
     try {
+      setApplying(true);
+      await wait(500);
       const response = await updateQueryColors({
         chartColor: chartColor?.[0],
         queryId,
@@ -40,10 +43,11 @@ const Properties = ({
       });
 
       toast.success(response.message);
-      //  fetcDashboardInfo();
       return response;
     } catch (error) {
       toast.error(error);
+    } finally {
+      setApplying(false);
     }
     return null;
   };
@@ -101,16 +105,16 @@ const Properties = ({
           <Button sx={{ width: 'fit-content', fontWeight: '500' }} variant="contained">
             Reset
           </Button>
-          <Button
+          <LoadingButton
+            loading={applying}
             sx={{ width: 'fit-content', fontWeight: '500' }}
             onClick={() => {
               applyQueryColor();
-              popover.onClose();
             }}
             variant="contained"
           >
             Apply
-          </Button>
+          </LoadingButton>
         </div>
       </div>
     </Box>

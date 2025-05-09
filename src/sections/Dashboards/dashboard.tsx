@@ -18,6 +18,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
+import AddWegit from './components/add-wiget';
 import EmptyDashboard from './empty-dashboard';
 import Tabular from './components/outputs/tabular';
 import useDashboardDetails from './hooks/usedashboard';
@@ -219,6 +220,7 @@ const Dashboard = () => {
       sx={{
         display: 'flex',
         backgroundColor: '#f2f2f2',
+        position: 'relative',
       }}
     >
       <div
@@ -282,10 +284,9 @@ const Dashboard = () => {
           ))}
         </ResponsiveGridLayout>
       )}
-      {/* <div style={{ height: '40vh' }}>
-        Hello
+      <div style={{ position: 'absolute', top: '10%', right: '0%', width: '100%', height: '40vh' }}>
         <AddWegit />
-      </div> */}
+      </div>
     </DashboardContent>
   );
 };
