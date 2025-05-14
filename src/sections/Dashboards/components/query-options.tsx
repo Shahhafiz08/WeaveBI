@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import { Paper, Button, Drawer, MenuItem, MenuList, ClickAwayListener } from '@mui/material';
+import { Paper, Drawer, MenuItem, MenuList, IconButton, ClickAwayListener } from '@mui/material';
 
 import { Iconify } from 'src/components/iconify';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
@@ -9,27 +9,30 @@ import { Insights } from './insights';
 import Properties from './properties';
 import { useQueryOptions } from '../hooks/useQuery-options';
 
+type QueryOptionsTypes = {
+  setChartColor?: React.Dispatch<React.SetStateAction<string[]>>;
+
+  handleChangeXTitle?: (text: string) => void;
+  handleChangeYTitle?: (text: string) => void;
+  chartColor: any;
+  title?: string;
+  queryId: number;
+  querytype?: string;
+  incommingChartColor: string;
+  chart?: string;
+};
 const QueryOptions = ({
-  titleColor,
-  setTitleColor,
+  handleChangeXTitle,
+  handleChangeYTitle,
+
   setChartColor,
   chartColor,
   title,
   queryId,
   querytype,
-  incommingTitleColor,
+  chart,
   incommingChartColor,
-}: {
-  setChartColor?: React.Dispatch<React.SetStateAction<string[]>>;
-  titleColor: string;
-  chartColor: any;
-  setTitleColor: React.Dispatch<React.SetStateAction<string>>;
-  title?: string;
-  queryId: number;
-  querytype?: string;
-  incommingTitleColor: string;
-  incommingChartColor: string;
-}) => {
+}: QueryOptionsTypes) => {
   const popover = usePopover();
 
   const {
@@ -40,15 +43,17 @@ const QueryOptions = ({
     open,
     insights,
     loading,
+    handleChangeOutputType,
+    outputType,
   } = useQueryOptions(queryId, querytype as string);
 
   const value = useRef<string>('');
 
   return (
     <>
-      <Button type="button" onClick={popover.onOpen} style={{ justifyContent: 'end' }}>
+      <IconButton onClick={popover.onOpen} sx={{ width: 30, height: 30 }}>
         <Iconify icon="uil:ellipsis-v" />
-      </Button>
+      </IconButton>
 
       <CustomPopover
         open={popover.open}
@@ -88,13 +93,15 @@ const QueryOptions = ({
                   popover.onClose();
                 }}
               >
-                <Iconify icon="mdi:file-document-multiple-outline" sx={{ marginRight: '5px' }} />
-                Properties
+                <Iconify
+                  icon="material-symbols:dashboard-customize-outline-rounded"
+                  sx={{ marginRight: '5px' }}
+                />
+                Customize
               </MenuItem>
               <MenuItem
                 onClick={() => {
                   deleteDashboardQuery(queryId);
-
                   popover.onClose();
                 }}
               >
@@ -102,7 +109,7 @@ const QueryOptions = ({
                   icon="material-symbols:delete-outline-rounded"
                   sx={{ marginRight: '5px' }}
                 />
-                Delete
+                Remove
               </MenuItem>
             </MenuList>
           </ClickAwayListener>
@@ -120,12 +127,14 @@ const QueryOptions = ({
         )}
         {value.current === 'properties' && (
           <Properties
-            setTitleColor={setTitleColor}
+            chart={chart}
+            handleChangeXTitle={handleChangeXTitle}
+            handleChangeYTitle={handleChangeYTitle}
+            outputType={outputType}
+            handleChangeOutputType={handleChangeOutputType}
             setChartColor={setChartColor}
-            incommingTitleColor={incommingTitleColor}
             incommingChartColor={incommingChartColor}
             chartColor={chartColor}
-            titleColor={titleColor}
             queryId={queryId}
           />
         )}

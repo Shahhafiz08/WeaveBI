@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react';
 
 export const useColorPicker = ({
-  incommingTitleColor,
   incommingChartColor,
 }: {
-  incommingTitleColor: string;
+  // incommingTitleColor: string;
   incommingChartColor: string;
 }) => {
   const [titleColor, setTitleColor] = useState('');
@@ -91,11 +90,9 @@ export const useColorPicker = ({
         '#F0F6FC',
       ],
     };
-    setTitleColor(incommingTitleColor ?? '#21518F');
+    // setTitleColor(incommingTitleColor ?? '#21518F');
     setChartColor(colors[incommingChartColor ?? '#21518F']);
-  }, [incommingTitleColor, incommingChartColor]);
-
-  
+  }, [incommingChartColor]);
 
   return { titleColor, setTitleColor, setChartColor, chartColor };
 };

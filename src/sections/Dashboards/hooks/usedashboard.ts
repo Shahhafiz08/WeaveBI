@@ -137,6 +137,13 @@ const useDashboardDetails = (id: string | number) => {
     }
   }, [fetchDashboardInfo, id, setEdit]);
 
+  const handleChangeRenderableQueriesOutputType = (changeType: string, queryid: string) => {
+    const foundQuery = renderableQueries.find((query) => query.id === queryid);
+    foundQuery.outputType = changeType;
+    const filtered = renderableQueries.filter((query) => query.id !== queryid);
+
+    setRenderableQueries([foundQuery, ...filtered]);
+  };
   return {
     saveLayout,
     setEdit,
@@ -152,6 +159,7 @@ const useDashboardDetails = (id: string | number) => {
     setLoading,
     setOpen,
     gridContainerRef,
+    handleChangeRenderableQueriesOutputType,
     editDashboard,
     edit,
     renderableQueries,

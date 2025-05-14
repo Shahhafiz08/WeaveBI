@@ -39,8 +39,8 @@ export const TitleColorPicker: React.FC<Props> = ({
             onKeyDown={(e) => e.key === 'Enter' && setTitleColor(color)}
             className="color-box"
             style={{
-              width: '40px',
-              height: '40px',
+              width: '36px',
+              height: '36px',
               borderRadius: '10px',
               backgroundColor: color,
               cursor: 'pointer',

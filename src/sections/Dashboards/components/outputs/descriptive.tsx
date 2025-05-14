@@ -10,17 +10,9 @@ type Props = {
   queryName: string;
   queryData: string;
   incommingChartColor: string;
-  incommingTitleColor: string;
 };
-const Descriptive = ({
-  queryId,
-  queryName,
-  queryData,
-  incommingChartColor,
-  incommingTitleColor,
-}: Props) => {
-  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker({
-    incommingTitleColor,
+const Descriptive = ({ queryId, queryName, queryData, incommingChartColor }: Props) => {
+  const { titleColor, chartColor, setChartColor } = useColorPicker({
     incommingChartColor,
   });
   const color = Array.isArray(chartColor) && chartColor.length > 0 ? chartColor[0] : '#000000'; // fallback color
@@ -33,9 +25,6 @@ const Descriptive = ({
           chartColor={chartColor}
           setChartColor={setChartColor}
           queryId={queryId}
-          titleColor={titleColor}
-          setTitleColor={setTitleColor}
-          incommingTitleColor={incommingTitleColor}
           incommingChartColor={incommingChartColor}
         />
       </div>

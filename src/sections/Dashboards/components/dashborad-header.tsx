@@ -1,6 +1,14 @@
 import React from 'react';
 
-import { Paper, Button, MenuItem, MenuList, Typography, ClickAwayListener } from '@mui/material';
+import {
+  Paper,
+  Button,
+  MenuItem,
+  MenuList,
+  Typography,
+  IconButton,
+  ClickAwayListener,
+} from '@mui/material';
 
 import { Iconify } from 'src/components/iconify';
 import { StyledArrow } from 'src/components/custom-popover/styles';
@@ -11,7 +19,7 @@ type DashboardProps = {
   edit?: boolean;
   editDashboard: () => void;
   dashboardName: string;
-
+  // addWidget: () => void;
   refreshLoading: boolean;
   refreshDashboardQueries: () => void;
   saveLayout: () => void;
@@ -21,6 +29,7 @@ type DashboardProps = {
 const DashboardHeader: React.FC<DashboardProps> = ({
   dashboardName,
   id,
+  // addWidget,
   saveLayout,
   edit,
   editDashboard,
@@ -57,9 +66,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
             </Button>
           ) : (
             <Button
-              onClick={() => {
-                console.log('add widget');
-              }}
+              // onClick={addWidget}
               type="button"
               variant="contained"
               sx={{
@@ -74,7 +81,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
 
           <StyledArrow />
 
-          <Button
+          <IconButton
             type="button"
             onClick={() => {
               refreshDashboardQueries();
@@ -82,11 +89,11 @@ const DashboardHeader: React.FC<DashboardProps> = ({
             disabled={refreshLoading}
           >
             <Iconify icon="ic:baseline-autorenew" className={`${refreshLoading ? 'spin' : ''}`} />
-          </Button>
+          </IconButton>
 
-          <Button type="button" onClick={popover.onOpen}>
+          <IconButton type="button" onClick={popover.onOpen}>
             <Iconify icon="uil:ellipsis-v" />
-          </Button>
+          </IconButton>
 
           <CustomPopover
             open={popover.open}

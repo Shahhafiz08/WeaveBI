@@ -5,9 +5,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Paper, Button, TextField, Typography, IconButton } from '@mui/material';
 
+import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
 
-const BottomSheet = () => {
+import { DummyChart } from './dummyChart';
+
+type addWidget = {
+  closeAddWidget: () => void;
+  close: string;
+};
+const AddWidget = ({ closeAddWidget, close }: addWidget) => {
   const addWegit = zod.object({
     limit: zod.number().min(1, 'Set an output limit'),
     query: zod.string().min(1, 'Enter a valid query'),
@@ -22,25 +29,27 @@ const BottomSheet = () => {
       connectionName: '',
     },
   });
+
   return (
     <Box
       id="query-section"
       sx={{
         userSelect: 'none',
-        display: 'flex',
+
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '100px',
-        height: '40vh',
         width: '100%',
+        display: `${close}`,
+        // transform: CSSTranslate - moveDown,
       }}
     >
       <Paper
         elevation={3}
         id="outer-div"
         sx={{
-          padding: '10px 25px',
+          padding: ' 5px 40px 30px 40px',
           borderRadius: '20px',
           border: '2px solid rgb(239, 237, 237)',
           display: 'flex',
@@ -48,7 +57,7 @@ const BottomSheet = () => {
           justifyContent: 'centre',
           gap: 2,
           position: 'absolute',
-          width: '88%',
+          width: '106%',
         }}
       >
         {/* Drag Handle */}
@@ -71,7 +80,7 @@ const BottomSheet = () => {
           <Typography id="title" sx={{ fontSize: '1.1 rem' }}>
             Create Query
           </Typography>
-          <IconButton sx={{ padding: '0' }} id="cross">
+          <IconButton onClick={closeAddWidget} sx={{ padding: '0' }} id="cross">
             <CloseIcon />
           </IconButton>
         </Box>
@@ -112,23 +121,11 @@ const BottomSheet = () => {
                 label="Limit"
                 type="number"
                 inputProps={{ min: 1, max: 20 }}
-                sx={{ mt: 2, width: 100 }}
+                sx={{ width: 120 }}
               />
 
-              <Box sx={{ display: 'flex', justifyContent: 'end', mt: 2 }}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    width: 100,
-                    height: 50,
-                    backgroundColor: '#193e6d',
-                    borderRadius: '15px',
-                    fontSize: 20,
-                    fontWeight: 600,
-                  }}
-                >
-                  Run
-                </Button>
+              <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+                <Button variant="contained">Run</Button>
               </Box>
             </Form>
           </Box>
@@ -152,43 +149,33 @@ const BottomSheet = () => {
               }}
             >
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
-                {['charts.svg', 'table.svg', 'text.svg'].map((icon, i) => (
-                  <Box
-                    key={i}
-                    className="outputs"
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      fontSize: 25,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <img
-                      className="output-icons"
-                      src={`/icons/${icon}`}
-                      alt={icon.split('.')[0]}
-                      style={{ width: 30 }}
-                    />
-                    {icon.split('.')[0].charAt(0).toUpperCase() + icon.split('.')[0].slice(1)}
-                  </Box>
-                ))}
+                <Button style={{ display: 'flex', gap: '10px' }}>
+                  <img src="/public/assets/images/dashboard/chart-icon.svg" alt="Chart Icon" />
+                  <Typography>Charts</Typography>
+                </Button>
+                <Button style={{ display: 'flex', gap: '10px' }}>
+                  <img src="/public/assets/images/dashboard/table-icon.svg" alt="Chart Icon" />
+                  <Typography>Table</Typography>
+                </Button>
+                <Button style={{ display: 'flex', gap: '10px' }}>
+                  <img src="/public/assets/images/dashboard/text-icon.svg" alt="Chart Icon" />
+                  <Typography>Text</Typography>
+                </Button>
               </Box>
 
-              <Box sx={{ width: 20 }}>
-                <img src="/icons/elipse.svg" alt="" style={{ cursor: 'pointer' }} />
-              </Box>
+              <Button sx={{ width: 20 }}>
+                <Iconify icon="uil:ellipsis-v" />
+              </Button>
             </Box>
 
             <Box
               className="chart"
               sx={{
-                border: '2px solid rgb(188, 184, 184)',
-                height: 350,
+                height: 250,
                 width: '100%',
               }}
             >
-              chart
+              <DummyChart color="pink" />
             </Box>
           </Box>
         </Box>
@@ -197,4 +184,4 @@ const BottomSheet = () => {
   );
 };
 
-export default BottomSheet;
+export default AddWidget;

@@ -20,7 +20,7 @@ export const ChartColorPicker: React.FC<Props> = ({
   setChartColor,
   label,
 }) => (
-  <div style={{ marginBottom: '20px' }}>
+  <div style={{ marginBottom: '10px' }}>
     <div style={{ fontWeight: 500, marginBottom: '5px' }}>{label}</div>
     <div
       style={{
@@ -122,8 +122,8 @@ export const ChartColorPicker: React.FC<Props> = ({
           onKeyDown={(e) => e.key === 'Enter'}
           className="color-box"
           style={{
-            width: '40px',
-            height: '40px',
+            width: '42px',
+            height: '42px',
             borderRadius: '10px',
             backgroundColor: color,
             cursor: 'pointer',

@@ -6,21 +6,17 @@ import { useColorPicker } from '../../hooks/useColor-picker';
 type Props = {
   qeryName: string;
   queryId: number;
-  queryData: Array<object>;
-  
+  queryData: Array<object>; 
   incommingChartColor: string;
-  incommingTitleColor: string;
 };
 const SingeValue = ({
   queryData,
   queryId,
   qeryName,
-
-  incommingTitleColor,
   incommingChartColor,
 }: Props) => {
-  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker({
-    incommingTitleColor,
+  const { titleColor, chartColor, setChartColor } = useColorPicker({
+  
     incommingChartColor,
   });
 
@@ -41,13 +37,9 @@ const SingeValue = ({
           chartColor={chartColor}
           setChartColor={setChartColor}
           queryId={queryId}
-          titleColor={titleColor}
-          setTitleColor={setTitleColor}
           incommingChartColor={chartColor}
-          incommingTitleColor={titleColor}
         />
       </div>
-
       <Box
         sx={{
           display: 'flex',

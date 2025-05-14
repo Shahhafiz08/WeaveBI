@@ -128,6 +128,10 @@ input[type='number']::-webkit-inner-spin-button {
 .hoverButton:hover {
   background-color: rgb(226, 229, 232);
 }
+.addWidget {
+  border: 2px solid #de6868;
+}
+
 @keyframes spin {
   0% {
     rotate: 0deg;

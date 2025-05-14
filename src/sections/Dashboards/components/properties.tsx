@@ -1,56 +1,31 @@
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { useParams } from 'react-router';
-
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, Select, MenuItem, TextField, InputLabel, FormControl } from '@mui/material';
 
-import { updateQueryColors } from '../api/actions';
-import { TitleColorPicker } from './title-color-picker';
 import { ChartColorPicker } from './chart-color-picker';
+import { useProperties } from '../hooks/use-properties';
 
 const Properties = ({
   queryId,
-  titleColor,
-  setTitleColor,
+  handleChangeXTitle,
+  handleChangeYTitle,
+  outputType,
+  chart,
   setChartColor,
   chartColor,
+  handleChangeOutputType,
   incommingChartColor,
-  incommingTitleColor,
 }: {
   queryId: number;
-  setTitleColor: React.Dispatch<React.SetStateAction<string>>;
   setChartColor?: any;
-  titleColor: string;
+  handleChangeXTitle?: (text: string) => void;
+  handleChangeYTitle?: (text: string) => void;
+  handleChangeOutputType: ({ output }: { output: string }) => void;
   chartColor: any;
-  incommingTitleColor: string;
+  chart?: string;
+  outputType: string | undefined;
   incommingChartColor: string;
 }) => {
-  // const popover = usePopover();
-
-  const { id } = useParams();
-  const [applying, setApplying] = useState(false);
-  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-  const applyQueryColor = async () => {
-    try {
-      setApplying(true);
-      await wait(500);
-      const response = await updateQueryColors({
-        chartColor: chartColor?.[0],
-        queryId,
-        titleColor,
-        dashboardId: Number(id),
-      });
-
-      toast.success(response.message);
-      return response;
-    } catch (error) {
-      toast.error(error);
-    } finally {
-      setApplying(false);
-    }
-    return null;
-  };
+  const { applyQueryColor, applying } = useProperties({ chartColor, queryId });
 
   return (
     <Box
@@ -66,7 +41,7 @@ const Properties = ({
       paddingLeft={2}
     >
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <div> Control Pannel</div>
+        <div> Customize</div>
       </div>
 
       <div
@@ -77,29 +52,73 @@ const Properties = ({
           flexDirection: 'column',
         }}
       >
-        <div style={{ marginBottom: 10 }}>
-          <TextField fullWidth name="name" label="Title" sx={{ marginBottom: '15px' }} />
-          <TextField
-            name="query"
-            fullWidth
-            label="Descriptions "
-            minRows={2}
-            // value={customInstructions}
-            multiline
-          />
+        {/* Change description and title and chart type */}
+        <div style={{ marginBottom: 5, display: 'flex', flexDirection: 'column', gap: 15 }}>
+          <FormControl size="small">
+            <TextField fullWidth name="name" label="Title" size="small" />
+            <TextField
+              size="small"
+              name="query"
+              fullWidth
+              label="Descriptions "
+              minRows={2}
+              // value={customInstructions}
+              multiline
+            />
+          </FormControl>
+          
+          <FormControl size="small">
+            <InputLabel id="chart_type">Chart Type</InputLabel>
+            <Select
+              labelId="chart_type"
+              id="demo-simple-select"
+              // value={age}
+              onChange={(e) => handleChangeOutputType({ output: e.target.value as string })}
+              label="Chart Type"
+            >
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="pie chart">Pie</MenuItem>
+              <MenuItem value="doughnut chart">Doughnut</MenuItem>
+              <MenuItem value="bar chart">Bar</MenuItem>
+              <MenuItem value="line chart">Line</MenuItem>
+              <MenuItem value="scatter chart">Scatter</MenuItem>
+            </Select>
+          </FormControl>
         </div>
-        <div style={{ fontFamily: 'sans-serif' }}>
-          <TitleColorPicker
-            incommingTitleColor={incommingTitleColor}
-            label="Title color"
-            selectedColor={titleColor}
-            setTitleColor={setTitleColor}
-          />
-          <ChartColorPicker
-            label="Chart Color"
-            incommingChartColor={incommingChartColor}
-            setChartColor={setChartColor}
-          />
+
+        {/* Change chart color */}
+
+        <ChartColorPicker
+          label="Chart Color"
+          incommingChartColor={incommingChartColor}
+          setChartColor={setChartColor}
+        />
+
+        {/* add  X & Y axis */}
+        <div style={{ marginBottom: 5, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {chart === 'chart' && (
+            <>
+              {' '}
+              <TextField
+                fullWidth
+                name="name"
+                label="X-axis Title"
+                size="small"
+                onChange={(e) => {
+                  if (handleChangeXTitle) handleChangeXTitle(e.target.value);
+                }}
+              />
+              <TextField
+                fullWidth
+                name="name"
+                label="Y-axis Title"
+                size="small"
+                onChange={(e) => {
+                  if (handleChangeYTitle) handleChangeYTitle(e.target.value);
+                }}
+              />
+            </>
+          )}
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <Button sx={{ width: 'fit-content', fontWeight: '500' }} variant="contained">

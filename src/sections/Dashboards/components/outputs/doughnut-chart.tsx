@@ -34,7 +34,6 @@ type Props = {
   queryId: number;
   title: string;
   incommingChartColor: string;
-  incommingTitleColor: string;
 };
 
 export const DoughnutChart = ({
@@ -44,12 +43,11 @@ export const DoughnutChart = ({
   values,
   datasetLabel,
   incommingChartColor,
-  incommingTitleColor,
 }: Props) => {
-  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker({
-    incommingTitleColor,
+  const { titleColor, chartColor,  setChartColor } = useColorPicker({
     incommingChartColor,
   });
+  const chart = 'chart';
 
   const options = {
     responsive: true,
@@ -147,10 +145,8 @@ export const DoughnutChart = ({
           setChartColor={setChartColor}
           queryId={queryId}
           chartColor={chartColor}
-          titleColor={titleColor}
-          setTitleColor={setTitleColor}
+          chart={chart}
           incommingChartColor={incommingChartColor}
-          incommingTitleColor={incommingTitleColor}
         />
       </div>
 

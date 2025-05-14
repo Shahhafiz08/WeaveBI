@@ -1,3 +1,5 @@
+import type { ChartOptions } from 'chart.js';
+
 import { Bar } from 'react-chartjs-2';
 import {
   Title,
@@ -12,6 +14,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
+import { useProperties } from '../../hooks/use-properties';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -23,7 +26,6 @@ type incommingDataType = {
   queryId: number;
 
   incommingChartColor: string;
-  incommingTitleColor: string;
 };
 
 export const BarChart = ({
@@ -31,14 +33,41 @@ export const BarChart = ({
   chartData,
   queryId,
   title,
-  incommingTitleColor,
   incommingChartColor,
 }: incommingDataType) => {
-  const { titleColor, chartColor, setTitleColor, setChartColor } = useColorPicker({
-    incommingTitleColor,
+  const { titleColor, chartColor, setChartColor } = useColorPicker({
     incommingChartColor,
   });
-  const options = {
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ queryId });
+
+  const checkChart = 'chart';
+  const options: ChartOptions<'bar'> = {
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: Xtitle,
+          font: {
+            size: 17,
+            weight: 'bold',
+            lineHeight: 1.2,
+          },
+        },
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: Ytitle,
+          font: {
+            size: 17,
+            weight: 'bold',
+            lineHeight: 1.2,
+          },
+        },
+      },
+    },
     maintainAspectRatio: false,
     responsive: true,
     layout: {
@@ -86,9 +115,9 @@ export const BarChart = ({
           chartColor={chartColor}
           setChartColor={setChartColor}
           queryId={queryId}
-          titleColor={titleColor}
-          setTitleColor={setTitleColor}
-          incommingTitleColor={incommingTitleColor}
+          chart={checkChart}
+          handleChangeXTitle={handleChangeXTitle}
+          handleChangeYTitle={handleChangeYTitle}
           incommingChartColor={incommingChartColor}
         />
       </div>

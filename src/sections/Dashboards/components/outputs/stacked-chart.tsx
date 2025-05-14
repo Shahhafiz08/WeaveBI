@@ -1,3 +1,5 @@
+import type { ChartOptions } from 'chart.js';
+
 import { Bar } from 'react-chartjs-2';
 import {
   Title,
@@ -12,6 +14,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
+import { useProperties } from '../../hooks/use-properties';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -33,12 +36,40 @@ export const StackedChart = ({
   incommingChartColor,
   incommingTitleColor,
 }: IncommingDataType) => {
-  const { titleColor, setTitleColor, setChartColor, chartColor } = useColorPicker({
-    incommingTitleColor,
+  const { setChartColor, chartColor } = useColorPicker({
     incommingChartColor,
   });
+  const checkChart = 'chart';
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ queryId });
 
-  const options = {
+  const options: ChartOptions<'bar'> = {
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: Xtitle,
+          font: {
+            size: 17,
+            weight: 'bold',
+            lineHeight: 1.2,
+          },
+        },
+      },
+      y: {
+        display: true,
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: Ytitle,
+          font: {
+            size: 17,
+            weight: 'bold',
+            lineHeight: 1.2,
+          },
+        },
+      },
+    },
     maintainAspectRatio: false,
     responsive: true,
     layout: {
@@ -51,7 +82,7 @@ export const StackedChart = ({
     },
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: 'top',
       },
       title: {
         display: false,
@@ -73,7 +104,6 @@ export const StackedChart = ({
           '#FBDDE1',
           '#FDEEF0',
         ];
-  console.log(chartColor);
   const data = {
     labels,
     datasets: chartData.map((chart, index) => {
@@ -101,15 +131,15 @@ export const StackedChart = ({
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ color: titleColor }}>{title}</Typography>
+        <Typography>{title}</Typography>
         <QueryOptions
+          chart={checkChart}
+          handleChangeXTitle={handleChangeXTitle}
+          handleChangeYTitle={handleChangeYTitle}
           chartColor={chartColor}
           incommingChartColor={chartColor}
-          incommingTitleColor={titleColor}
           setChartColor={setChartColor}
           queryId={queryId}
-          titleColor={titleColor}
-          setTitleColor={setTitleColor}
         />
       </div>
 

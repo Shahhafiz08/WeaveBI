@@ -13,7 +13,7 @@ type DashboardPosition = {
 type DashboardColors = {
   dashboardId: number;
   queryId: number;
-  titleColor: string;
+
   chartColor: string;
 };
 // Get dashboard queries
@@ -91,19 +91,13 @@ export const updateQueryPosition = async ({
   return response?.data;
 };
 // Update colors
-
-export const updateQueryColors = async ({
-  dashboardId,
-  queryId,
-  titleColor,
-  chartColor,
-}: DashboardColors) => {
+export const updateQueryColors = async ({ dashboardId, queryId, chartColor }: DashboardColors) => {
   const response = await axios.patch(endpoints.dashboard.colors, {
     colors: [
       {
         dashboardId,
         queryId,
-        titleColor,
+
         chartColor,
       },
     ],

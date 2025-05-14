@@ -1,3 +1,5 @@
+import type { ChartOptions } from 'chart.js';
+
 import { Scatter } from 'react-chartjs-2';
 import {
   Legend,
@@ -11,6 +13,7 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
+import { useProperties } from '../../hooks/use-properties';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
@@ -22,23 +25,24 @@ type incommingDataType = {
 
   queryId: number;
   title: string;
-  incommingTitleColor: string;
+
   incommingChartColor: string;
 };
 
 export const ScatterChart = ({
-  incommingTitleColor,
   incommingChartColor,
   queryId,
   title,
   chartData,
 }: incommingDataType) => {
-  const { titleColor, setTitleColor, setChartColor, chartColor } = useColorPicker({
-    incommingTitleColor,
+  const { setChartColor, chartColor } = useColorPicker({
     incommingChartColor,
   });
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ queryId });
 
-  const options = {
+  const chartProps = 'chart';
+
+  const options: ChartOptions<'scatter'> = {
     maintainAspectRatio: false,
     responsive: true,
     layout: {
@@ -50,17 +54,48 @@ export const ScatterChart = ({
       },
     },
     scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: Xtitle,
+          font: {
+            size: 17,
+            weight: 'bold',
+            lineHeight: 1.2,
+          },
+        },
+      },
       y: {
+        display: true,
         beginAtZero: true,
+        title: {
+          display: true,
+          text: Ytitle,
+          font: {
+            size: 17,
+            weight: 'bold',
+            lineHeight: 1.2,
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      tooltip: {
+        enabled: true,
       },
     },
   };
+
   const data = {
     datasets: chartData?.map((chart) => ({
       label: chart.label,
       data: chart.data?.map((item) => ({
-        x: item.x,
-        y: item.y,
+        x: Number(item.x),
+        y: Number(item.y),
       })),
       backgroundColor: chartColor,
       borderColor: chartColor,
@@ -77,24 +112,24 @@ export const ScatterChart = ({
           paddingBottom: '0px',
         }}
       >
-        <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
+        <Typography style={{ display: 'inline' }}>{title}</Typography>
         <QueryOptions
           chartColor={chartColor}
           queryId={queryId}
           setChartColor={setChartColor}
-          titleColor={titleColor}
-          setTitleColor={setTitleColor}
+          chart={chartProps}
+          handleChangeXTitle={handleChangeXTitle}
+          handleChangeYTitle={handleChangeYTitle}
           incommingChartColor={chartColor}
-          incommingTitleColor={titleColor}
         />
       </div>
       <div
         style={{
           width: '100%',
           height: '100%',
-          paddingLeft: '40px',
-          paddingRight: '40px',
-          paddingBottom: '30px',
+          paddingLeft: '5px',
+          paddingRight: '25px',
+          paddingBottom: '15px',
         }}
       >
         {' '}

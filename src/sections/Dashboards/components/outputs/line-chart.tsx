@@ -1,3 +1,5 @@
+import type { ChartOptions } from 'chart.js';
+
 import { Line } from 'react-chartjs-2';
 import {
   Title,
@@ -13,21 +15,21 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
+import { useProperties } from '../../hooks/use-properties';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
 type incommingDataType = {
   datasetLabel?: string;
   labels: Array<string>;
   values: Array<number>;
-  incommingTitleColor: string;
   incommingChartColor: string;
   title: string;
   queryId: number;
 };
 
 export const LineChart = ({
-  incommingTitleColor,
   labels,
   incommingChartColor,
   values,
@@ -35,20 +37,47 @@ export const LineChart = ({
   queryId,
   datasetLabel,
 }: incommingDataType) => {
-  const { titleColor, setTitleColor, setChartColor, chartColor } = useColorPicker({
-    incommingTitleColor,
+  const { setChartColor, chartColor } = useColorPicker({
     incommingChartColor,
   });
-
-  const options = {
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ queryId });
+  const chart = 'chart';
+  const options: ChartOptions<'line'> = {
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: Xtitle,
+          font: {
+            size: 17,
+            weight: 'bold',
+            lineHeight: 1.2,
+          },
+        },
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: Ytitle,
+          font: {
+            size: 17,
+            weight: 'bold',
+            lineHeight: 1.2,
+          },
+        },
+      },
+    },
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: 'top',
       },
       title: {
         display: true,
+        text: '',
       },
     },
   };
@@ -75,22 +104,22 @@ export const LineChart = ({
           paddingBottom: '0px',
         }}
       >
-        <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
+        <Typography style={{ display: 'inline' }}>{title}</Typography>
         <QueryOptions
+          chart={chart}
+          handleChangeYTitle={handleChangeYTitle}
+          handleChangeXTitle={handleChangeXTitle}
           chartColor={chartColor}
           setChartColor={setChartColor}
           queryId={queryId}
-          titleColor={titleColor}
-          setTitleColor={setTitleColor}
           incommingChartColor={chartColor}
-          incommingTitleColor={titleColor}
         />
       </div>
       <div
         style={{
-          paddingLeft: '40px',
-          paddingRight: '40px',
-          paddingBottom: '40px',
+          paddingLeft: '10px',
+          paddingRight: '15px',
+          paddingBottom: '15px',
           display: 'flex',
           alignItems: 'center',
           height: '90%',

@@ -36,8 +36,7 @@ const Tabular = ({
   incommingTitleColor,
   incommingChartColor,
 }: Props) => {
-  const { titleColor, setTitleColor, chartColor, setChartColor } = useColorPicker({
-    incommingTitleColor,
+  const { titleColor, chartColor, setChartColor } = useColorPicker({
     incommingChartColor,
   });
   const StyledTableCell = styled(TableCell)(() => ({
@@ -68,12 +67,9 @@ const Tabular = ({
             querytype={queryGraphData}
             title={title}
             queryId={queryId}
-            titleColor={titleColor}
-            setTitleColor={setTitleColor}
             setChartColor={setChartColor}
             chartColor={chartColor}
             incommingChartColor={chartColor}
-            incommingTitleColor={titleColor}
           />
         </div>
         <TableContainer sx={{ position: 'relative', maxHeight: '320px' }} component={Paper}>

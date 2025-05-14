@@ -18,7 +18,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import AddWegit from './components/add-wiget';
+// import AddWegit from './components/add-widget';
 import EmptyDashboard from './empty-dashboard';
 import Tabular from './components/outputs/tabular';
 import useDashboardDetails from './hooks/usedashboard';
@@ -59,7 +59,6 @@ ChartJS.register(
 const Dashboard = () => {
   const { id } = useParams();
   const {
-    // chartColors,
     edit,
     loading,
     renderableQueries,
@@ -72,9 +71,16 @@ const Dashboard = () => {
     layout,
     ResponsiveGridLayout,
   } = useDashboardDetails(id as string);
+  // const [, setHidden] = useState('flex');
+  // const closeAddWidget = () => {
+  //   setHidden('none');
+  // };
+  // const showAddWidget = () => {
+  //   setHidden('flex');
+  // };
 
   // Render chart
-  const renderChart = (query: any) => {
+  const renderChart = (query: any, type?: string) => {
     if (!query.data) {
       return null;
     }
@@ -85,7 +91,6 @@ const Dashboard = () => {
       return (
         <Descriptive
           incommingChartColor={query.colors?.chartColor}
-          incommingTitleColor={query.colors?.titleColor}
           queryId={query.id}
           queryName={query.name}
           queryData={query.data}
@@ -97,7 +102,6 @@ const Dashboard = () => {
       return (
         <SingeValue
           incommingChartColor={query.colors.chartColor}
-          incommingTitleColor={query.colors.titleColor}
           queryId={query.id}
           qeryName={query.name}
           queryData={query.data}
@@ -128,7 +132,7 @@ const Dashboard = () => {
 
       switch (query.data.graph_type.toLowerCase()) {
         case 'bar':
-          if (query.outputType.toLowerCase() === 'stacked chart') {
+          if (type?.toLowerCase() === 'stacked chart') {
             return (
               <StackedChart
                 incommingChartColor={query.colors?.chartColor}
@@ -143,8 +147,7 @@ const Dashboard = () => {
 
           return (
             <BarChart
-              incommingChartColor={query.colors.chartColor}
-              incommingTitleColor={query.colors.titleColor}
+              incommingChartColor={query.colors?.chartColor}
               chartData={query.data.datasets}
               labels={labels}
               title={title}
@@ -156,7 +159,6 @@ const Dashboard = () => {
           return (
             <DoughnutChart
               incommingChartColor={query.colors?.chartColor}
-              incommingTitleColor={query.colors?.titleColor}
               queryId={query.id}
               title={title}
               labels={labels}
@@ -169,7 +171,6 @@ const Dashboard = () => {
           return (
             <PieChart
               incommingChartColor={query.colors.chartColor}
-              incommingTitleColor={query.colors.titleColor}
               labelss={labels}
               values={values}
               datasetLabel={datasetLabel}
@@ -182,11 +183,11 @@ const Dashboard = () => {
           return (
             <LineChart
               incommingChartColor={query.colors.chartColor}
-              incommingTitleColor={query.colors.titleColor}
               title={title}
               queryId={query.id}
               labels={labels}
               values={values}
+              // config={{title, labels}}
               datasetLabel={datasetLabel}
             />
           );
@@ -195,7 +196,6 @@ const Dashboard = () => {
           return (
             <ScatterChart
               incommingChartColor={query.colors.chartColor}
-              incommingTitleColor={query.colors.titleColor}
               title={title}
               queryId={query.id}
               chartData={query.data?.datasets}
@@ -225,16 +225,14 @@ const Dashboard = () => {
     >
       <div
         style={{
-          // position: 'sticky',
           top: '72px',
           zIndex: '9',
           paddingLeft: '40px',
           paddingRight: '20px',
-          // backgroundColor: 'rgba(255,255,255,0.8)',
-          // backdropFilter: 'blur(5px)',
         }}
       >
         <DashboardHeader
+          // addWidget={showAddWidget}
           dashboardName={dashboardData?.name}
           id={id as unknown as any}
           saveLayout={saveLayout}
@@ -245,6 +243,7 @@ const Dashboard = () => {
           refreshLoading={refreshLoading}
         />
       </div>
+
       {renderableQueries.length === 0 ? (
         <EmptyDashboard />
       ) : refreshLoading ? (
@@ -278,15 +277,14 @@ const Dashboard = () => {
               }
             >
               <Box sx={{ overflow: 'hidden', width: '100%', height: '100%' }}>
-                {renderChart(query)}
+                {query?.data?.graph_type?.toLowerCase()
+                  ? renderChart(query, query.outputType)
+                  : renderChart(query)}
               </Box>
             </div>
           ))}
         </ResponsiveGridLayout>
       )}
-      <div style={{ position: 'absolute', top: '10%', right: '0%', width: '100%', height: '40vh' }}>
-        <AddWegit />
-      </div>
     </DashboardContent>
   );
 };

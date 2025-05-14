@@ -16,7 +16,6 @@ type IncomingDataType = {
 
   queryId: number;
   incommingChartColor: string;
-  incommingTitleColor: string;
 };
 
 export const PieChart = ({
@@ -27,11 +26,9 @@ export const PieChart = ({
 
   queryId,
   incommingChartColor,
-  incommingTitleColor,
 }: IncomingDataType) => {
-  const { titleColor, setTitleColor, setChartColor, chartColor } = useColorPicker({
+  const { titleColor, setChartColor, chartColor } = useColorPicker({
     incommingChartColor,
-    incommingTitleColor,
   });
 
   const options = {
@@ -39,6 +36,13 @@ export const PieChart = ({
     maintainAspectRatio: false,
     layout: {
       padding: 20,
+      elements: {
+        arc: {
+          // You can increase the radius percentage (default is 100%)
+          // 120% makes the pie larger (but be careful with overflow)
+          radius: '150%',
+        },
+      },
     },
     plugins: {
       legend: {
@@ -128,11 +132,8 @@ export const PieChart = ({
         <QueryOptions
           chartColor={chartColor}
           incommingChartColor={incommingChartColor}
-          incommingTitleColor={incommingTitleColor}
           queryId={queryId}
           setChartColor={setChartColor}
-          titleColor={titleColor}
-          setTitleColor={setTitleColor}
         />
       </div>
 

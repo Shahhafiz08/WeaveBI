@@ -13,11 +13,17 @@ export const useQueryOptions = (queryid: number, querytype?: string) => {
   const [insights, setInsights] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [outputType, setOutputType] = useState(querytype);
+
+  const handleChangeOutputType = ({ output }: { output: string }) => {
+    setOutputType(output);
+    console.log(output, ' OOOOOOOUUUUUUUUTTTTTTTTTTPPPPPPUUUUUUUUUTTTTTTTTTTTTT');
+  };
 
   const toggleDrawer = (newBool: boolean) => {
     setOpen(newBool);
   };
-  
+
   const showInsights = async (
     queryId: number,
     browseOnline?: boolean,
@@ -88,6 +94,8 @@ export const useQueryOptions = (queryid: number, querytype?: string) => {
     showInsights,
     open,
     setOpen,
+    handleChangeOutputType,
+    outputType,
     toggleDrawer,
   };
 };
