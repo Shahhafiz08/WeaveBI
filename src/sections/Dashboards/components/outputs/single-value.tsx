@@ -3,21 +3,11 @@ import { Box, Stack, Typography } from '@mui/material';
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
-type Props = {
-  qeryName: string;
-  queryId: number;
-  queryData: Array<object>; 
-  incommingChartColor: string;
-};
-const SingeValue = ({
-  queryData,
-  queryId,
-  qeryName,
-  incommingChartColor,
-}: Props) => {
-  const { titleColor, chartColor, setChartColor } = useColorPicker({
-  
-    incommingChartColor,
+import type { QueryResponse, QuerySingleValueData } from '../../types/inference';
+
+const SingeValue = ({ query }: QueryResponse) => {
+  const { chartColor, setChartColor } = useColorPicker({
+    incommingChartColor: query.colors?.chartColor,
   });
 
   return (
@@ -32,12 +22,12 @@ const SingeValue = ({
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ color: `${titleColor}` }}>{qeryName}</Typography>
+        <Typography>{query.name}</Typography>
         <QueryOptions
+          showOptions="yesShow"
           chartColor={chartColor}
           setChartColor={setChartColor}
-          queryId={queryId}
-          incommingChartColor={chartColor}
+          query={query}
         />
       </div>
       <Box
@@ -58,7 +48,7 @@ const SingeValue = ({
             fontWeight: 'bold',
           }}
         >
-          {Object.values(queryData?.[0])}
+          {(query.data as unknown as QuerySingleValueData[])?.[0]?.count}
         </Typography>
       </Box>
     </Stack>

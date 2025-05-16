@@ -6,40 +6,23 @@ import { Paper, Typography } from '@mui/material';
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
+import type { QueryResponse } from '../../types/inference';
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-type IncomingDataType = {
-  title?: string;
-  datasetLabel?: string;
-  labelss: string[];
-  values: number[];
-
-  queryId: number;
-  incommingChartColor: string;
-};
-
-export const PieChart = ({
-  title,
-  labelss,
-  values,
-  datasetLabel,
-
-  queryId,
-  incommingChartColor,
-}: IncomingDataType) => {
-  const { titleColor, setChartColor, chartColor } = useColorPicker({
-    incommingChartColor,
+export const PieChart = ({ query }: QueryResponse) => {
+  const { chartColor, setChartColor } = useColorPicker({
+    incommingChartColor: query.colors?.chartColor,
   });
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+
     layout: {
       padding: 20,
       elements: {
         arc: {
-          // You can increase the radius percentage (default is 100%)
-          // 120% makes the pie larger (but be careful with overflow)
           radius: '150%',
         },
       },
@@ -82,21 +65,22 @@ export const PieChart = ({
   };
 
   const data = {
-    labels: labelss,
+    labels: query.data?.labels ?? [],
     datasets: [
       {
-        label: datasetLabel || '',
-        data: values,
-        backgroundColor: chartColor,
+        label: query.data.datasetLabel?.[0] ?? 'Dataset',
+        data:
+          query.data.values?.map((value) => (typeof value === 'string' ? Number(value) : value)) ??
+          [],
         borderColor: chartColor,
-        borderWidth: 1,
+        backgroundColor: chartColor,
       },
     ],
   };
 
   return (
     <Paper
-      key={queryId}
+      key={query.id}
       elevation={2}
       sx={{
         textAlign: 'start',
@@ -119,21 +103,20 @@ export const PieChart = ({
       >
         <Typography
           sx={{
-            color: titleColor,
-
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
           }}
         >
-          {title}
+          {query.name}
         </Typography>
 
         <QueryOptions
-          chartColor={chartColor}
-          incommingChartColor={incommingChartColor}
-          queryId={queryId}
+          changeChatType="changeit"
+          showOptions="yesShow"
+          query={query}
           setChartColor={setChartColor}
+          chartColor={chartColor}
         />
       </div>
 

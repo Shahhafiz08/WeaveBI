@@ -4,28 +4,44 @@ import { Box, Button, Select, MenuItem, TextField, InputLabel, FormControl } fro
 import { ChartColorPicker } from './chart-color-picker';
 import { useProperties } from '../hooks/use-properties';
 
-const Properties = ({
-  queryId,
-  handleChangeXTitle,
-  handleChangeYTitle,
-  outputType,
-  chart,
-  setChartColor,
-  chartColor,
-  handleChangeOutputType,
-  incommingChartColor,
-}: {
-  queryId: number;
+import type { Query } from '../types/inference';
+
+type PropertiesType = {
+  query: Query;
   setChartColor?: any;
   handleChangeXTitle?: (text: string) => void;
   handleChangeYTitle?: (text: string) => void;
   handleChangeOutputType: ({ output }: { output: string }) => void;
+  isChart?: string;
+  outputType?: string;
   chartColor: any;
-  chart?: string;
-  outputType: string | undefined;
-  incommingChartColor: string;
-}) => {
-  const { applyQueryColor, applying } = useProperties({ chartColor, queryId });
+  showOptions?: string;
+  changeChatType?: string;
+};
+const Properties = ({
+  query,
+  handleChangeXTitle,
+  handleChangeYTitle,
+  outputType,
+  showOptions,
+  isChart,
+  chartColor,
+  setChartColor,
+  changeChatType,
+  handleChangeOutputType,
+}: PropertiesType) => {
+  const {
+    applyQueryColor,
+    applying,
+    title,
+    handleQueryTitleChange,
+    handleQueryDescriptionChange,
+    description,
+    updateQueryOptions,
+  } = useProperties({
+    query,
+    chartColor,
+  });
 
   return (
     <Box
@@ -41,7 +57,7 @@ const Properties = ({
       paddingLeft={2}
     >
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <div> Customize</div>
+        <div>Customize</div>
       </div>
 
       <div
@@ -54,55 +70,70 @@ const Properties = ({
       >
         {/* Change description and title and chart type */}
         <div style={{ marginBottom: 5, display: 'flex', flexDirection: 'column', gap: 15 }}>
-          <FormControl size="small">
-            <TextField fullWidth name="name" label="Title" size="small" />
+          <FormControl size="small" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
+              required
+              fullWidth
+              name="name"
+              label="Title"
+              size="small"
+              value={title}
+              onChange={(e) => {
+                handleQueryTitleChange(e.target.value);
+              }}
+            />
+            <TextField
+              required
               size="small"
               name="query"
               fullWidth
-              label="Descriptions "
+              label="Query"
               minRows={2}
-              // value={customInstructions}
+              onChange={(e) => {
+                handleQueryDescriptionChange(e.target.value);
+              }}
+              value={description}
               multiline
             />
           </FormControl>
-          
-          <FormControl size="small">
-            <InputLabel id="chart_type">Chart Type</InputLabel>
-            <Select
-              labelId="chart_type"
-              id="demo-simple-select"
-              // value={age}
-              onChange={(e) => handleChangeOutputType({ output: e.target.value as string })}
-              label="Chart Type"
-            >
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="pie chart">Pie</MenuItem>
-              <MenuItem value="doughnut chart">Doughnut</MenuItem>
-              <MenuItem value="bar chart">Bar</MenuItem>
-              <MenuItem value="line chart">Line</MenuItem>
-              <MenuItem value="scatter chart">Scatter</MenuItem>
-            </Select>
-          </FormControl>
+          {changeChatType === 'changeit' && (
+            <FormControl size="small" required>
+              <InputLabel id="chart_type">Chart Type</InputLabel>
+              <Select
+                labelId="chart_type"
+                id="demo-simple-select"
+                onChange={(e) => handleChangeOutputType({ output: e.target.value as string })}
+                label="Chart Type"
+                defaultValue={outputType}
+              >
+                <MenuItem value="pie chart">Pie</MenuItem>
+                <MenuItem value="doughnut chart">Doughnut</MenuItem>
+                <MenuItem value="bar chart">Bar</MenuItem>
+                <MenuItem value="line chart">Line</MenuItem>
+                <MenuItem value="scatter chart">Scatter</MenuItem>
+                <MenuItem value="stacked chart">Stacked</MenuItem>
+              </Select>
+            </FormControl>
+          )}
         </div>
 
         {/* Change chart color */}
 
         <ChartColorPicker
+          showOptions={showOptions}
           label="Chart Color"
-          incommingChartColor={incommingChartColor}
           setChartColor={setChartColor}
         />
 
         {/* add  X & Y axis */}
         <div style={{ marginBottom: 5, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {chart === 'chart' && (
+          {isChart === 'chart' && (
             <>
               {' '}
               <TextField
                 fullWidth
                 name="name"
-                label="X-axis Title"
+                label="X-axis label"
                 size="small"
                 onChange={(e) => {
                   if (handleChangeXTitle) handleChangeXTitle(e.target.value);
@@ -111,7 +142,7 @@ const Properties = ({
               <TextField
                 fullWidth
                 name="name"
-                label="Y-axis Title"
+                label="Y-axis label"
                 size="small"
                 onChange={(e) => {
                   if (handleChangeYTitle) handleChangeYTitle(e.target.value);
@@ -129,6 +160,7 @@ const Properties = ({
             sx={{ width: 'fit-content', fontWeight: '500' }}
             onClick={() => {
               applyQueryColor();
+              updateQueryOptions();
             }}
             variant="contained"
           >

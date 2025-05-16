@@ -16,31 +16,17 @@ import QueryOptions from '../query-options';
 import { useProperties } from '../../hooks/use-properties';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
+import type { QueryResponse } from '../../types/inference';
+
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
-type incommingDataType = {
-  chartData: Array<{
-    label: string;
-    data: Array<{ x: string; y: string }>;
-  }>;
 
-  queryId: number;
-  title: string;
-
-  incommingChartColor: string;
-};
-
-export const ScatterChart = ({
-  incommingChartColor,
-  queryId,
-  title,
-  chartData,
-}: incommingDataType) => {
+export const ScatterChart = ({ query }: QueryResponse) => {
   const { setChartColor, chartColor } = useColorPicker({
-    incommingChartColor,
+    incommingChartColor: query.colors?.chartColor,
   });
-  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ queryId });
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ query });
 
-  const chartProps = 'chart';
+  const checkChart = 'chart';
 
   const options: ChartOptions<'scatter'> = {
     maintainAspectRatio: false,
@@ -91,9 +77,9 @@ export const ScatterChart = ({
   };
 
   const data = {
-    datasets: chartData?.map((chart) => ({
+    datasets: query.data.datasets?.map((chart: any) => ({
       label: chart.label,
-      data: chart.data?.map((item) => ({
+      data: chart.data?.map((item: any) => ({
         x: Number(item.x),
         y: Number(item.y),
       })),
@@ -103,7 +89,7 @@ export const ScatterChart = ({
   };
 
   return (
-    <Paper key={queryId} sx={{ borderRadius: 2, width: '100%', height: '100%' }}>
+    <Paper key={query.id} sx={{ borderRadius: 2, width: '100%', height: '100%' }}>
       <div
         style={{
           display: 'flex',
@@ -112,15 +98,16 @@ export const ScatterChart = ({
           paddingBottom: '0px',
         }}
       >
-        <Typography style={{ display: 'inline' }}>{title}</Typography>
+        <Typography style={{ display: 'inline' }}>{query.name}</Typography>
         <QueryOptions
           chartColor={chartColor}
-          queryId={queryId}
+          query={query}
           setChartColor={setChartColor}
-          chart={chartProps}
+          showOptions="yesShow"
+          changeChatType="changeit"
+          isChart={checkChart}
           handleChangeXTitle={handleChangeXTitle}
           handleChangeYTitle={handleChangeYTitle}
-          incommingChartColor={chartColor}
         />
       </div>
       <div

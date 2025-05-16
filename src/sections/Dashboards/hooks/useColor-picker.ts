@@ -3,10 +3,10 @@ import { useMemo, useState } from 'react';
 export const useColorPicker = ({
   incommingChartColor,
 }: {
-  // incommingTitleColor: string;
+  
   incommingChartColor: string;
 }) => {
-  const [titleColor, setTitleColor] = useState('');
+ 
   const [chartColor, setChartColor] = useState<any>();
 
   useMemo(() => {
@@ -94,5 +94,5 @@ export const useColorPicker = ({
     setChartColor(colors[incommingChartColor ?? '#21518F']);
   }, [incommingChartColor]);
 
-  return { titleColor, setTitleColor, setChartColor, chartColor };
+  return {  setChartColor, chartColor };
 };

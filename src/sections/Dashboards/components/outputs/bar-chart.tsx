@@ -17,28 +17,15 @@ import QueryOptions from '../query-options';
 import { useProperties } from '../../hooks/use-properties';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
+import type { QueryResponse } from '../../types/inference';
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-type incommingDataType = {
-  chartData: Array<string>;
-  labels: Array<string>;
-  title: string;
-  queryId: number;
-
-  incommingChartColor: string;
-};
-
-export const BarChart = ({
-  labels,
-  chartData,
-  queryId,
-  title,
-  incommingChartColor,
-}: incommingDataType) => {
-  const { titleColor, chartColor, setChartColor } = useColorPicker({
-    incommingChartColor,
+export const BarChart = ({ query }: QueryResponse) => {
+  const { chartColor, setChartColor } = useColorPicker({
+    incommingChartColor: query.colors?.chartColor,
   });
-  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ queryId });
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ query });
 
   const checkChart = 'chart';
   const options: ChartOptions<'bar'> = {
@@ -81,8 +68,8 @@ export const BarChart = ({
   };
 
   const data = {
-    labels,
-    datasets: chartData.map((chart: any) => ({
+    labels: query.data?.labels ?? [],
+    datasets: query.data.datasets?.map((chart: any) => ({
       label: chart.label,
       data: chart.data,
       backgroundColor: chartColor,
@@ -92,7 +79,7 @@ export const BarChart = ({
 
   return (
     <Paper
-      key={queryId}
+      key={query.id}
       elevation={2}
       sx={{
         width: '100%',
@@ -110,23 +97,24 @@ export const BarChart = ({
           paddingBottom: '0px',
         }}
       >
-        <Typography style={{ display: 'inline', color: `${titleColor}` }}>{title}</Typography>
+        <Typography style={{ display: 'inline' }}>{query.name}</Typography>
         <QueryOptions
-          chartColor={chartColor}
-          setChartColor={setChartColor}
-          queryId={queryId}
-          chart={checkChart}
-          handleChangeXTitle={handleChangeXTitle}
+          changeChatType="changeit"
+          showOptions="yesShow"
+          isChart={checkChart}
+          query={query}
           handleChangeYTitle={handleChangeYTitle}
-          incommingChartColor={incommingChartColor}
+          handleChangeXTitle={handleChangeXTitle}
+          setChartColor={setChartColor}
+          chartColor={chartColor}
         />
       </div>
 
       <div
         style={{
           padding: 20,
-          paddingLeft: '40px',
-          paddingRight: '40px',
+          paddingLeft: '0px',
+          paddingRight: '20px',
           width: '100%',
           height: '100%',
         }}

@@ -17,30 +17,17 @@ import QueryOptions from '../query-options';
 import { useProperties } from '../../hooks/use-properties';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
+import type { QueryResponse } from '../../types/inference';
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-type IncommingDataType = {
-  chartData: Array<{ label: string; data: number[] }>;
-  labels: string[];
-  queryId: number;
-  title: string;
-  incommingChartColor: string;
-  incommingTitleColor: string;
-};
-
-export const StackedChart = ({
-  labels,
-  queryId,
-  title,
-  chartData,
-  incommingChartColor,
-  incommingTitleColor,
-}: IncommingDataType) => {
+export const StackedChart = ({ query }: QueryResponse) => {
   const { setChartColor, chartColor } = useColorPicker({
-    incommingChartColor,
+    incommingChartColor: query.colors?.chartColor,
   });
+
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ query });
   const checkChart = 'chart';
-  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ queryId });
 
   const options: ChartOptions<'bar'> = {
     scales: {
@@ -89,7 +76,6 @@ export const StackedChart = ({
       },
     },
   };
-
   const finalChartColor =
     Array.isArray(chartColor) && chartColor.length > 0
       ? chartColor
@@ -105,8 +91,8 @@ export const StackedChart = ({
           '#FDEEF0',
         ];
   const data = {
-    labels,
-    datasets: chartData.map((chart, index) => {
+    labels: query.data.labels,
+    datasets: query.data.datasets?.map((chart: any, index) => {
       const color = finalChartColor[index % finalChartColor.length];
       return {
         label: chart.label,
@@ -120,7 +106,7 @@ export const StackedChart = ({
 
   return (
     <Paper
-      key={queryId}
+      key={query.id}
       elevation={2}
       sx={{
         width: '100%',
@@ -131,18 +117,18 @@ export const StackedChart = ({
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography>{title}</Typography>
+        <Typography style={{ display: 'inline' }}>{query.name}</Typography>
         <QueryOptions
-          chart={checkChart}
-          handleChangeXTitle={handleChangeXTitle}
+          changeChatType="changeit"
+          showOptions="yesShow"
+          isChart={checkChart}
+          query={query}
           handleChangeYTitle={handleChangeYTitle}
-          chartColor={chartColor}
-          incommingChartColor={chartColor}
+          handleChangeXTitle={handleChangeXTitle}
           setChartColor={setChartColor}
-          queryId={queryId}
+          chartColor={chartColor}
         />
       </div>
-
       <Bar data={data} options={options} />
     </Paper>
   );

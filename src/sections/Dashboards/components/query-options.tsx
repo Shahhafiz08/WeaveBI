@@ -9,32 +9,31 @@ import { Insights } from './insights';
 import Properties from './properties';
 import { useQueryOptions } from '../hooks/useQuery-options';
 
+import type { Query } from '../types/inference';
+
 type QueryOptionsTypes = {
   setChartColor?: React.Dispatch<React.SetStateAction<string[]>>;
-
   handleChangeXTitle?: (text: string) => void;
   handleChangeYTitle?: (text: string) => void;
-  chartColor: any;
-  title?: string;
-  queryId: number;
   querytype?: string;
-  incommingChartColor: string;
-  chart?: string;
+  isChart?: string;
+  chartColor?: any;
+  showOptions?: string;
+  query: Query;
+  changeChatType?: string;
 };
 const QueryOptions = ({
+  query,
   handleChangeXTitle,
   handleChangeYTitle,
-
   setChartColor,
-  chartColor,
-  title,
-  queryId,
+  changeChatType,
   querytype,
-  chart,
-  incommingChartColor,
+  showOptions,
+  chartColor,
+  isChart,
 }: QueryOptionsTypes) => {
   const popover = usePopover();
-
   const {
     showInsights,
     deleteDashboardQuery,
@@ -45,7 +44,7 @@ const QueryOptions = ({
     loading,
     handleChangeOutputType,
     outputType,
-  } = useQueryOptions(queryId, querytype as string);
+  } = useQueryOptions(query?.databaseId, query?.outputType);
 
   const value = useRef<string>('');
 
@@ -76,7 +75,7 @@ const QueryOptions = ({
               <MenuItem
                 onClick={() => {
                   value.current = 'insights';
-                  showInsights(queryId);
+                  showInsights(query.databaseId);
                   toggleDrawer(true);
                   popover.onClose();
                 }}
@@ -101,7 +100,7 @@ const QueryOptions = ({
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  deleteDashboardQuery(queryId);
+                  deleteDashboardQuery(query.databaseId);
                   popover.onClose();
                 }}
               >
@@ -118,24 +117,24 @@ const QueryOptions = ({
       <Drawer anchor="right" open={open} onClose={() => toggleDrawer(false)}>
         {value.current === 'insights' && (
           <Insights
-            queryId={queryId}
+            query={query}
             loading={loading}
             showInsights={showInsights}
-            title={title}
             insights={insights}
           />
         )}
         {value.current === 'properties' && (
           <Properties
-            chart={chart}
+            changeChatType={changeChatType}
+            showOptions={showOptions}
+            chartColor={chartColor}
+            query={query}
+            isChart={isChart}
             handleChangeXTitle={handleChangeXTitle}
             handleChangeYTitle={handleChangeYTitle}
             outputType={outputType}
             handleChangeOutputType={handleChangeOutputType}
             setChartColor={setChartColor}
-            incommingChartColor={incommingChartColor}
-            chartColor={chartColor}
-            queryId={queryId}
           />
         )}
       </Drawer>

@@ -13,13 +13,19 @@ type DashboardPosition = {
 type DashboardColors = {
   dashboardId: number;
   queryId: number;
-
   chartColor: string;
+};
+type UpdateQuery = {
+  name: string;
+  query: string;
+  outputType: string;
+  databaseId: number;
+  queryId?: number;
 };
 // Get dashboard queries
 export const getDashboardInfo = async (id: string) => {
   try {
-    const dashboardinfo = await axios.get(`${endpoints.dashboard.info}/${id}`);
+    const dashboardinfo = await axios.get(`${endpoints.dashboard.info}/${id}/info`);
     return dashboardinfo.data;
   } catch (error) {
     console.log(error);
@@ -92,16 +98,32 @@ export const updateQueryPosition = async ({
 };
 // Update colors
 export const updateQueryColors = async ({ dashboardId, queryId, chartColor }: DashboardColors) => {
+  console.log('Api chart color', chartColor);
   const response = await axios.patch(endpoints.dashboard.colors, {
     colors: [
       {
         dashboardId,
         queryId,
-
         chartColor,
       },
     ],
   });
 
   return response.data;
+};
+//  update a query
+export const updateQuery = async ({
+  name,
+  query,
+  outputType,
+  databaseId,
+  queryId,
+}: UpdateQuery) => {
+  const responce = await axios.patch(`${endpoints.query.update}/${queryId}`, {
+    name,
+    query,
+    outputType,
+    databaseId,
+  });
+  return responce.data;
 };

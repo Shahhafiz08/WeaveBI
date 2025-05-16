@@ -5,28 +5,19 @@ import { Box, Paper, Typography } from '@mui/material';
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
-type Props = {
-  queryId: number;
-  queryName: string;
-  queryData: string;
-  incommingChartColor: string;
-};
-const Descriptive = ({ queryId, queryName, queryData, incommingChartColor }: Props) => {
-  const { titleColor, chartColor, setChartColor } = useColorPicker({
-    incommingChartColor,
+import type { QueryResponse } from '../../types/inference';
+
+const Descriptive = ({ query }: QueryResponse) => {
+  const { chartColor, setChartColor } = useColorPicker({
+    incommingChartColor: query.colors?.chartColor,
   });
   const color = Array.isArray(chartColor) && chartColor.length > 0 ? chartColor[0] : '#000000'; // fallback color
 
   return (
-    <Paper key={queryId} elevation={2} sx={{ p: 3, borderRadius: 2, height: '100%' }}>
+    <Paper key={query.id} elevation={2} sx={{ p: 3, borderRadius: 2, height: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ color: `${titleColor}` }}>{queryName}</Typography>
-        <QueryOptions
-          chartColor={chartColor}
-          setChartColor={setChartColor}
-          queryId={queryId}
-          incommingChartColor={incommingChartColor}
-        />
+        <Typography>{query.name}</Typography>
+        <QueryOptions chartColor={chartColor} setChartColor={setChartColor} query={query} />
       </div>
 
       <Box
@@ -44,7 +35,7 @@ const Descriptive = ({ queryId, queryName, queryData, incommingChartColor }: Pro
       >
         <div style={{}}>
           <Markdown>
-            {typeof queryData === 'string' ? queryData : JSON.stringify(queryData, null, 2)}
+            {typeof query.data === 'string' ? query.data : JSON.stringify(query.data, null, 2)}
           </Markdown>
         </div>
       </Box>

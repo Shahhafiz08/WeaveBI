@@ -84,29 +84,15 @@ const Dashboard = () => {
     if (!query.data) {
       return null;
     }
+    console.log(query);
 
     // for descriptive
-    const _heading = Array.isArray(query.data) ? Object.keys(query.data[0]) : [];
     if (query.outputType.toLowerCase() === 'descriptive') {
-      return (
-        <Descriptive
-          incommingChartColor={query.colors?.chartColor}
-          queryId={query.id}
-          queryName={query.name}
-          queryData={query.data}
-        />
-      );
+      return <Descriptive query={query} />;
     }
     // For singleValue
     if (query.outputType.toLowerCase() === 'singlevalue') {
-      return (
-        <SingeValue
-          incommingChartColor={query.colors.chartColor}
-          queryId={query.id}
-          qeryName={query.name}
-          queryData={query.data}
-        />
-      );
+      return <SingeValue query={query} />;
     }
     // For tabular data
     if (
@@ -115,93 +101,26 @@ const Dashboard = () => {
     ) {
       return (
         <Tabular
-          incommingChartColor={query.colors.chartColor}
-          incommingTitleColor={query.colors.titleColor}
-          queryId={query.id}
-          title={query.title}
-          queryGraphData={query.outputType}
-          queryData={query.data}
-          queryName={query.name}
-          heading={_heading}
+        query={query}
         />
       );
     }
     // For chart data
     if (query.data && query.data.graph_type) {
-      const { title, labels, datasets, values, datasetLabel } = query.data;
-
       switch (query.data.graph_type.toLowerCase()) {
         case 'bar':
           if (type?.toLowerCase() === 'stacked chart') {
-            return (
-              <StackedChart
-                incommingChartColor={query.colors?.chartColor}
-                incommingTitleColor={query.colors?.titleColor}
-                labels={labels}
-                chartData={datasets}
-                queryId={query.id}
-                title={title}
-              />
-            );
+            return <StackedChart query={query} />;
           }
-
-          return (
-            <BarChart
-              incommingChartColor={query.colors?.chartColor}
-              chartData={query.data.datasets}
-              labels={labels}
-              title={title}
-              queryId={query.id}
-            />
-          );
-
+          return <BarChart query={query} />;
         case 'doughnut':
-          return (
-            <DoughnutChart
-              incommingChartColor={query.colors?.chartColor}
-              queryId={query.id}
-              title={title}
-              labels={labels}
-              values={values}
-              datasetLabel={datasetLabel}
-            />
-          );
-
+          return <DoughnutChart query={query} />;
         case 'pie':
-          return (
-            <PieChart
-              incommingChartColor={query.colors.chartColor}
-              labelss={labels}
-              values={values}
-              datasetLabel={datasetLabel}
-              queryId={query.id}
-              title={title}
-            />
-          );
-
+          return <PieChart query={query} />;
         case 'line':
-          return (
-            <LineChart
-              incommingChartColor={query.colors.chartColor}
-              title={title}
-              queryId={query.id}
-              labels={labels}
-              values={values}
-              // config={{title, labels}}
-              datasetLabel={datasetLabel}
-            />
-          );
-
+          return <LineChart query={query} />;
         case 'scatter':
-          return (
-            <ScatterChart
-              incommingChartColor={query.colors.chartColor}
-              title={title}
-              queryId={query.id}
-              chartData={query.data?.datasets}
-            />
-          );
-
+          return <ScatterChart query={query} />;
         default:
           return null;
       }
@@ -244,7 +163,7 @@ const Dashboard = () => {
         />
       </div>
 
-      {renderableQueries.length === 0 ? (
+      {renderableQueries?.length === 0 ? (
         <EmptyDashboard />
       ) : refreshLoading ? (
         <LoadingScreen />
@@ -261,7 +180,7 @@ const Dashboard = () => {
             layout.current = currentLayout;
           }}
         >
-          {renderableQueries.map((query: any, index: number) => (
+          {renderableQueries?.map((query: any, index: number) => (
             <div
               key={query.id.toString()}
               data-grid={

@@ -16,6 +16,8 @@ import { Paper, Typography } from '@mui/material';
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
+import type { QueryResponse } from '../../types/inference';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,27 +29,10 @@ ChartJS.register(
   Legend
 );
 
-type Props = {
-  datasetLabel?: string;
-  labels: string[];
-  values: number[];
-  queryId: number;
-  title: string;
-  incommingChartColor: string;
-};
-
-export const DoughnutChart = ({
-  labels,
-  queryId,
-  title,
-  values,
-  datasetLabel,
-  incommingChartColor,
-}: Props) => {
-  const { titleColor, chartColor,  setChartColor } = useColorPicker({
-    incommingChartColor,
+export const DoughnutChart = ({ query }: QueryResponse) => {
+  const { chartColor, setChartColor } = useColorPicker({
+    incommingChartColor: query.colors?.chartColor,
   });
-  const chart = 'chart';
 
   const options = {
     responsive: true,
@@ -94,21 +79,22 @@ export const DoughnutChart = ({
   };
 
   const data = {
-    labels,
+    labels: query.data?.labels ?? [],
     datasets: [
       {
-        label: datasetLabel || '',
-        data: values,
-        backgroundColor: chartColor,
+        label: query.data.datasetLabel?.[0] ?? 'Dataset',
+        data:
+          query.data.values?.map((value) => (typeof value === 'string' ? Number(value) : value)) ??
+          [],
         borderColor: chartColor,
-        borderWidth: 1,
+        backgroundColor: chartColor,
       },
     ],
   };
 
   return (
     <Paper
-      key={queryId}
+      key={query.id}
       elevation={2}
       sx={{
         textAlign: 'start',
@@ -131,22 +117,20 @@ export const DoughnutChart = ({
       >
         <Typography
           sx={{
-            color: titleColor,
-
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
           }}
         >
-          {title}
+          {query.name}
         </Typography>
 
         <QueryOptions
-          setChartColor={setChartColor}
-          queryId={queryId}
           chartColor={chartColor}
-          chart={chart}
-          incommingChartColor={incommingChartColor}
+          changeChatType="changeit"
+          showOptions="yesShow"
+          query={query}
+          setChartColor={setChartColor}
         />
       </div>
 

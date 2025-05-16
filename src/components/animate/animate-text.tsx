@@ -109,7 +109,7 @@ export function AnimateText({
         aria-hidden
         className={animateTextClasses.lines}
       >
-        {textArray.map((line, lineIndex) => (
+        {textArray?.map((line, lineIndex) => (
           <Box
             component="span"
             key={`${line}-${lineIndex}`}
@@ -117,7 +117,7 @@ export function AnimateText({
             className={animateTextClasses.line}
             sx={{ display: 'block' }}
           >
-            {line.split(' ').map((word, wordIndex) => {
+            {line.split(' ')?.map((word, wordIndex) => {
               const lastWordInline = line.split(' ')[line.split(' ').length - 1];
 
               return (
@@ -128,7 +128,7 @@ export function AnimateText({
                   className={animateTextClasses.word}
                   sx={{ display: 'inline-block' }}
                 >
-                  {word.split('').map((char, charIndex) => (
+                  {word.split('')?.map((char, charIndex) => (
                     <Box
                       component={m.span}
                       key={`${char}-${charIndex}`}

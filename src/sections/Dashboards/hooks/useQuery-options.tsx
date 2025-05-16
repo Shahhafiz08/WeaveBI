@@ -19,6 +19,7 @@ export const useQueryOptions = (queryid: number, querytype?: string) => {
     setOutputType(output);
     console.log(output, ' OOOOOOOUUUUUUUUTTTTTTTTTTPPPPPPUUUUUUUUUTTTTTTTTTTTTT');
   };
+  
 
   const toggleDrawer = (newBool: boolean) => {
     setOpen(newBool);

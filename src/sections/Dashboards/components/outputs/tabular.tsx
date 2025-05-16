@@ -13,35 +13,16 @@ import {
 
 import { truncateString } from 'src/utils/helper';
 
-import QueryOptions from '../query-options';
-import { useColorPicker } from '../../hooks/useColor-picker';
+import { primary } from 'src/theme/core';
 
-type Props = {
-  title: string;
-  queryGraphData: string;
-  queryId: number;
-  queryName: string;
-  queryData: object[];
-  heading: string[];
-  incommingTitleColor: string;
-  incommingChartColor: string;
-};
-const Tabular = ({
-  title,
-  queryGraphData,
-  queryId,
-  queryName,
-  queryData,
-  heading,
-  incommingTitleColor,
-  incommingChartColor,
-}: Props) => {
-  const { titleColor, chartColor, setChartColor } = useColorPicker({
-    incommingChartColor,
-  });
+import QueryOptions from '../query-options';
+
+import type { QueryResponse } from '../../types/inference';
+
+const Tabular = ({ query }: QueryResponse) => {
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: chartColor,
+      backgroundColor: primary.gray,
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -50,31 +31,25 @@ const Tabular = ({
 
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(even)': {
-      backgroundColor: chartColor,
+      backgroundColor: primary.gray,
     },
 
     '&:last-child td, &:last-child th': {
       border: 0,
     },
   }));
+  const heading = Array.isArray(query.data) ? Object.keys(query.data[0]) : [];
+
   return (
     <div>
       <Paper elevation={2} sx={{ p: 3, borderRadius: 2, userSelect: 'none' }}>
         <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
-          <Typography style={{ display: 'inline', color: `${titleColor}` }}>{queryName}</Typography>
-
-          <QueryOptions
-            querytype={queryGraphData}
-            title={title}
-            queryId={queryId}
-            setChartColor={setChartColor}
-            chartColor={chartColor}
-            incommingChartColor={chartColor}
-          />
+          <Typography>{query.name}</Typography>
+          <QueryOptions query={query} />
         </div>
         <TableContainer sx={{ position: 'relative', maxHeight: '320px' }} component={Paper}>
           <Table sx={{ width: '100%' }}>
-            <TableHead style={{ position: 'relative', color: titleColor ?? '#637381' }}>
+            <TableHead style={{ position: 'relative' }}>
               <TableRow style={{ position: 'sticky', top: '0.01px' }}>
                 {heading.map((item, i) => (
                   <StyledTableCell key={i} style={{}}>
@@ -84,7 +59,7 @@ const Tabular = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {queryData.map((rowItem: any, i) => (
+              {query.data.map((rowItem: any, i) => (
                 <StyledTableRow key={i}>
                   {Object.keys(rowItem).map((item, _) => (
                     <StyledTableCell key={_}>{truncateString(rowItem[item], 20)}</StyledTableCell>

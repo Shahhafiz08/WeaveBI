@@ -14,15 +14,15 @@ import {
 
 import { Iconify } from 'src/components/iconify';
 
+import type { Query } from '../types/inference';
+
 export const Insights = ({
-  queryId,
-  title,
+  query,
   insights,
   loading,
   showInsights,
 }: {
-  queryId: number;
-  title?: string;
+  query: Query;
   insights: string;
   loading: boolean;
   showInsights: (
@@ -80,7 +80,7 @@ export const Insights = ({
         </div>
         <div> Insights</div>
       </div>
-      <Typography style={{ fontWeight: 500, fontSize: '1.1rem' }}>{title}</Typography>
+      <Typography style={{ fontWeight: 500, fontSize: '1.1rem' }}>{query.name}</Typography>
       <Box
         sx={{
           borderRadius: '10px',
@@ -142,7 +142,7 @@ export const Insights = ({
         />
         <Button
           onClick={() => {
-            showInsights(queryId, browseOnline, customInstructions);
+            showInsights(query.id, browseOnline, customInstructions);
           }}
           sx={{ width: 'fit-content', fontWeight: '500' }}
           variant="contained"

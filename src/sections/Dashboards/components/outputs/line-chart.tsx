@@ -18,30 +18,19 @@ import QueryOptions from '../query-options';
 import { useProperties } from '../../hooks/use-properties';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
+import type { QueryResponse } from '../../types/inference';
+
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-type incommingDataType = {
-  datasetLabel?: string;
-  labels: Array<string>;
-  values: Array<number>;
-  incommingChartColor: string;
-  title: string;
-  queryId: number;
-};
-
-export const LineChart = ({
-  labels,
-  incommingChartColor,
-  values,
-  title,
-  queryId,
-  datasetLabel,
-}: incommingDataType) => {
+export const LineChart = ({ query }: QueryResponse) => {
   const { setChartColor, chartColor } = useColorPicker({
-    incommingChartColor,
+    incommingChartColor: query.colors?.chartColor,
   });
-  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ queryId });
-  const chart = 'chart';
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle, title } = useProperties({
+    query,
+  });
+
+  const checkChart = 'chart';
   const options: ChartOptions<'line'> = {
     scales: {
       x: {
@@ -83,11 +72,13 @@ export const LineChart = ({
   };
 
   const data = {
-    labels,
+    labels: query.data?.labels ?? [],
     datasets: [
       {
-        label: datasetLabel,
-        data: values,
+        label: query.data.datasetLabel?.[0] ?? 'Dataset',
+        data:
+          query.data.values?.map((value) => (typeof value === 'string' ? Number(value) : value)) ??
+          [],
         borderColor: chartColor,
         backgroundColor: chartColor,
       },
@@ -95,7 +86,11 @@ export const LineChart = ({
   };
 
   return (
-    <Paper key={queryId} elevation={2} sx={{ textAlign: 'start', borderRadius: 2, height: '100%' }}>
+    <Paper
+      key={query.id}
+      elevation={2}
+      sx={{ textAlign: 'start', borderRadius: 2, height: '100%' }}
+    >
       <div
         style={{
           display: 'flex',
@@ -106,13 +101,13 @@ export const LineChart = ({
       >
         <Typography style={{ display: 'inline' }}>{title}</Typography>
         <QueryOptions
-          chart={chart}
+          chartColor={chartColor}
+          query={query}
+          showOptions="yesShow"
+          isChart={checkChart}
           handleChangeYTitle={handleChangeYTitle}
           handleChangeXTitle={handleChangeXTitle}
-          chartColor={chartColor}
           setChartColor={setChartColor}
-          queryId={queryId}
-          incommingChartColor={chartColor}
         />
       </div>
       <div
