@@ -16,7 +16,7 @@ import { Paper, Typography } from '@mui/material';
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
-import type { QueryResponse } from '../../types/inference';
+import type { QueryResponse, QueryChartData } from '../../types/inference';
 
 ChartJS.register(
   CategoryScale,
@@ -84,8 +84,9 @@ export const DoughnutChart = ({ query }: QueryResponse) => {
       {
         label: query.data.datasetLabel?.[0] ?? 'Dataset',
         data:
-          query.data.values?.map((value) => (typeof value === 'string' ? Number(value) : value)) ??
-          [],
+          query.data.values?.map((value: QueryChartData) =>
+            typeof value === 'string' ? Number(value) : value
+          ) ?? [],
         borderColor: chartColor,
         backgroundColor: chartColor,
       },

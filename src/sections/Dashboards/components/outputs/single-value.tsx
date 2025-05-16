@@ -36,15 +36,14 @@ const SingeValue = ({ query }: QueryResponse) => {
           justifyContent: 'center',
           mt: 2,
           p: 2,
-          bgcolor: '#F5F5F5',
-          position: 'relative',
+          fontSize: '30px',
           borderRadius: 1,
         }}
       >
         <Typography
           style={{
             color: Array.isArray(chartColor) ? chartColor[0] : '#193E6D',
-            fontSize: '3.2rem',
+            fontSize: '2.2em',
             fontWeight: 'bold',
           }}
         >

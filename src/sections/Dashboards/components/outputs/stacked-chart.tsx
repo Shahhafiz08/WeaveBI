@@ -92,7 +92,7 @@ export const StackedChart = ({ query }: QueryResponse) => {
         ];
   const data = {
     labels: query.data.labels,
-    datasets: query.data.datasets?.map((chart: any, index) => {
+    datasets: query.data.datasets?.map((chart: any, index: number) => {
       const color = finalChartColor[index % finalChartColor.length];
       return {
         label: chart.label,

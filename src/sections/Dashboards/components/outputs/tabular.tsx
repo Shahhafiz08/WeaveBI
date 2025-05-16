@@ -59,7 +59,7 @@ const Tabular = ({ query }: QueryResponse) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {query.data.map((rowItem: any, i) => (
+              {query.data.map((rowItem: any, i:number) => (
                 <StyledTableRow key={i}>
                   {Object.keys(rowItem).map((item, _) => (
                     <StyledTableCell key={_}>{truncateString(rowItem[item], 20)}</StyledTableCell>

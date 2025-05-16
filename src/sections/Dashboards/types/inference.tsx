@@ -14,7 +14,7 @@ export type Query = {
   colors: {
     chartColor: string;
   };
-  data: QueryChartData;
+  data: QueryChartData | any;
 };
 
 export type QueryChartData = {
@@ -23,8 +23,6 @@ export type QueryChartData = {
   values: Array<number | string>;
   datasetLabel: Array<string>;
 };
-
-export type QueryTableData = {};
 
 export type QuerySingleValueData = {
   count: string | number;

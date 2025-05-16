@@ -77,8 +77,9 @@ export const LineChart = ({ query }: QueryResponse) => {
       {
         label: query.data.datasetLabel?.[0] ?? 'Dataset',
         data:
-          query.data.values?.map((value) => (typeof value === 'string' ? Number(value) : value)) ??
-          [],
+          query.data.values?.map((value: any) =>
+            typeof value === 'string' ? Number(value) : value
+          ) ?? [],
         borderColor: chartColor,
         backgroundColor: chartColor,
       },
@@ -104,6 +105,7 @@ export const LineChart = ({ query }: QueryResponse) => {
           chartColor={chartColor}
           query={query}
           showOptions="yesShow"
+          changeChatType="changeit"
           isChart={checkChart}
           handleChangeYTitle={handleChangeYTitle}
           handleChangeXTitle={handleChangeXTitle}
