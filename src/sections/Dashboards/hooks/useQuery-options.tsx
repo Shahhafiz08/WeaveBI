@@ -85,6 +85,7 @@ export const useQueryOptions = (queryid: number, querytype?: string) => {
     }
     return null;
   };
+ 
 
   return {
     setInsights,

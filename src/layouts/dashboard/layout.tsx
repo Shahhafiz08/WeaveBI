@@ -177,7 +177,7 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
           '--layout-transition-easing': 'linear',
           '--layout-transition-duration': '120ms',
           '--layout-nav-mini-width': '88px',
-          '--layout-nav-vertical-width': '300px',
+          '--layout-nav-vertical-width': '222px',
           '--layout-nav-horizontal-height': '64px',
           '--layout-dashboard-content-pt': theme.spacing(1),
           '--layout-dashboard-content-pb': theme.spacing(8),

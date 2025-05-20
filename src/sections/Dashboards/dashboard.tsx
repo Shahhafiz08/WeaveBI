@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams } from 'react-router';
 import {
   Title,
@@ -14,9 +15,8 @@ import {
 
 import { Box } from '@mui/material';
 
-import { DashboardContent } from 'src/layouts/dashboard';
-
 import { LoadingScreen } from 'src/components/loading-screen';
+import { useCustomDrawer } from 'src/components/custom-drawer/useCustomDrawer';
 
 // import AddWegit from './components/add-widget';
 import EmptyDashboard from './empty-dashboard';
@@ -26,11 +26,13 @@ import { BarChart } from './components/outputs/bar-chart';
 import { PieChart } from './components/outputs/pie-chart';
 import SingeValue from './components/outputs/single-value';
 import Descriptive from './components/outputs/descriptive';
+import AddQueryWidget from './components/add-query-widget';
 import DashboardHeader from './components/dashborad-header';
 import { LineChart } from './components/outputs/line-chart';
 import { ScatterChart } from './components/outputs/scatter-chart';
 import { StackedChart } from './components/outputs/stacked-chart';
 import { DoughnutChart } from './components/outputs/doughnut-chart';
+import AddWidgetDrawer from '../../components/custom-drawer/add-widget-drawer';
 
 export interface Query {
   id: number;
@@ -71,15 +73,18 @@ const Dashboard = () => {
     layout,
     ResponsiveGridLayout,
   } = useDashboardDetails(id as string);
-  // const [, setHidden] = useState('flex');
-  // const closeAddWidget = () => {
-  //   setHidden('none');
-  // };
-  // const showAddWidget = () => {
-  //   setHidden('flex');
-  // };
+  const { MainContent } = useCustomDrawer();
 
   // Render chart
+  const [isSliderOpen, setIsSliderOpen] = useState(false);
+
+  const handleCloseSlider = () => {
+    setIsSliderOpen(false);
+  };
+  const handleOpenSlider = () => {
+    setIsSliderOpen(true);
+  };
+
   const renderChart = (query: any, type?: string) => {
     if (!query.data) {
       return null;
@@ -99,11 +104,7 @@ const Dashboard = () => {
       query.outputType.toLowerCase() === 'tabular' &&
       (!query.data.graph_type || typeof query.data !== 'object')
     ) {
-      return (
-        <Tabular
-        query={query}
-        />
-      );
+      return <Tabular query={query} />;
     }
     // For chart data
     if (query.data && query.data.graph_type) {
@@ -134,77 +135,87 @@ const Dashboard = () => {
   }
 
   return (
-    <DashboardContent
-      maxWidth="xl"
-      sx={{
+    <div
+      style={{
+        paddingLeft: '20px',
         display: 'flex',
         backgroundColor: '#f2f2f2',
         position: 'relative',
+        flexDirection: 'row',
       }}
     >
-      <div
-        style={{
-          top: '72px',
-          zIndex: '9',
-          paddingLeft: '40px',
-          paddingRight: '20px',
-        }}
-      >
-        <DashboardHeader
-          // addWidget={showAddWidget}
-          dashboardName={dashboardData?.name}
-          id={id as unknown as any}
-          saveLayout={saveLayout}
-          renderableQueries={renderableQueries}
-          edit={edit}
-          editDashboard={editDashboard}
-          refreshDashboardQueries={refreshDashboardQueries}
-          refreshLoading={refreshLoading}
-        />
-      </div>
+      <MainContent open={isSliderOpen}>
+        <div style={{ width: '100%' }}>
+          <div
+            style={{
+              top: '100px',
+              zIndex: '9',
+              paddingLeft: '20px',
+              paddingRight: '20px',
+            }}
+          >
+            <DashboardHeader
+              handleOpenSlider={handleOpenSlider}
+              // addWidget={showAddWidget}
+              dashboardName={dashboardData?.name}
+              id={id as unknown as any}
+              saveLayout={saveLayout}
+              renderableQueries={renderableQueries}
+              edit={edit}
+              editDashboard={editDashboard}
+              refreshDashboardQueries={refreshDashboardQueries}
+              refreshLoading={refreshLoading}
+            />
+          </div>
 
-      {renderableQueries?.length === 0 ? (
-        <EmptyDashboard />
-      ) : refreshLoading ? (
-        <LoadingScreen />
-      ) : (
-        <ResponsiveGridLayout
-          className="layouts"
-          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 200 }}
-          cols={{ lg: 50, md: 50, sm: 50, xs: 50 }}
-          rowHeight={50}
-          autoSize
-          isDraggable={edit}
-          isResizable={edit}
-          onLayoutChange={(currentLayout) => {
-            layout.current = currentLayout;
-          }}
-        >
-          {renderableQueries?.map((query: any, index: number) => (
-            <div
-              key={query.id.toString()}
-              data-grid={
-                query.position
-                  ? {
-                      i: query.position.id,
-                      w: query.position.z,
-                      h: query.position.h,
-                      y: query.position.y,
-                      x: query.position.x,
-                    }
-                  : layouts.lg[index]
-              }
+          {renderableQueries?.length === 0 ? (
+            <EmptyDashboard />
+          ) : refreshLoading ? (
+            <LoadingScreen />
+          ) : (
+            <ResponsiveGridLayout
+              className="layouts"
+              breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 200 }}
+              cols={{ lg: 50, md: 50, sm: 50, xs: 50 }}
+              rowHeight={50}
+              autoSize
+              isDraggable={edit}
+              isResizable={edit}
+              onLayoutChange={(currentLayout) => {
+                layout.current = currentLayout;
+              }}
             >
-              <Box sx={{ overflow: 'hidden', width: '100%', height: '100%' }}>
-                {query?.data?.graph_type?.toLowerCase()
-                  ? renderChart(query, query.outputType)
-                  : renderChart(query)}
-              </Box>
-            </div>
-          ))}
-        </ResponsiveGridLayout>
-      )}
-    </DashboardContent>
+              {renderableQueries?.map((query: any, index: number) => (
+                <div
+                  key={query.id.toString()}
+                  data-grid={
+                    query.position
+                      ? {
+                          i: query.position.id,
+                          w: query.position.z,
+                          h: query.position.h,
+                          y: query.position.y,
+                          x: query.position.x,
+                        }
+                      : layouts.lg[index]
+                  }
+                >
+                  <Box sx={{ overflow: 'hidden', width: '100%', height: '100%' }}>
+                    {query?.data?.graph_type?.toLowerCase()
+                      ? renderChart(query, query.outputType)
+                      : renderChart(query)}
+                  </Box>
+                </div>
+              ))}
+            </ResponsiveGridLayout>
+          )}
+        </div>
+
+        <AddWidgetDrawer open={isSliderOpen} onClose={handleCloseSlider}>
+          <AddQueryWidget />
+        </AddWidgetDrawer>
+      </MainContent>
+    </div>
   );
 };
 

@@ -2,11 +2,11 @@ import type { Breakpoint } from '@mui/material/styles';
 import type { NavSectionProps } from 'src/components/nav-section';
 
 import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 import { varAlpha, hideScrollY } from 'src/theme/styles';
 
-import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
 import { NavSectionMini, NavSectionVertical } from 'src/components/nav-section';
 
@@ -38,8 +38,13 @@ export function NavVertical({
   const renderNavVertical = (
     <>
       {slots?.topArea ?? (
-        <Box sx={{ pl: 3.5, pt: 2.5, pb: 1 }}>
-          <Logo />
+        <Box sx={{ pl: 3.5, pt: 2.5, pb: 1, mb: 2 }}>
+          {
+            <Typography sx={{ userSelect: 'none' }} variant="h3" color="#193E6D">
+              WeaveBI
+            </Typography>
+            /* <Logo /> */
+          }
         </Box>
       )}
 
@@ -52,8 +57,8 @@ export function NavVertical({
   const renderNavMini = (
     <>
       {slots?.topArea ?? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 2.5 }}>
-          <Logo />
+        <Box sx={{ display: 'flex', width: '80px', justifyContent: 'center', py: 3, pl: 2, pr: 2 }}>
+          <img src="/public/assets/images/home/logo-graphic-view.png" alt="" />
         </Box>
       )}
 

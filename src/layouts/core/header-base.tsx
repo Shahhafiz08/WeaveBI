@@ -31,7 +31,7 @@ const StyledDivider = styled('span')(({ theme }) => ({
   flexDirection: 'column',
   marginLeft: theme.spacing(2.5),
   marginRight: theme.spacing(2.5),
-  backgroundColor: 'currentColor',
+  backgroundColor: '#D9D9D9',
   color: theme.vars.palette.divider,
   '&::before, &::after': {
     top: -5,
@@ -41,7 +41,7 @@ const StyledDivider = styled('span')(({ theme }) => ({
     flexShrink: 0,
     borderRadius: '50%',
     position: 'absolute',
-    backgroundColor: 'currentColor',
+    backgroundColor: '#D9D9D9',
   },
   '&::after': { bottom: -5, top: 'auto' },
 }));

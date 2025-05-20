@@ -39,6 +39,7 @@ const Properties = ({
     description,
     updateQueryOptions,
   } = useProperties({
+    outputType,
     query,
     chartColor,
   });

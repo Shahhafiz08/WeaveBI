@@ -9,8 +9,9 @@ import type { Query } from '../types/inference';
 type propetiesType = {
   chartColor?: any;
   query: Query;
+  outputType?: string;
 };
-export const useProperties = ({ chartColor, query }: propetiesType) => {
+export const useProperties = ({ chartColor, query, outputType }: propetiesType) => {
   const [Xtitle, setXTitle] = useState('');
   const [title, setQueryTitle] = useState(query.name as string);
   const [description, setQueryDescription] = useState(query.query as string);
@@ -60,7 +61,7 @@ export const useProperties = ({ chartColor, query }: propetiesType) => {
         query: description,
         name: title,
         queryId: query.id,
-        outputType: query.outputType ?? '',
+        outputType: outputType ?? '',
       });
 
       toast.success(response.message);

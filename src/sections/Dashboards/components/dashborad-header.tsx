@@ -23,13 +23,14 @@ type DashboardProps = {
   refreshLoading: boolean;
   refreshDashboardQueries: () => void;
   saveLayout: () => void;
+  handleOpenSlider: () => void;
   renderableQueries: any[];
 };
 
 const DashboardHeader: React.FC<DashboardProps> = ({
   dashboardName,
   id,
-  // addWidget,
+  handleOpenSlider,
   saveLayout,
   edit,
   editDashboard,
@@ -48,7 +49,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
         {' Dashboard'}
       </Typography>
       {renderableQueries?.length > 0 && (
-        <div style={{ marginTop: '10px' }}>
+        <div style={{ marginTop: '10px', display: 'flex', gap: 10, alignItems: 'center' }}>
           {edit ? (
             <Button
               onClick={() => {
@@ -66,7 +67,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
             </Button>
           ) : (
             <Button
-              // onClick={addWidget}
+              onClick={handleOpenSlider}
               type="button"
               variant="contained"
               sx={{

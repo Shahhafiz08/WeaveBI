@@ -86,7 +86,7 @@ const useDashboardDetails = (id: string | number) => {
       Stacked: { w: 22, h: 5 },
       tabular: { w: 30, h: 7 },
       descriptive: { w: 14, h: 6 },
-      singlevalue: { w: 8, h: 4 },
+      singlevalue: { w: 8, h: 4, minH: 5, minW: 5 },
     }),
     []
   );
@@ -97,16 +97,18 @@ const useDashboardDetails = (id: string | number) => {
         const { w, h } = chartLayoutConfig[query.outputType.toLowerCase().trim()] || {
           w: 15,
           h: 6,
+          minH: 10,
+          minW: 12,
         };
-
         const perRow = Math.floor(60 / 20);
-
         return {
           i: query.id.toString(),
           x: (index % perRow) * 15,
           y: Math.floor(index / perRow) * 6,
           w,
           h,
+          minH: 10,
+          minW: 10,
         };
       }) || [],
   };

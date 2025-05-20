@@ -11,7 +11,7 @@ import { styled, useTheme } from '@mui/material/styles';
 
 import { useScrollOffSetTop } from 'src/hooks/use-scroll-offset-top';
 
-import { bgBlur, varAlpha } from 'src/theme/styles';
+import { bgBlur } from 'src/theme/styles';
 
 import { layoutClasses } from '../classes';
 
@@ -69,6 +69,7 @@ export function HeaderSection({
 
   const toolbarStyles = {
     default: {
+      background: '#F2F2F2',
       minHeight: 'auto',
       height: 'var(--layout-header-mobile-height)',
       transition: theme.transitions.create(['height', 'background-color'], {
@@ -83,7 +84,7 @@ export function HeaderSection({
       },
     },
     offset: {
-      ...bgBlur({ color: varAlpha(theme.vars.palette.background.defaultChannel, 0.8) }),
+      ...bgBlur({ color: '#F2F2F2' }),
     },
   };
 
