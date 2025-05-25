@@ -1,15 +1,22 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { useParams } from 'src/routes/hooks';
+
 import {
-  deleteQuery,
   downloadChartData,
   downloadTabularData,
   generateQueryInsights,
+  unlinkQueryFromDashboard,
 } from '../api/actions';
 
 // show insights
-export const useQueryOptions = (queryid: number, querytype?: string) => {
+export const useQueryOptions = (
+  queryId: number,
+  fetchDashboardInfo: () => void,
+  querytype?: string
+) => {
+  const { id } = useParams();
   const [insights, setInsights] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -19,17 +26,12 @@ export const useQueryOptions = (queryid: number, querytype?: string) => {
     setOutputType(output);
     console.log(output, ' OOOOOOOUUUUUUUUTTTTTTTTTTPPPPPPUUUUUUUUUTTTTTTTTTTTTT');
   };
-  
 
   const toggleDrawer = (newBool: boolean) => {
     setOpen(newBool);
   };
 
-  const showInsights = async (
-    queryId: number,
-    browseOnline?: boolean,
-    addInstructions?: string
-  ) => {
+  const showInsights = async (browseOnline?: boolean, addInstructions?: string) => {
     try {
       setLoading(true);
       const insightData = await generateQueryInsights(queryId, browseOnline, addInstructions);
@@ -48,7 +50,7 @@ export const useQueryOptions = (queryid: number, querytype?: string) => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `query_data-${queryid}`;
+      a.download = `query_data-${queryId}`;
       document.body.appendChild(a);
       a.click();
 
@@ -57,13 +59,13 @@ export const useQueryOptions = (queryid: number, querytype?: string) => {
     }
     try {
       if (querytype === 'tabular') {
-        const downloadTabular = await downloadTabularData(queryid);
+        const downloadTabular = await downloadTabularData(queryId);
         const blob = new Blob([downloadTabular], {
           type: 'text/csv',
         });
         convertToFile(blob);
       } else {
-        const downloadChart = await downloadChartData(queryid);
+        const downloadChart = await downloadChartData(queryId);
         const blob = new Blob([JSON.stringify(downloadChart)], {
           type: 'application/json',
         });
@@ -74,18 +76,17 @@ export const useQueryOptions = (queryid: number, querytype?: string) => {
     }
   };
   // delete query
-  const deleteDashboardQuery = async (queryId: number) => {
+  const deleteDashboardQuery = async () => {
     try {
-      const response = await deleteQuery(queryId);
-      toast.success('Query deleted sucessfully');
-
+      const response = await unlinkQueryFromDashboard({ queryId, dashboardId: Number(id) });
+      toast.success(response.message);
+      fetchDashboardInfo();
       return response;
     } catch (error) {
       toast.error(error);
     }
     return null;
   };
- 
 
   return {
     setInsights,

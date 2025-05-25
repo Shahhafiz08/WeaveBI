@@ -4,11 +4,9 @@ import { Link } from 'react-router-dom';
 
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import TableContainer from '@mui/material/TableContainer';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import {
   Box,
   Chip,
@@ -26,6 +24,8 @@ import { paths } from 'src/routes/paths';
 import { Iconify } from 'src/components/iconify';
 import { CustomPopover } from 'src/components/custom-popover';
 
+import usetTableStyling from 'src/sections/hooks/use-table-styling';
+
 import {
   getDashboardResponse,
   pinDashboardResponse,
@@ -41,24 +41,7 @@ type fetchDataType = {
   tags: string[];
 };
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.grey[200],
-    color: theme.palette.common.black,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(even)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+const { StyledTableCell, StyledTableRow } = usetTableStyling();
 
 export default function RecentDashboardList() {
   const [getData, setGetData] = React.useState<fetchDataType[]>([]);
@@ -128,7 +111,7 @@ export default function RecentDashboardList() {
   const tableHeadItems = ['Name', 'Description', 'Domain', 'Created', 'Action'];
 
   return (
-    <Stack sx={{ boxShadow: 2, height: '400px', borderRadius: 1 }}>
+    <Stack sx={{ boxShadow: 2, height: '400px', borderRadius: 1, background: 'white' }}>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead sx={{ position: 'sticky', top: '0.1px', zIndex: 10 }}>

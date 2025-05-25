@@ -6,13 +6,19 @@ import { Paper, Typography } from '@mui/material';
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
-import type { QueryResponse, QueryChartData } from '../../types/inference';
+import type { Query } from '../../types/inference';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const PieChart = ({ query }: QueryResponse) => {
+export const PieChart = ({
+  queryData,
+  fetchDashboardInfo,
+}: {
+  queryData: Query;
+  fetchDashboardInfo: () => void;
+}) => {
   const { chartColor, setChartColor } = useColorPicker({
-    incommingChartColor: query.colors?.chartColor,
+    incommingChartColor: queryData.colors?.chartColor,
   });
 
   const options = {
@@ -65,23 +71,18 @@ export const PieChart = ({ query }: QueryResponse) => {
   };
 
   const data = {
-    labels: query.data?.labels ?? [],
-    datasets: [
-      {
-        label: query.data.datasetLabel?.[0] ?? 'Dataset',
-        data:
-          query.data.values?.map((value: QueryChartData) =>
-            typeof value === 'string' ? Number(value) : value
-          ) ?? [],
-        borderColor: chartColor,
-        backgroundColor: chartColor,
-      },
-    ],
-  };
+    labels: queryData.data?.labels ?? [],
+    datasets: queryData.data.datasets?.map((value: any) => ({
+      label: value.lable,
+      data: value.data,
+      borderColor: chartColor,
+      backgroundColor: chartColor,
+    })),
+  }; 
 
   return (
     <Paper
-      key={query.id}
+      key={queryData.id}
       elevation={2}
       sx={{
         textAlign: 'start',
@@ -109,13 +110,14 @@ export const PieChart = ({ query }: QueryResponse) => {
             whiteSpace: 'nowrap',
           }}
         >
-          {query.name}
+          {queryData.name}
         </Typography>
 
         <QueryOptions
+          fetchDashboardInfo={fetchDashboardInfo}
           changeChatType="changeit"
           showOptions="yesShow"
-          query={query}
+          query={queryData}
           setChartColor={setChartColor}
           chartColor={chartColor}
         />

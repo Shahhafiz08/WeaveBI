@@ -12,9 +12,6 @@ export const getDatabase = async () => {
 
 // Delete database
 export const deleteDatabase = async (id: number) => {
-  try {
-    await axios.delete(`${endpoints.database.delete}/${id}`);
-  } catch (error) {
-    throw new Error('Unable to delete database');
-  }
+  const response = await axios.delete(`${endpoints.database.delete}/${id}`);
+  return response;
 };

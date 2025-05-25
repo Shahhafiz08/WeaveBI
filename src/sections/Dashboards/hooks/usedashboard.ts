@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { Responsive, WidthProvider } from 'react-grid-layout';
-import React, { useRef, useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 import { getDashboardInfo, updateQueryPosition, parallellyRunAllQueries } from '../api/actions';
 
@@ -13,6 +13,14 @@ const useDashboardDetails = (id: string | number) => {
   const [edit, setEdit] = useState(false);
   const [renderableQueries, setRenderableQueries] = useState<any[]>([]);
   const gridContainerRef = useRef<HTMLDivElement | null>(null);
+  const [isSliderOpen, setIsSliderOpen] = useState<boolean>(false);
+
+  const handleCloseSlider = () => {
+    setIsSliderOpen(false);
+  };
+  const handleOpenSlider = () => {
+    setIsSliderOpen(true);
+  };
 
   const chartColors = [
     '#253f69',
@@ -33,7 +41,7 @@ const useDashboardDetails = (id: string | number) => {
   const fetchDashboardInfo = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await getDashboardInfo(id as unknown as string);
+      const response = await getDashboardInfo(Number(id));
       setDashboardData(response);
       const _renderableQueries = response?.queries.filter(
         (query: { data: any; outputType: string }) =>
@@ -73,52 +81,48 @@ const useDashboardDetails = (id: string | number) => {
   }, [fetchDashboardInfo, id]);
 
   // Intitial size of charts
-  const chartLayoutConfig: Record<
-    string,
-    { w?: number; h?: number; minH?: number; minW?: number; maxH?: number; maxW?: number }
-  > = useMemo(
-    () => ({
-      bar: { w: 12, h: 6 },
-      'scatter plot': { w: 22, h: 6 },
-      pie: { w: 15, h: 7, minH: 4, minW: 10 },
-      doughnut: { w: 15, h: 7 },
-      line: { w: 16, h: 4 },
-      Stacked: { w: 22, h: 5 },
-      tabular: { w: 30, h: 7 },
-      descriptive: { w: 14, h: 6 },
-      singlevalue: { w: 8, h: 4, minH: 5, minW: 5 },
-    }),
-    []
-  );
+  // const chartLayoutConfig: Record<
+  //   string,
+  //   { w?: number; h?: number; minH?: number; minW?: number; maxH?: number; maxW?: number }
+  // > = useMemo(
+  //   () => ({
+  //     bar: { w: 12, h: 6 },
+  //     'scatter plot': { w: 22, h: 6 },
+  //     pie: { w: 15, h: 7, minH: 4, minW: 10 },
+  //     doughnut: { w: 15, h: 7 },
+  //     line: { w: 16, h: 4 },
+  //     Stacked: { w: 22, h: 5 },
+  //     tabular: { w: 30, h: 7 },
+  //     descriptive: { w: 14, h: 6 },
+  //     singlevalue: { w: 8, h: 4, minH: 2, minW: 5 },
+  //   }),
+  //   []
+  // );
   // layout design
+
   const layouts = {
     lg:
-      renderableQueries?.map((query: any, index: number) => {
-        const { w, h } = chartLayoutConfig[query.outputType.toLowerCase().trim()] || {
-          w: 15,
-          h: 6,
-          minH: 10,
-          minW: 12,
-        };
-        const perRow = Math.floor(60 / 20);
-        return {
-          i: query.id.toString(),
-          x: (index % perRow) * 15,
-          y: Math.floor(index / perRow) * 6,
-          w,
-          h,
-          minH: 10,
-          minW: 10,
-        };
-      }) || [],
+      renderableQueries?.map(
+        (query: any) =>
+          query.position === null && {
+            i: String(1),
+            x: 1,
+            y: Infinity,
+            z: 1,
+            h: 7,
+            w: 20,
+            minH: 4,
+            minW: 4,
+          }
+      ) || [],
   };
+
   const ResponsiveGridLayout = WidthProvider(Responsive);
   const layout = useRef<any[]>([]);
   // Save dashboard positions
   const saveLayout = useCallback(async () => {
     const positions = layout.current.map((position) => {
       const { i, x, y, w, h } = position;
-
       return updateQueryPosition({
         dashboardId: id,
         queryId: i,
@@ -157,9 +161,12 @@ const useDashboardDetails = (id: string | number) => {
     anchorRef,
     layout,
     open,
+
+    handleCloseSlider,
     refreshDashboardQueries,
     setLoading,
     setOpen,
+    handleOpenSlider,
     gridContainerRef,
     handleChangeRenderableQueriesOutputType,
     editDashboard,
@@ -168,6 +175,7 @@ const useDashboardDetails = (id: string | number) => {
     fetchDashboardInfo,
     layouts,
     ResponsiveGridLayout,
+    isSliderOpen,
   };
 };
 

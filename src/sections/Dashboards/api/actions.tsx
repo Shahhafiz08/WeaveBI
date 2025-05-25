@@ -2,30 +2,13 @@ import { toast } from 'react-toastify';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-type DashboardPosition = {
-  dashboardId: any;
-  queryId: number;
-  x: number;
-  y: number;
-  z: number;
-  h: number;
-};
-type DashboardColors = {
-  dashboardId: number;
-  queryId: number;
-  chartColor: string;
-};
-type UpdateQuery = {
-  name: string;
-  query: string;
-  outputType: string;
-  databaseId: number;
-  queryId?: number;
-};
+import type { UpdateQuery, SaveQueryType, DashboardColors, DashboardPosition } from './types';
+
 // Get dashboard queries
-export const getDashboardInfo = async (id: string) => {
+export const getDashboardInfo = async (id: number) => {
   try {
     const dashboardinfo = await axios.get(`${endpoints.dashboard.info}/${id}/info`);
+    console.log('updated response', dashboardinfo);
     return dashboardinfo.data;
   } catch (error) {
     console.log(error);
@@ -62,15 +45,24 @@ export const generateQueryInsights = async (
   customInstructions?: string
 ) => {
   const response = await axios.get(
-    `${endpoints.query.insights}/${id}?search=${browseOnline ?? null}&customInstructions=${customInstructions ?? null}`
+    `${endpoints.query.insights}/{${id}}/insights?search=${browseOnline}&customInstructions=${customInstructions}`
   );
 
   return response.data;
 };
-// delete a query
-export const deleteQuery = async (queryId: number) => {
-  const responce = await axios.delete(`${endpoints.query.delete}/${queryId}`);
-  return responce;
+// Unlink a query
+export const unlinkQueryFromDashboard = async ({
+  queryId,
+  dashboardId,
+}: {
+  queryId: number;
+  dashboardId: number;
+}) => {
+  const responce = await axios.post(`${endpoints.query.unlinkQueryFromDashboard}`, {
+    queryId,
+    dashboardId,
+  });
+  return responce.data;
 };
 
 // Update query positions
@@ -98,7 +90,6 @@ export const updateQueryPosition = async ({
 };
 // Update colors
 export const updateQueryColors = async ({ dashboardId, queryId, chartColor }: DashboardColors) => {
-  console.log('Api chart color', chartColor);
   const response = await axios.patch(endpoints.dashboard.colors, {
     colors: [
       {
@@ -125,5 +116,36 @@ export const updateQuery = async ({
     outputType,
     databaseId,
   });
+  
   return responce.data;
+};
+
+//  Add query
+export const addQuery = async ({ name, query, outputType, databaseId }: SaveQueryType) => {
+  const response = await axios.post(`${endpoints.query.save}/save-run?save=true`, {
+    name,
+    query,
+    outputType,
+    databaseId,
+  });
+
+  return { message: response.data.message, queryId: response.data.data.id };
+};
+export const linkQueryToDashbord = async ({
+  queryId,
+  dashboardId,
+}: {
+  queryId: number;
+  dashboardId: number;
+}) => {
+  const response = await axios.post(`${endpoints.query.linkToDashbord}`, {
+    queryId,
+    dashboardId,
+  });
+  return response.data;
+};
+// Run an existing Query
+export const runExistingQuery = async (queryId: number) => {
+  const response = await axios.get(`${endpoints.query.runExistingQuery}/${queryId}`);
+  return response.data;
 };

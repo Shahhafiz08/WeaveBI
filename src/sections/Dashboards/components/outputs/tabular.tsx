@@ -1,51 +1,37 @@
 import {
   Paper,
   Table,
-  styled,
   TableRow,
   TableBody,
-  TableCell,
   TableHead,
   Typography,
   TableContainer,
-  tableCellClasses,
 } from '@mui/material';
 
 import { truncateString } from 'src/utils/helper';
 
-import { primary } from 'src/theme/core';
+import usetTableStyling from 'src/sections/hooks/use-table-styling';
 
 import QueryOptions from '../query-options';
 
-import type { QueryResponse } from '../../types/inference';
+import type { Query } from '../../types/inference';
 
-const Tabular = ({ query }: QueryResponse) => {
-  const StyledTableCell = styled(TableCell)(() => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: primary.gray,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(() => ({
-    '&:nth-of-type(even)': {
-      backgroundColor: primary.gray,
-    },
-
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
-  const heading = Array.isArray(query.data) ? Object.keys(query.data[0]) : [];
+const Tabular = ({
+  queryData,
+  fetchDashboardInfo,
+}: {
+  queryData: Query;
+  fetchDashboardInfo: () => void;
+}) => {
+  const { StyledTableCell, StyledTableRow } = usetTableStyling();
+  const heading = Array.isArray(queryData.data) ? Object.keys(queryData.data[0]) : [];
 
   return (
     <div>
       <Paper elevation={2} sx={{ p: 3, borderRadius: 2, userSelect: 'none' }}>
         <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
-          <Typography>{query.name}</Typography>
-          <QueryOptions query={query} />
+          <Typography>{queryData.name}</Typography>
+          <QueryOptions fetchDashboardInfo={fetchDashboardInfo} query={queryData} />
         </div>
         <TableContainer sx={{ position: 'relative', maxHeight: '320px' }} component={Paper}>
           <Table sx={{ width: '100%' }}>
@@ -59,7 +45,7 @@ const Tabular = ({ query }: QueryResponse) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {query.data.map((rowItem: any, i:number) => (
+              {queryData.data.map((rowItem: any, i: number) => (
                 <StyledTableRow key={i}>
                   {Object.keys(rowItem).map((item, _) => (
                     <StyledTableCell key={_}>{truncateString(rowItem[item], 20)}</StyledTableCell>

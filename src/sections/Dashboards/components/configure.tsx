@@ -1,8 +1,8 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Select, MenuItem, TextField, InputLabel, FormControl } from '@mui/material';
 
+import { useConfigure } from '../hooks/use-configure';
 import { ChartColorPicker } from './chart-color-picker';
-import { useProperties } from '../hooks/use-properties';
 
 import type { Query } from '../types/inference';
 
@@ -17,9 +17,11 @@ type PropertiesType = {
   chartColor: any;
   showOptions?: string;
   changeChatType?: string;
+  fetchDashboardInfo:()=>void
 };
 const Properties = ({
   query,
+  fetchDashboardInfo,
   handleChangeXTitle,
   handleChangeYTitle,
   outputType,
@@ -38,10 +40,11 @@ const Properties = ({
     handleQueryDescriptionChange,
     description,
     updateQueryOptions,
-  } = useProperties({
+  } = useConfigure({
     outputType,
     query,
     chartColor,
+    fetchDashboardInfo,
   });
 
   return (
@@ -58,7 +61,7 @@ const Properties = ({
       paddingLeft={2}
     >
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <div>Customize</div>
+        <div>Configure</div>
       </div>
 
       <div

@@ -14,25 +14,35 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
-import { useProperties } from '../../hooks/use-properties';
+import { useConfigure } from '../../hooks/use-configure';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
-import type { QueryResponse } from '../../types/inference';
+import type { Query } from '../../types/inference';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const StackedChart = ({ query }: QueryResponse) => {
+export const StackedChart = ({
+  queryData,
+  fetchDashboardInfo,
+}: {
+  queryData: Query;
+  fetchDashboardInfo: () => void;
+}) => {
   const { setChartColor, chartColor } = useColorPicker({
-    incommingChartColor: query.colors?.chartColor,
+    incommingChartColor: queryData.colors?.chartColor,
   });
 
-  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ query });
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useConfigure({
+    query: queryData,
+    fetchDashboardInfo,
+  });
   const checkChart = 'chart';
 
   const options: ChartOptions<'bar'> = {
     scales: {
       x: {
         display: true,
+        stacked: true,
         title: {
           display: true,
           text: Xtitle,
@@ -44,6 +54,7 @@ export const StackedChart = ({ query }: QueryResponse) => {
         },
       },
       y: {
+        stacked: true,
         display: true,
         beginAtZero: true,
         title: {
@@ -90,23 +101,23 @@ export const StackedChart = ({ query }: QueryResponse) => {
           '#FBDDE1',
           '#FDEEF0',
         ];
+
   const data = {
-    labels: query.data.labels,
-    datasets: query.data.datasets?.map((chart: any, index: number) => {
+    labels: queryData.data.labels,
+    datasets: queryData.data.datasets?.map((chart: any, index: number) => {
       const color = finalChartColor[index % finalChartColor.length];
       return {
         label: chart.label,
-        data: chart.data,
         backgroundColor: color,
         borderColor: color,
-        borderWidth: 1,
+        data: chart.data.map((item: string | number) => item),
       };
     }),
   };
 
   return (
     <Paper
-      key={query.id}
+      key={queryData.id}
       elevation={2}
       sx={{
         width: '100%',
@@ -117,12 +128,13 @@ export const StackedChart = ({ query }: QueryResponse) => {
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ display: 'inline' }}>{query.name}</Typography>
+        <Typography style={{ display: 'inline' }}>{queryData.name}</Typography>
         <QueryOptions
+          fetchDashboardInfo={fetchDashboardInfo}
           changeChatType="changeit"
           showOptions="yesShow"
           isChart={checkChart}
-          query={query}
+          query={queryData}
           handleChangeYTitle={handleChangeYTitle}
           handleChangeXTitle={handleChangeXTitle}
           setChartColor={setChartColor}

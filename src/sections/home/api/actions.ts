@@ -127,7 +127,7 @@ export async function deleteDashboardResponse(id: number) {
 // Pin Dashboard
 export async function pinDashboardResponse(id: number) {
   try {
-    await axios.patch(`${endpoints.dashboard.pin}/${id}`);
+    await axios.patch(`${endpoints.dashboard.pin}/${id}/pin`);
   } catch (error) {
     throw error(error);
   }

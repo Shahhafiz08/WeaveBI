@@ -49,7 +49,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
         {' Dashboard'}
       </Typography>
       {renderableQueries?.length > 0 && (
-        <div style={{ marginTop: '10px', display: 'flex', gap: 10, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {edit ? (
             <Button
               onClick={() => {

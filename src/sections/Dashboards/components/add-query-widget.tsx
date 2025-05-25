@@ -1,67 +1,115 @@
-import { z as zod } from 'zod';
 import { useState } from 'react';
+import { z, z as zod } from 'zod';
+import { toast } from 'react-toastify';
+import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Box, Stack, Button, MenuItem, TextField, Typography, FormControl } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Box, Stack, MenuItem, Typography, FormControl } from '@mui/material';
 
 import { Form, Field } from 'src/components/hook-form';
 
-const AddQueryWidget = () => {
-  const addWegit = zod.object({
-    limit: zod.number().min(1, 'Set an output limit'),
-    query: zod.string().min(1, 'Enter a valid query'),
-    Querytitle: zod
-      .string()
-      .min(1, 'Enter a valid query')
-      .max(300, 'Query should be less than 300 Characters'),
-    outputType: zod.string().min(1, 'Select the output type '),
-  });
-  type addWedgitSchema = zod.infer<typeof addWegit>;
+import { addQuery, getDashboardInfo, linkQueryToDashbord } from '../api/actions';
+
+const AddWidgetSchema = zod.object({
+  queryTitle: zod
+    .string()
+    .min(1, 'Enter a valid query title')
+    .max(300, 'Query should be less than 300 characters'),
+  query: zod.string().min(1, 'Enter a valid query'),
+  limit: zod
+    .number({ invalid_type_error: 'Output limit is required' })
+    .min(1, 'Set an output limit')
+    .max(20, 'Max limit is 20'),
+  outputType: zod.string().min(1, 'Select the output type'),
+  charts: zod.string().min(0, 'Please enter a valid value').or(z.literal('')),
+});
+
+type AddWidgetFormValues = zod.infer<typeof AddWidgetSchema>;
+
+const AddQueryWidget = ({ fetchDashboardInfo }: { fetchDashboardInfo: () => void }) => {
+  const { id } = useParams();
   const [checkChart, setCheckChart] = useState('');
-  const methods = useForm<addWedgitSchema>({
-    resolver: zodResolver(addWegit),
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  let chartType = '';
+  const methods = useForm<AddWidgetFormValues>({
+    resolver: zodResolver(AddWidgetSchema),
     defaultValues: {
-      limit: 0,
+      queryTitle: '',
       query: '',
+      limit: 1,
       outputType: '',
+      charts: '',
     },
   });
 
+  const { handleSubmit, setValue, reset } = methods;
+
+  const onSubmit = async (data: AddWidgetFormValues) => {
+    try {
+      if (data.outputType === 'charts') {
+        chartType = data.charts;
+      } else if (data.outputType !== 'chart') {
+        chartType = data.outputType;
+      }
+      setIsLoading(true);
+      const response = await addQuery({
+        databaseId: 12,
+        name: data.queryTitle,
+        outputType: chartType,
+        query: data.query,
+      });
+
+      toast.success(`${response.message} to the dashboard`);
+      reset();
+      await linkQueryToDashbord({ queryId: response.queryId, dashboardId: Number(id) });
+      await getDashboardInfo(Number(id));
+      fetchDashboardInfo();
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Stack paddingRight={3}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h6" fontWeight="500">
-          Create Query
-        </Typography>
-      </div>
-      <Form methods={methods}>
-        <FormControl sx={{ width: '100%' }}>
-          <TextField
-            fullWidth
+    <Stack spacing={2}>
+      <Typography variant="h6" fontWeight="500">
+        Create Query
+      </Typography>
+
+      <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <FormControl size="small" fullWidth>
+          <Field.Text
+            name="queryTitle"
             label="Query Title"
-            id="Query Title "
-            variant="outlined"
-            margin="normal"
-            sx={{ marginBottom: '15px' }}
+            size="small"
+            fullWidth
+            required
+            sx={{ mb: 2 }}
           />
 
           <Field.Text
-            fullWidth
-            required
             name="query"
             label="Enter your query..."
             minRows={2}
             multiline
-            sx={{ marginBottom: '15px' }}
+            size="small"
+            fullWidth
+            required
+            sx={{ mb: 2 }}
           />
 
-          <TextField
-            id="limit"
-            label="Output pLimit"
+          <Field.Text
+            name="limit"
+            label="Output Limit"
             type="number"
+            size="small"
             inputProps={{ min: 1, max: 20 }}
-            sx={{ width: 120, marginBottom: '15px' }}
+            required
+            fullWidth
+            sx={{ mb: 2 }}
           />
 
           <Field.Select
@@ -69,25 +117,41 @@ const AddQueryWidget = () => {
             label="Output Type"
             onChange={(e) => {
               setCheckChart(e.target.value);
+              setValue('outputType', e.target.value);
             }}
-            sx={{ marginBottom: '15px' }}
+            size="small"
+            fullWidth
+            required
+            sx={{ mb: 2 }}
           >
             <MenuItem value="tabular">Tabular</MenuItem>
             <MenuItem value="descriptive">Descriptive</MenuItem>
+            <MenuItem value="singleValue">Single Value</MenuItem>
             <MenuItem value="charts">Charts</MenuItem>
           </Field.Select>
+
           {checkChart === 'charts' && (
-            <Field.Select name="charts" label="Select Charts" sx={{ width: '100%' }}>
+            <Field.Select
+              name="charts"
+              label="Select Charts"
+              size="small"
+              fullWidth
+              required
+              sx={{ mb: 2 }}
+            >
               <MenuItem value="Bar Chart">Bar Chart</MenuItem>
               <MenuItem value="Line Chart">Line Chart</MenuItem>
               <MenuItem value="Pie Chart">Pie Chart</MenuItem>
               <MenuItem value="Doughnut Chart">Doughnut Chart</MenuItem>
               <MenuItem value="Scatter Chart">Scatter Chart</MenuItem>
-              <MenuItem value="Stacked Bar Chart">Stacked Bar Chart</MenuItem>
+              <MenuItem value="Stacked Chart">Stacked Bar Chart</MenuItem>
             </Field.Select>
           )}
-          <Box sx={{ display: 'flex', justifyContent: 'end', marginTop: '15px' }}>
-            <Button variant="contained">Run</Button>
+
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <LoadingButton loading={isLoading} variant="contained" type="submit">
+              Run
+            </LoadingButton>
           </Box>
         </FormControl>
       </Form>

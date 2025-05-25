@@ -1,4 +1,3 @@
-
 import type { ReactNode } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -28,7 +27,8 @@ export default function AddWidgetDrawer({
           width,
           boxSizing: 'border-box',
           padding: 2,
-       
+          marginTop: 9,
+          borderRadius: '16px 0px 0px 0px ',
         },
       }}
     >

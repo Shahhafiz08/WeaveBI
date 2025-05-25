@@ -5,8 +5,8 @@ import { Paper, Drawer, MenuItem, MenuList, IconButton, ClickAwayListener } from
 import { Iconify } from 'src/components/iconify';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
+import Configure from './configure';
 import { Insights } from './insights';
-import Properties from './properties';
 import { useQueryOptions } from '../hooks/useQuery-options';
 
 import type { Query } from '../types/inference';
@@ -21,12 +21,14 @@ type QueryOptionsTypes = {
   showOptions?: string;
   query: Query;
   changeChatType?: string;
+  fetchDashboardInfo: () => void;
 };
 const QueryOptions = ({
   query,
   handleChangeXTitle,
   handleChangeYTitle,
   setChartColor,
+  fetchDashboardInfo,
   changeChatType,
   querytype,
   showOptions,
@@ -44,7 +46,7 @@ const QueryOptions = ({
     loading,
     handleChangeOutputType,
     outputType,
-  } = useQueryOptions(query?.databaseId, query?.outputType);
+  } = useQueryOptions(query.id, fetchDashboardInfo, query?.outputType);
 
   const value = useRef<string>('');
 
@@ -75,7 +77,7 @@ const QueryOptions = ({
               <MenuItem
                 onClick={() => {
                   value.current = 'insights';
-                  showInsights(query.databaseId);
+                  showInsights();
                   toggleDrawer(true);
                   popover.onClose();
                 }}
@@ -85,7 +87,7 @@ const QueryOptions = ({
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  value.current = 'properties';
+                  value.current = 'Configure';
 
                   toggleDrawer(true);
 
@@ -96,11 +98,11 @@ const QueryOptions = ({
                   icon="material-symbols:dashboard-customize-outline-rounded"
                   sx={{ marginRight: '5px' }}
                 />
-                Customize
+                Configure
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  deleteDashboardQuery(query.databaseId);
+                  deleteDashboardQuery();
                   popover.onClose();
                 }}
               >
@@ -117,14 +119,15 @@ const QueryOptions = ({
       <Drawer anchor="right" open={open} onClose={() => toggleDrawer(false)}>
         {value.current === 'insights' && (
           <Insights
+            showInsights={showInsights}
             query={query}
             loading={loading}
-            showInsights={showInsights}
             insights={insights}
           />
         )}
-        {value.current === 'properties' && (
-          <Properties
+        {value.current === 'Configure' && (
+          <Configure
+            fetchDashboardInfo={fetchDashboardInfo}
             changeChatType={changeChatType}
             showOptions={showOptions}
             chartColor={chartColor}

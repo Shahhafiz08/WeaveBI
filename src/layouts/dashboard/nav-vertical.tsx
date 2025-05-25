@@ -39,12 +39,9 @@ export function NavVertical({
     <>
       {slots?.topArea ?? (
         <Box sx={{ pl: 3.5, pt: 2.5, pb: 1, mb: 2 }}>
-          {
-            <Typography sx={{ userSelect: 'none' }} variant="h3" color="#193E6D">
-              WeaveBI
-            </Typography>
-            /* <Logo /> */
-          }
+          <Typography sx={{ userSelect: 'none' }} variant="h3" color="#193E6D">
+            WeaveBI
+          </Typography>
         </Box>
       )}
 

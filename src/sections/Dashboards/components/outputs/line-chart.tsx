@@ -15,19 +15,26 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
-import { useProperties } from '../../hooks/use-properties';
+import { useConfigure } from '../../hooks/use-configure';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
-import type { QueryResponse } from '../../types/inference';
+import type { Query } from '../../types/inference';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export const LineChart = ({ query }: QueryResponse) => {
+export const LineChart = ({
+  queryData,
+  fetchDashboardInfo,
+}: {
+  queryData: Query;
+  fetchDashboardInfo: () => void;
+}) => {
   const { setChartColor, chartColor } = useColorPicker({
-    incommingChartColor: query.colors?.chartColor,
+    incommingChartColor: queryData.colors?.chartColor,
   });
-  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle, title } = useProperties({
-    query,
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle, title } = useConfigure({
+    query: queryData,
+    fetchDashboardInfo,
   });
 
   const checkChart = 'chart';
@@ -72,23 +79,19 @@ export const LineChart = ({ query }: QueryResponse) => {
   };
 
   const data = {
-    labels: query.data?.labels ?? [],
-    datasets: [
-      {
-        label: query.data.datasetLabel?.[0] ?? 'Dataset',
-        data:
-          query.data.values?.map((value: any) =>
-            typeof value === 'string' ? Number(value) : value
-          ) ?? [],
-        borderColor: chartColor,
-        backgroundColor: chartColor,
-      },
-    ],
+    labels: queryData.data?.labels,
+    datasets: queryData.data.datasets.map((item: any) => ({
+      label: item.label,
+      data: item.data.map((value: string) => value),
+      borderColor: chartColor,
+      backgroundColor: chartColor,
+    })),
   };
+ 
 
   return (
     <Paper
-      key={query.id}
+      key={queryData.id}
       elevation={2}
       sx={{ textAlign: 'start', borderRadius: 2, height: '100%' }}
     >
@@ -102,8 +105,9 @@ export const LineChart = ({ query }: QueryResponse) => {
       >
         <Typography style={{ display: 'inline' }}>{title}</Typography>
         <QueryOptions
+          fetchDashboardInfo={fetchDashboardInfo}
           chartColor={chartColor}
-          query={query}
+          query={queryData}
           showOptions="yesShow"
           changeChatType="changeit"
           isChart={checkChart}

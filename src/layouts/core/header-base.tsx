@@ -2,6 +2,7 @@ import type { NavSectionProps } from 'src/components/nav-section';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { Settings } from '@mui/icons-material';
 import { styled, useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
@@ -11,11 +12,10 @@ import { Logo } from 'src/components/logo';
 import { HeaderSection } from './header-section';
 import { MenuButton } from '../components/menu-button';
 import { SignInButton } from '../components/sign-in-button';
-import { AccountDrawer } from '../components/account-drawer';
 import { NotificationsDrawer } from '../components/notifications-drawer';
+import { AccountDrawer, type AccountDrawerProps } from '../components/account-drawer';
 
 import type { HeaderSectionProps } from './header-section';
-import type { AccountDrawerProps } from '../components/account-drawer';
 import type { ContactsPopoverProps } from '../components/contacts-popover';
 import type { NotificationsDrawerProps } from '../components/notifications-drawer';
 
@@ -142,14 +142,13 @@ export function HeaderBase({
                 gap: { xs: 1, sm: 1.5 },
               }}
             >
-              {/* -- Searchbar -- */}
+              {/* -- Settings button -- */}
+              {settings && <Settings />}
 
               {/* -- Notifications popover -- */}
               {notifications && (
                 <NotificationsDrawer data-slot="notifications" data={data?.notifications} />
               )}
-
-              {/* -- Settings button -- */}
 
               {/* -- Account drawer -- */}
               {account && <AccountDrawer data-slot="account" data={data?.account} />}

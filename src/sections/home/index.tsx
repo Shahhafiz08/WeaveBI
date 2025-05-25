@@ -5,7 +5,6 @@ import { Tab, Stack, Typography } from '@mui/material';
 import { TabList, TabPanel, TabContext } from '@mui/lab';
 
 import { primary } from 'src/theme/core';
-import { DashboardContent } from 'src/layouts/dashboard';
 
 import { KeyPoints } from './components/keypoints-home';
 import PinnedDashboardList from './components/pinned-dashboard-list';
@@ -78,8 +77,8 @@ export default function HomeView() {
   };
 
   return (
-    <DashboardContent maxWidth="xl">
-      <Stack marginBottom={5}>
+    <div style={{ background: '#F2F2F2', padding: 20, width: '100%' }}>
+      <Stack marginBottom={2}>
         <Grid2 container direction="row" rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           {data &&
             data.map((card, index) => (
@@ -90,7 +89,12 @@ export default function HomeView() {
         </Grid2>
       </Stack>
 
-      <Stack height="50vh" style={{ marginBottom: '40px' }} flexDirection="row" gap={5}>
+      <Stack
+        height="50vh"
+        style={{ marginBottom: '40px', width: '100%' }}
+        flexDirection="row"
+        gap={5}
+      >
         <div style={{ width: '50%' }}>
           <FrequeryntlyAskedQueries color="pink" />
         </div>
@@ -117,6 +121,6 @@ export default function HomeView() {
           </TabPanel>
         </TabContext>
       </Stack>
-    </DashboardContent>
+    </div>
   );
 }

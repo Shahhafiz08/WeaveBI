@@ -13,18 +13,27 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
-import { useProperties } from '../../hooks/use-properties';
+import { useConfigure } from '../../hooks/use-configure';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
-import type { QueryResponse } from '../../types/inference';
+import type { Query } from '../../types/inference';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-export const ScatterChart = ({ query }: QueryResponse) => {
-  const { setChartColor, chartColor } = useColorPicker({
-    incommingChartColor: query.colors?.chartColor,
+export const ScatterChart = ({
+  queryData,
+  fetchDashboardInfo,
+}: {
+  queryData: Query;
+  fetchDashboardInfo: () => void;
+}) => {
+  const { chartColor, setChartColor } = useColorPicker({
+    incommingChartColor: queryData.colors?.chartColor,
   });
-  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ query });
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useConfigure({
+    query: queryData,
+    fetchDashboardInfo,
+  });
 
   const checkChart = 'chart';
 
@@ -77,19 +86,18 @@ export const ScatterChart = ({ query }: QueryResponse) => {
   };
 
   const data = {
-    datasets: query.data.datasets?.map((chart: any) => ({
-      label: chart.label,
-      data: chart.data?.map((item: any) => ({
-        x: Number(item.x),
-        y: Number(item.y),
+    datasets: queryData.data.datasets?.map((plotdata: any) => ({
+      label: plotdata.label,
+      data: plotdata.data?.map((value: any) => ({
+        x: value.x,
+        y: value.y,
       })),
-      backgroundColor: chartColor,
       borderColor: chartColor,
+      backgroundColor: chartColor,
     })),
   };
-
   return (
-    <Paper key={query.id} sx={{ borderRadius: 2, width: '100%', height: '100%' }}>
+    <Paper key={queryData.id} sx={{ borderRadius: 2, width: '100%', height: '100%' }}>
       <div
         style={{
           display: 'flex',
@@ -98,10 +106,11 @@ export const ScatterChart = ({ query }: QueryResponse) => {
           paddingBottom: '0px',
         }}
       >
-        <Typography style={{ display: 'inline' }}>{query.name}</Typography>
+        <Typography style={{ display: 'inline' }}>{queryData.name}</Typography>
         <QueryOptions
+          fetchDashboardInfo={fetchDashboardInfo}
           chartColor={chartColor}
-          query={query}
+          query={queryData}
           setChartColor={setChartColor}
           showOptions="yesShow"
           changeChatType="changeit"

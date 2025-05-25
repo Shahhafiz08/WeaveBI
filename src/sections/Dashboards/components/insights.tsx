@@ -25,11 +25,7 @@ export const Insights = ({
   query: Query;
   insights: string;
   loading: boolean;
-  showInsights: (
-    queryId: number,
-    browseOnline?: boolean,
-    addInstructions?: string
-  ) => Promise<null>;
+  showInsights: (browseOnline?: boolean, addInstructions?: string) => Promise<null>;
 }) => {
   const [isDisabled, setIsDisabled] = React.useState<boolean>(true);
   const [isHidden, setIsHidden] = React.useState<string>('none');
@@ -142,7 +138,7 @@ export const Insights = ({
         />
         <Button
           onClick={() => {
-            showInsights(query.id, browseOnline, customInstructions);
+            showInsights(browseOnline, customInstructions);
           }}
           sx={{ width: 'fit-content', fontWeight: '500' }}
           variant="contained"

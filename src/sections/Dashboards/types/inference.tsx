@@ -14,7 +14,7 @@ export type Query = {
   colors: {
     chartColor: string;
   };
-  data: QueryChartData | any;
+  data: QueryChartData | any | ScatterChartData;
 };
 
 export type QueryChartData = {
@@ -26,4 +26,12 @@ export type QueryChartData = {
 
 export type QuerySingleValueData = {
   count: string | number;
+  value: string | number;
+};
+export type ScatterChartData = {
+  graph_type: string;
+  title: string;
+  datasetLabel: string;
+  labels: Array<string>;
+  values: any;
 };

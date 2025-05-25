@@ -14,18 +14,27 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import QueryOptions from '../query-options';
-import { useProperties } from '../../hooks/use-properties';
+import { useConfigure } from '../../hooks/use-configure';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
-import type { QueryResponse } from '../../types/inference';
+import type { Query } from '../../types/inference';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const BarChart = ({ query }: QueryResponse) => {
+export const BarChart = ({
+  queryData,
+  fetchDashboardInfo,
+}: {
+  queryData: Query;
+  fetchDashboardInfo: () => void;
+}) => {
   const { chartColor, setChartColor } = useColorPicker({
-    incommingChartColor: query.colors?.chartColor,
+    incommingChartColor: queryData.colors?.chartColor,
   });
-  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useProperties({ query });
+  const { Xtitle, handleChangeXTitle, handleChangeYTitle, Ytitle } = useConfigure({
+    query: queryData,
+    fetchDashboardInfo,
+  });
 
   const checkChart = 'chart';
   const options: ChartOptions<'bar'> = {
@@ -68,18 +77,18 @@ export const BarChart = ({ query }: QueryResponse) => {
   };
 
   const data = {
-    labels: query.data?.labels ?? [],
-    datasets: query.data.datasets?.map((chart: any) => ({
-      label: chart.label,
-      data: chart.data,
-      backgroundColor: chartColor,
+    labels: queryData.data.labels?.map((label: string) => label),
+    datasets: queryData.data.datasets.map((plotdata: any) => ({
+      label: plotdata.label,
+      data: plotdata.data.map((value: string) => value),
       borderColor: chartColor,
+      backgroundColor: chartColor,
     })),
   };
 
   return (
     <Paper
-      key={query.id}
+      key={queryData.id}
       elevation={2}
       sx={{
         width: '100%',
@@ -97,12 +106,13 @@ export const BarChart = ({ query }: QueryResponse) => {
           paddingBottom: '0px',
         }}
       >
-        <Typography style={{ display: 'inline' }}>{query.name}</Typography>
+        <Typography style={{ display: 'inline' }}>{queryData.name}</Typography>
         <QueryOptions
+          fetchDashboardInfo={fetchDashboardInfo}
           changeChatType="changeit"
           showOptions="yesShow"
           isChart={checkChart}
-          query={query}
+          query={queryData}
           handleChangeYTitle={handleChangeYTitle}
           handleChangeXTitle={handleChangeXTitle}
           setChartColor={setChartColor}

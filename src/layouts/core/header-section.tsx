@@ -71,6 +71,7 @@ export function HeaderSection({
     default: {
       background: '#F2F2F2',
       minHeight: 'auto',
+      maxHeight: '55px',
       height: 'var(--layout-header-mobile-height)',
       transition: theme.transitions.create(['height', 'background-color'], {
         easing: theme.transitions.easing.easeInOut,
