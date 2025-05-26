@@ -161,7 +161,12 @@ const Dashboard = () => {
         </div>
 
         {renderableQueries?.length === 0 ? (
-          <EmptyDashboard />
+          <EmptyDashboard
+            fetchDashboardInfo={fetchDashboardInfo}
+            handleCloseSlider={handleCloseSlider}
+            handleOpenSlider={handleOpenSlider}
+            isSliderOpen={isSliderOpen}
+          />
         ) : refreshLoading ? (
           <LoadingScreen />
         ) : (

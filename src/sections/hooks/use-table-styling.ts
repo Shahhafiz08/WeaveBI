@@ -10,17 +10,17 @@ const usetTableStyling = () => {
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      border: 'none',
     },
   }));
 
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(even)': {
       backgroundColor: primary.gray,
+      border: '1px solid rgba(240,240,240,02)',
     },
 
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
+    '&:last-child td, &:last-child th': {},
   }));
   return {
     StyledTableCell,

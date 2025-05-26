@@ -1,19 +1,28 @@
-import { useParams } from 'react-router';
-
 import { Grid, Stack, Button, Typography } from '@mui/material';
 
 import AddWidgetDrawer from 'src/components/custom-drawer/add-widget-drawer';
 import { useCustomDrawer } from 'src/components/custom-drawer/useCustomDrawer';
 
-import useDashboardDetails from './hooks/usedashboard';
 import AddQueryWidget from './components/add-query-widget';
 
-const EmptyDashboard = () => {
-  const { MainContent } = useCustomDrawer();
-  const { id } = useParams();
+type EmptyDashboardType = {
+  isSliderOpen: any;
+  handleOpenSlider: any;
+  handleCloseSlider: any;
+  fetchDashboardInfo: any;
+};
 
-  const { isSliderOpen, handleCloseSlider, fetchDashboardInfo, handleOpenSlider } =
-    useDashboardDetails(id as string);
+const EmptyDashboard = ({
+  handleOpenSlider,
+  isSliderOpen,
+  fetchDashboardInfo,
+  handleCloseSlider,
+}: EmptyDashboardType) => {
+  const { MainContent } = useCustomDrawer();
+  // const { id } = useParams();
+
+  // const { isSliderOpen, handleCloseSlider, fetchDashboardInfo, handleOpenSlider } =
+  //   useDashboardDetails(id as string);
   return (
     <MainContent open={isSliderOpen}>
       <Grid
