@@ -44,11 +44,7 @@ const EmptyDashboard = ({
             boxShadow: '4',
           }}
         >
-          <img
-            src="/public/assets/images/dashboard/add-widget.svg"
-            alt=""
-            style={{ maxWidth: '20px' }}
-          />
+          <img src="assets/images/dashboard/add-widget.svg" alt="" style={{ maxWidth: '20px' }} />
           <Typography>Create Your Visualization</Typography>
           <Button variant="contained" sx={{ fontWeight: '' }} onClick={handleOpenSlider}>
             Add Widget
