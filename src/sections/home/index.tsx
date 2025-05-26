@@ -9,6 +9,7 @@ import { primary } from 'src/theme/core';
 import { KeyPoints } from './components/keypoints-home';
 import PinnedDashboardList from './components/pinned-dashboard-list';
 import RecentDashboardList from './components/recent-dashboard-list';
+import img1 from '../../../public/assets/images/home/total-databases-icon.svg';
 import { FrequeryntlyAskedQueries } from './components/ferquentyl-asked-queries';
 import { totalQueryCount, totalDatabaseCount, totalDashboardCount } from './api/actions';
 
@@ -52,12 +53,12 @@ export default function HomeView() {
   const data = [
     {
       total: totalDatabases,
-      image: '/public/assets/images/home/total-databases-icon.svg',
+      image: img1,
       title: 'Total Databases',
     },
     {
       total: activedatabases,
-      image: '/public/assets/images/home/active-databases-icon.svg',
+      image: '/assets/images/home/active-databases-icon.svg',
       title: 'Active Databases',
     },
     {
