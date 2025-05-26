@@ -1,8 +1,4 @@
 import React, { useState } from 'react';
-import img4 from 'assets/images/home/total-queries-icon.svg';
-import img1 from 'assets/images/home/total-databases-icon.svg';
-import img2 from 'assets/images/home/active-databases-icon.svg';
-import img3 from 'assets/images/home/totoal-dashboards-icons.svg';
 
 import Grid2 from '@mui/material/Unstable_Grid2';
 import { Tab, Stack, Typography } from '@mui/material';
@@ -11,6 +7,10 @@ import { TabList, TabPanel, TabContext } from '@mui/lab';
 import { primary } from 'src/theme/core';
 
 import { KeyPoints } from './components/keypoints-home';
+import img3 from '../../assets/home/total-queries-icon.svg';
+import img1 from '../../assets/home/total-databases-icon.svg';
+import img2 from '../../assets/home/active-databases-icon.svg';
+import img4 from '../../assets/home/totoal-dashboards-icon.svg';
 import PinnedDashboardList from './components/pinned-dashboard-list';
 import RecentDashboardList from './components/recent-dashboard-list';
 import { FrequeryntlyAskedQueries } from './components/ferquentyl-asked-queries';
