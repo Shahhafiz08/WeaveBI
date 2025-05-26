@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import img4 from 'assets/images/home/total-queries-icon.svg';
+import img1 from 'assets/images/home/total-databases-icon.svg';
+import img2 from 'assets/images/home/active-databases-icon.svg';
+import img3 from 'assets/images/home/totoal-dashboards-icons.svg';
 
 import Grid2 from '@mui/material/Unstable_Grid2';
 import { Tab, Stack, Typography } from '@mui/material';
@@ -9,7 +13,6 @@ import { primary } from 'src/theme/core';
 import { KeyPoints } from './components/keypoints-home';
 import PinnedDashboardList from './components/pinned-dashboard-list';
 import RecentDashboardList from './components/recent-dashboard-list';
-import img1 from '../../../public/assets/images/home/total-databases-icon.svg';
 import { FrequeryntlyAskedQueries } from './components/ferquentyl-asked-queries';
 import { totalQueryCount, totalDatabaseCount, totalDashboardCount } from './api/actions';
 
@@ -58,17 +61,17 @@ export default function HomeView() {
     },
     {
       total: activedatabases,
-      image: '/assets/images/home/active-databases-icon.svg',
+      image: img2,
       title: 'Active Databases',
     },
     {
       total: totalDashboards,
-      image: '/public/assets/images/home/totoal-dashboards-icons.svg',
+      image: img3,
       title: 'Total Dashboards',
     },
     {
       total: totalQueries,
-      image: '/public/assets/images/home/total-queries-icon.svg',
+      image: img4,
       title: 'Total Queries',
     },
   ];
