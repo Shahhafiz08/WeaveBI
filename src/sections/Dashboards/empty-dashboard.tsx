@@ -4,6 +4,7 @@ import AddWidgetDrawer from 'src/components/custom-drawer/add-widget-drawer';
 import { useCustomDrawer } from 'src/components/custom-drawer/useCustomDrawer';
 
 import AddQueryWidget from './components/add-query-widget';
+import addWidget from '../../assets/dashboard/add-widget.svg';
 
 type EmptyDashboardType = {
   isSliderOpen: any;
@@ -44,7 +45,7 @@ const EmptyDashboard = ({
             boxShadow: '4',
           }}
         >
-          <img src="assets/images/dashboard/add-widget.svg" alt="" style={{ maxWidth: '20px' }} />
+          <img src={addWidget} alt="" style={{ maxWidth: '20px' }} />
           <Typography>Create Your Visualization</Typography>
           <Button variant="contained" sx={{ fontWeight: '' }} onClick={handleOpenSlider}>
             Add Widget
