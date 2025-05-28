@@ -1,14 +1,14 @@
-import React from 'react';
-
 import { Stack } from '@mui/material';
 
 import { Iconify } from 'src/components/iconify';
+
+import nodata from '../../assets/dashboard/no-data-found.svg';
 
 const NoDataFound = () => (
   <Stack gap={5}>
     <div style={{ textAlign: 'center' }}>
       {' '}
-      <img src="/src/assets/dashboard/no-data-found.svg" alt="" style={{ width: '200px' }} />
+      <img src={nodata} alt="" style={{ width: '200px' }} />
     </div>
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       {' '}
