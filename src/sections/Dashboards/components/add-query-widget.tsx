@@ -28,8 +28,15 @@ const AddWidgetSchema = zod.object({
 
 type AddWidgetFormValues = zod.infer<typeof AddWidgetSchema>;
 
-const AddQueryWidget = ({ fetchDashboardInfo }: { fetchDashboardInfo: () => void }) => {
+const AddQueryWidget = ({
+  fetchDashboardInfo,
+  databaseId,
+}: {
+  fetchDashboardInfo: () => void;
+  databaseId: number;
+}) => {
   const { id } = useParams();
+
   const [checkChart, setCheckChart] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   let chartType = '';
@@ -55,11 +62,12 @@ const AddQueryWidget = ({ fetchDashboardInfo }: { fetchDashboardInfo: () => void
       }
       setIsLoading(true);
       const response = await addQuery({
-        databaseId: 12,
+        databaseId,
         name: data.queryTitle,
         outputType: chartType,
         query: data.query,
       });
+     
 
       toast.success(`${response.message} to the dashboard`);
       reset();
@@ -67,7 +75,7 @@ const AddQueryWidget = ({ fetchDashboardInfo }: { fetchDashboardInfo: () => void
       await getDashboardInfo(Number(id));
       fetchDashboardInfo();
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -139,12 +147,12 @@ const AddQueryWidget = ({ fetchDashboardInfo }: { fetchDashboardInfo: () => void
               required
               sx={{ mb: 2 }}
             >
-              <MenuItem value="Bar Chart">Bar Chart</MenuItem>
-              <MenuItem value="Line Chart">Line Chart</MenuItem>
-              <MenuItem value="Pie Chart">Pie Chart</MenuItem>
-              <MenuItem value="Doughnut Chart">Doughnut Chart</MenuItem>
-              <MenuItem value="Scatter Chart">Scatter Chart</MenuItem>
-              <MenuItem value="Stacked Chart">Stacked Bar Chart</MenuItem>
+              <MenuItem value="bar chart">Bar Chart</MenuItem>
+              <MenuItem value="line chart">Line Chart</MenuItem>
+              <MenuItem value="pie chart">Pie Chart</MenuItem>
+              <MenuItem value="doughnut chart">Doughnut Chart</MenuItem>
+              <MenuItem value="scatter chart">Scatter Chart</MenuItem>
+              <MenuItem value="stacked chart">Stacked Bar Chart</MenuItem>
             </Field.Select>
           )}
 

@@ -23,6 +23,7 @@ import { Iconify } from 'src/components/iconify';
 import Sectionheader from './Sectionheader';
 import usetTableStyling from '../hooks/use-table-styling';
 import { getDatabase, deleteDatabase } from './api/actions';
+import { useDatabaseId } from '../context/databaseid-context';
 
 type fetchDataType = {
   id: number;
@@ -36,6 +37,7 @@ const { StyledTableCell, StyledTableRow } = usetTableStyling();
 export default function DatabaseConnectionsView() {
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const [open, setOpen] = React.useState(false);
+  const { setDatabaseId } = useDatabaseId();
   const [refresh, setRefresh] = React.useState<boolean>(false);
 
   const handleToggle = () => {
@@ -54,10 +56,13 @@ export default function DatabaseConnectionsView() {
     try {
       const incomingData = await getDatabase();
       setGetdata(incomingData.databases);
+      console.log('dskjfnskjfdskjb', incomingData.databases);
     } catch (error) {
       console.error('Error fetching database:', error);
     }
   };
+
+  getData.map((item) => setDatabaseId(item.id));
 
   React.useEffect(() => {
     fetchData();

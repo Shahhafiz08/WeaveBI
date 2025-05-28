@@ -5,6 +5,7 @@ import { useCustomDrawer } from 'src/components/custom-drawer/useCustomDrawer';
 
 import AddQueryWidget from './components/add-query-widget';
 import addWidget from '../../assets/dashboard/add-widget.svg';
+import { useDatabaseId } from '../context/databaseid-context';
 
 type EmptyDashboardType = {
   isSliderOpen: any;
@@ -20,10 +21,8 @@ const EmptyDashboard = ({
   handleCloseSlider,
 }: EmptyDashboardType) => {
   const { MainContent } = useCustomDrawer();
-  // const { id } = useParams();
+  const { databaseId } = useDatabaseId();
 
-  // const { isSliderOpen, handleCloseSlider, fetchDashboardInfo, handleOpenSlider } =
-  //   useDashboardDetails(id as string);
   return (
     <MainContent open={isSliderOpen}>
       <Grid
@@ -52,7 +51,7 @@ const EmptyDashboard = ({
           </Button>
         </Stack>
         <AddWidgetDrawer open={isSliderOpen} onClose={handleCloseSlider}>
-          <AddQueryWidget fetchDashboardInfo={fetchDashboardInfo} />
+          <AddQueryWidget databaseId={databaseId} fetchDashboardInfo={fetchDashboardInfo} />
         </AddWidgetDrawer>
       </Grid>
     </MainContent>

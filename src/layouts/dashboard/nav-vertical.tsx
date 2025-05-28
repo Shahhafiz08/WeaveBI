@@ -11,6 +11,7 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { NavSectionMini, NavSectionVertical } from 'src/components/nav-section';
 
 import { NavToggleButton } from '../components/nav-toggle-button';
+import GraphicweaveLogo from '../../assets/home/logo-graphic-view.png';
 
 // ----------------------------------------------------------------------
 
@@ -46,16 +47,20 @@ export function NavVertical({
       )}
 
       <Scrollbar fillContent>
-        <NavSectionVertical data={data} sx={{ px: 2, flex: '1 1 auto' }} {...other} />
+        <NavSectionVertical
+          data={data}
+          sx={{ px: 2, flex: '1 1 auto',  }}
+          {...other}
+        />
       </Scrollbar>
     </>
   );
 
   const renderNavMini = (
-    <>
+    <div>
       {slots?.topArea ?? (
         <Box sx={{ display: 'flex', width: '80px', justifyContent: 'center', py: 3, pl: 2, pr: 2 }}>
-          <img src="/public/assets/images/home/logo-graphic-view.png" alt="" />
+          <img src={GraphicweaveLogo} alt="Logo img" />
         </Box>
       )}
 
@@ -64,9 +69,8 @@ export function NavVertical({
         sx={{ pb: 2, px: 0.5, ...hideScrollY, flex: '1 1 auto', overflowY: 'auto' }}
         {...other}
       />
-
       {slots?.bottomArea}
-    </>
+    </div>
   );
 
   return (
@@ -77,6 +81,7 @@ export function NavVertical({
         height: 1,
         display: 'none',
         position: 'fixed',
+        fontFamily: 'poppins',
         flexDirection: 'column',
         bgcolor: 'var(--layout-nav-bg)',
         zIndex: 'var(--layout-nav-zIndex)',

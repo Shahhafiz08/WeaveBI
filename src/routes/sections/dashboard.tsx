@@ -6,7 +6,7 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import OpenDashboard from 'src/sections/Dashboards/dashboard';
+import OpenVisualize from 'src/sections/Dashboards/dashboard';
 
 import { AuthGuard } from 'src/auth/guard';
 
@@ -16,10 +16,10 @@ import { paths } from '../paths';
 
 const Home = lazy(() => import('src/pages/home/index'));
 const DbConnections = lazy(() => import('src/pages/database-connections/index'));
-const Dashboard = lazy(() => import('src/sections/Dashboards'));
+const Visualize = lazy(() => import('src/sections/visualize/index'));
 const QueryBuilder = lazy(() => import('src/sections/queryBuilder/queryBuilder'));
 const Settings = lazy(() => import('src/sections/settings/settings'));
-const Logout = lazy(() => import('src/sections/logout/logout'));
+const Learn = lazy(() => import('src/sections/Learn/learn'));
 
 // ----------------------------------------------------------------------
 
@@ -39,16 +39,16 @@ export const dashboardRoutes = [
       { path: 'home', element: <Home /> },
       { path: paths.dashboard.databaseConnections, element: <DbConnections /> },
       {
-        path: paths.dashboard.dashBoard,
-        element: <Dashboard />,
+        path: paths.dashboard.visualize,
+        element: <Visualize />,
       },
       {
-        path: `${paths.dashboard.dashBoard}/:id`,
-        element: <OpenDashboard />,
+        path: `${paths.dashboard.visualize}/:id`,
+        element: <OpenVisualize />,
       },
       { path: paths.dashboard.queryBuilder, element: <QueryBuilder /> },
       { path: paths.dashboard.settings, element: <Settings /> },
-      { path: paths.dashboard.logout, element: <Logout /> },
+      { path: paths.dashboard.learn, element: <Learn /> },
     ],
   },
 ];

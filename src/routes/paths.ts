@@ -44,10 +44,10 @@ export const paths = {
   dashboard: {
     home: `${ROOTS.DASHBOARD}/home`,
     databaseConnections: `${ROOTS.DASHBOARD}/database-connection`,
-    dashBoard: `${ROOTS.DASHBOARD}/dashboard`,
+    visualize: `${ROOTS.DASHBOARD}/visualize`,
     queryBuilder: `${ROOTS.DASHBOARD}/query-builder`,
     settings: `${ROOTS.DASHBOARD}/settings`,
-    logout: `${ROOTS.DASHBOARD}/logout`,
-    OpenDashboard: (id: number) => `${ROOTS.DASHBOARD}/dashboard/${id}`,
+    learn: `${ROOTS.DASHBOARD}/learn`,
+    OpenVisualize: (id: number) => `${ROOTS.DASHBOARD}/visualize/${id}`,
   },
 };

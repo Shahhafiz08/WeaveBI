@@ -118,11 +118,8 @@ export async function getDashboardResponse() {
 }
 // Delete a dashboard
 export async function deleteDashboardResponse(id: number) {
-  try {
-    await axios.delete(`${endpoints.dashboard.delete}/${id}`);
-  } catch (error) {
-    throw new Error('Unable to delete dashboard');
-  }
+  const resp = await axios.delete(`${endpoints.dashboard.delete}/${id}`);
+  return resp.data;
 }
 // Pin Dashboard
 export async function pinDashboardResponse(id: number) {
@@ -140,3 +137,14 @@ export async function pinnedDashboardsResponse(pageNo: number, isPinned: boolean
 
   return response.data;
 }
+
+// Query activity graph
+export const queryActivity = async () => {
+  const resp = await axios.get(`${endpoints.user.queryActivity}`);
+  return resp.data;
+};
+// Output Overview
+export const outputOverview = async () => {
+  const resp = await axios.get(`${endpoints.user.queryOutputs}`);
+  return resp.data;
+};

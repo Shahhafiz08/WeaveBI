@@ -135,9 +135,9 @@ export default function PinnedDashboardList() {
 
                   <StyledTableCell sx={{ width: '25%' }}>
                     <Link
-                      className="open-dashboard"
+                      className="open-Visulize"
                       style={{ textDecoration: 'none', color: 'black' }}
-                      to={paths.dashboard.OpenDashboard(data.id)}
+                      to={paths.dashboard.OpenVisualize(data.id)}
                     >
                       {data.name}
                     </Link>

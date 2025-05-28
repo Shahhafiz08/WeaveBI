@@ -5,7 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import App from './app';
 import { CONFIG } from './config-global';
-// import { ColorProvider } from './sections/Dashboards/context/pickerContext';
+import { DatabaseIdProvider } from './sections/context/databaseid-context';
 
 // ----------------------------------------------------------------------
 
@@ -16,9 +16,9 @@ root.render(
   <HelmetProvider>
     <BrowserRouter basename={CONFIG.site.basePath}>
       <Suspense>
-        {/* <ColorProvider> */}
-        <App />
-        {/* </ColorProvider> */}
+        <DatabaseIdProvider>
+          <App />
+        </DatabaseIdProvider>
       </Suspense>
     </BrowserRouter>
   </HelmetProvider>

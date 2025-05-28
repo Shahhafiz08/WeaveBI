@@ -11,32 +11,12 @@ const icon = (name: string) => (
 );
 
 const ICONS = {
-  job: icon('ic-job'),
-  blog: icon('ic-blog'),
-  chat: icon('ic-chat'),
-  mail: icon('ic-mail'),
-  user: icon('ic-user'),
-  file: icon('ic-file'),
-  lock: icon('ic-lock'),
-  tour: icon('ic-tour'),
-  order: icon('ic-order'),
-  label: icon('ic-label'),
-  blank: icon('ic-blank'),
-  kanban: icon('ic-kanban'),
-  folder: icon('ic-folder'),
-  course: icon('ic-course'),
-  banking: icon('ic-banking'),
-  booking: icon('ic-booking'),
-  invoice: icon('ic-invoice'),
-  product: icon('ic-product'),
-  calendar: icon('ic-calendar'),
-  disabled: icon('ic-disabled'),
-  external: icon('ic-external'),
-  menuItem: icon('ic-menu-item'),
-  ecommerce: icon('ic-ecommerce'),
-  analytics: icon('ic-analytics'),
-  dashboard: icon('ic-dashboard'),
-  parameter: icon('ic-parameter'),
+  home: icon('home'),
+  connection: icon('connection'),
+  visualize: icon('visualize'),
+  queryBuilder: icon('query-builder'),
+  settings: icon('settings'),
+  learn: icon('learn'),
 };
 
 // ----------------------------------------------------------------------
@@ -47,16 +27,16 @@ export const navData = [
    */
   {
     items: [
-      { title: 'Home', path: paths.dashboard.home, icon: ICONS.label },
+      { title: 'Home', path: paths.dashboard.home, icon: ICONS.home },
       {
-        title: 'Database Connection',
+        title: 'Connections',
         path: paths.dashboard.databaseConnections,
-        icon: ICONS.ecommerce,
+        icon: ICONS.connection,
       },
-      { title: 'Dashboard', path: paths.dashboard.dashBoard, icon: ICONS.analytics },
-      { title: 'Query Builder', path: paths.dashboard.queryBuilder, icon: ICONS.folder },
-      { title: 'Setting', path: paths.dashboard.settings, icon: ICONS.banking },
-      { title: 'Logout', path: paths.dashboard.logout, icon: ICONS.menuItem },
+      { title: 'Visualize', path: paths.dashboard.visualize, icon: ICONS.visualize },
+      { title: 'Query Builder', path: paths.dashboard.queryBuilder, icon: ICONS.queryBuilder },
+      { title: 'Setting', path: paths.dashboard.settings, icon: ICONS.settings },
+      { title: 'Learn', path: paths.dashboard.learn, icon: ICONS.learn },
     ],
   },
   /**

@@ -22,6 +22,7 @@ export type QueryChartData = {
   labels: Array<string>;
   values: Array<number | string>;
   datasetLabel: Array<string>;
+  
 };
 
 export type QuerySingleValueData = {

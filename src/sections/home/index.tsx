@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Grid2 from '@mui/material/Unstable_Grid2';
 import { Tab, Stack, Typography } from '@mui/material';
@@ -13,8 +13,14 @@ import img2 from '../../assets/home/active-databases-icon.svg';
 import img4 from '../../assets/home/totoal-dashboards-icon.svg';
 import PinnedDashboardList from './components/pinned-dashboard-list';
 import RecentDashboardList from './components/recent-dashboard-list';
-import { FrequeryntlyAskedQueries } from './components/ferquentyl-asked-queries';
-import { totalQueryCount, totalDatabaseCount, totalDashboardCount } from './api/actions';
+import { UserQueryActivity } from './components/ferquentyl-asked-queries';
+import {
+  queryActivity,
+  outputOverview,
+  totalQueryCount,
+  totalDatabaseCount,
+  totalDashboardCount,
+} from './api/actions';
 
 // ----------------------------------------------------------------------
 
@@ -79,6 +85,32 @@ export default function HomeView() {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+  const [userActivityResponse, setUserActivityResponse] = useState<any>(null);
+  const [outputOverviewResponse, setOutputOverviewResponse] = useState<any>(null);
+
+  useEffect(() => {
+    const displayUserActivity = async () => {
+      try {
+        const resp = await queryActivity();
+        setUserActivityResponse(resp);
+        console.log('API Response:', userActivityResponse);
+      } catch (err) {
+        console.error('Failed to fetch query activity:', err);
+      }
+    };
+    const OutputOverview = async () => {
+      try {
+        const resp = await outputOverview();
+        setOutputOverviewResponse(resp);
+        console.log('API Response:', outputOverviewResponse);
+      } catch (err) {
+        console.error('Failed to fetch query activity:', err);
+      }
+    };
+    OutputOverview();
+    displayUserActivity();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div style={{ background: '#F2F2F2', padding: 20, width: '100%' }}>
@@ -100,10 +132,18 @@ export default function HomeView() {
         gap={5}
       >
         <div style={{ width: '50%' }}>
-          <FrequeryntlyAskedQueries color="pink" />
+          <UserQueryActivity
+            response={userActivityResponse}
+            title={userActivityResponse?.title}
+            color="pink"
+          />
         </div>
         <div style={{ width: '50%' }}>
-          <FrequeryntlyAskedQueries color="red" />
+          <UserQueryActivity
+            response={outputOverviewResponse}
+            color="red"
+            title={outputOverviewResponse?.title}
+          />
         </div>
       </Stack>
 

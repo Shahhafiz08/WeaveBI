@@ -2,9 +2,9 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
 
-import DashboardView from 'src/sections/visualize';
+import VisulaizeView from 'src/sections/visualize/index';
 
-const metadata = { title: `Dashboard - ${CONFIG.site.name}` };
+const metadata = { title: `Database connections - ${CONFIG.site.name}` };
 
 export default function Page() {
   return (
@@ -12,7 +12,7 @@ export default function Page() {
       <Helmet>
         <title> {metadata.title}</title>
       </Helmet>
-      <DashboardView />
+      <VisulaizeView />
     </>
   );
 }

@@ -1,10 +1,11 @@
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 import { getDashboardInfo, updateQueryPosition, parallellyRunAllQueries } from '../api/actions';
 
-const useDashboardDetails = (id: string | number) => {
+const useDashboardDetails = () => {
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [refreshLoading, setRefreshLoading] = useState(false);
@@ -21,6 +22,7 @@ const useDashboardDetails = (id: string | number) => {
   const handleOpenSlider = () => {
     setIsSliderOpen(true);
   };
+  const { id } = useParams();
 
   const chartColors = [
     '#253f69',
@@ -49,10 +51,15 @@ const useDashboardDetails = (id: string | number) => {
           (query.outputType.toLowerCase() === 'tabular' ||
             query.outputType.toLowerCase() === 'descriptive' ||
             query.outputType.toLowerCase() === 'singlevalue' ||
-            (query.data.graph_type &&
-              ['bar', 'pie', 'line', 'stacked', 'scatter', 'doughnut', 'singleValue'].includes(
-                query.data.graph_type.toLowerCase()
-              )))
+            (query.outputType.toLowerCase() && [
+              'bar chart',
+              'pie chart',
+              'line chart',
+              'stacked chart',
+              'scatter chart ',
+              'doughnut chart',
+              'singleValue chart',
+            ]))
       );
       setRenderableQueries(_renderableQueries);
     } catch (err) {
@@ -61,6 +68,7 @@ const useDashboardDetails = (id: string | number) => {
       setLoading(false);
     }
   }, [id]);
+  console.log(renderableQueries);
   // Refresh dashboard
   const refreshDashboardQueries = useCallback(async () => {
     try {
@@ -104,7 +112,7 @@ const useDashboardDetails = (id: string | number) => {
     lg:
       renderableQueries?.map(
         (query: any) =>
-          query.position === null && {
+          query.position.h === 0 && {
             i: String(1),
             x: 1,
             y: Infinity,

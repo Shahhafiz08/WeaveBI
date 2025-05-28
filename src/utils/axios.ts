@@ -64,6 +64,11 @@ export const endpoints = {
     details: '/api/product/details',
     search: '/api/product/search',
   },
+  user: {
+    queryActivity: 'user/query-activity',
+    queryOutputs: 'user/query-types',
+  },
+
   database: {
     create: '/database',
     get: '/database',

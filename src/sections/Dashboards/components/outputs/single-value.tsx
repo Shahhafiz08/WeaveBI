@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
-import type { Query, QuerySingleValueData } from '../../types/inference';
+import type { Query } from '../../types/inference';
 
 const SingeValue = ({
   queryData,
@@ -54,7 +54,7 @@ const SingeValue = ({
             fontWeight: 'bold',
           }}
         >
-          {(queryData.data as unknown as QuerySingleValueData[])?.[0]?.value}
+          {Object.values(queryData.data[0])}
         </Typography>
       </Box>
     </Stack>

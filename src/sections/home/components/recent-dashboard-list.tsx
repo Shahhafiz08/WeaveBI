@@ -25,6 +25,7 @@ import { Iconify } from 'src/components/iconify';
 import { CustomPopover } from 'src/components/custom-popover';
 
 import usetTableStyling from 'src/sections/hooks/use-table-styling';
+import { useDatabaseId } from 'src/sections/context/databaseid-context';
 
 import {
   getDashboardResponse,
@@ -39,6 +40,7 @@ type fetchDataType = {
   description: string;
   createdAt: string;
   tags: string[];
+  databaseId: number;
 };
 
 const { StyledTableCell, StyledTableRow } = usetTableStyling();
@@ -48,6 +50,7 @@ export default function RecentDashboardList() {
   const [selected, setSelected] = React.useState<number[]>([]);
   const [popoverAnchor, setPopoverAnchor] = React.useState<HTMLElement | null>(null);
   const [activeDashboardId, setActiveDashboardId] = React.useState<number | null>(null);
+  const { setDatabaseId } = useDatabaseId();
 
   const maxDescriptionLength = 60;
 
@@ -77,13 +80,15 @@ export default function RecentDashboardList() {
 
   async function handleDeleteDashboard(dashboardId: number) {
     try {
-      await deleteDashboardResponse(dashboardId);
+      const resp = await deleteDashboardResponse(dashboardId);
       handlePopoverClose();
       fetchData();
+      toast.success(resp.message);
     } catch (error) {
-      alert(error);
+      toast.error(error);
     }
   }
+  getData.map((item) => setDatabaseId(item.databaseId));
 
   async function handlePin(dashboardId: number) {
     setGetData((prevData) =>
@@ -155,9 +160,9 @@ export default function RecentDashboardList() {
 
                   <StyledTableCell sx={{ width: '25%' }}>
                     <Link
-                      className="open-dashboard"
+                      className="open-Visulize"
                       style={{ textDecoration: 'none', color: 'black' }}
-                      to={paths.dashboard.OpenDashboard(data.id)}
+                      to={paths.dashboard.OpenVisualize(data.id)}
                     >
                       {data.name}
                     </Link>

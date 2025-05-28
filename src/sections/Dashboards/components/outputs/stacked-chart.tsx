@@ -110,7 +110,7 @@ export const StackedChart = ({
         label: chart.label,
         backgroundColor: color,
         borderColor: color,
-        data: chart.data.map((item: string | number) => item),
+        data: chart.data?.map((item: string | number) => item),
       };
     }),
   };

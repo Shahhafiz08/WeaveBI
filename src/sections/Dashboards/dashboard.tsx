@@ -27,6 +27,7 @@ import AddQueryWidget from './components/add-query-widget';
 import Descriptive from './components/outputs/descriptive';
 import DashboardHeader from './components/dashborad-header';
 import { LineChart } from './components/outputs/line-chart';
+import { useDatabaseId } from '../context/databaseid-context';
 import { ScatterChart } from './components/outputs/scatter-chart';
 import { StackedChart } from './components/outputs/stacked-chart';
 import { DoughnutChart } from './components/outputs/doughnut-chart';
@@ -74,8 +75,9 @@ const Dashboard = () => {
     layout,
     ResponsiveGridLayout,
     isSliderOpen,
-  } = useDashboardDetails(id as string);
+  } = useDashboardDetails();
   const { MainContent } = useCustomDrawer();
+  const { databaseId } = useDatabaseId();
 
   // Render chart
   const renderChart = (query: any, type?: string) => {
@@ -186,7 +188,7 @@ const Dashboard = () => {
               <div
                 key={query.id.toString()}
                 data-grid={
-                  query.position
+                  query.position.h !== 0
                     ? {
                         i: query.position.id,
                         w: query.position.z,
@@ -208,7 +210,7 @@ const Dashboard = () => {
         )}
 
         <AddWidgetDrawer open={isSliderOpen} onClose={handleCloseSlider}>
-          <AddQueryWidget fetchDashboardInfo={fetchDashboardInfo} />
+          <AddQueryWidget databaseId={databaseId} fetchDashboardInfo={fetchDashboardInfo} />
         </AddWidgetDrawer>
       </MainContent>
     </div>

@@ -16,42 +16,34 @@ import { primary } from 'src/theme/core';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const dummyLabels = [
-  'Login Issues',
-  'Payment Failed',
-  'Account Setup',
-  'Password Reset',
-  'Other',
-  'abc',
-  'def',
-];
-const dummyTitle = 'Frequently Asked Support Queries';
 const dummyQueryId = 101;
 
-export const FrequeryntlyAskedQueries = ({ color }: { color: string }) => {
+export const UserQueryActivity = ({
+  color,
+  title,
+  response,
+}: {
+  color: string;
+  title: string;
+  response: any;
+}) => {
   const [shade, setShade] = useState<string[]>([]);
 
   useEffect(() => {
     const pinkShades = ['#EB6477', '#ED7586', '#EF8695', '#F298A4', '#F4A9B3'];
     const redShades = ['#548587', '#60999B', '#73A6A8', '#87B3B5', '#9BC0C1'];
-    if (color === 'pink') {
-      setShade(pinkShades);
-    } else {
-      setShade(redShades);
-    }
+    setShade(color === 'pink' ? pinkShades : redShades);
   }, [color]);
 
   const data = {
-    labels: dummyLabels,
-    datasets: [
-      {
-        label: 'Query Count',
-        data: [12, 19, 3, 5, 2, 8, 10],
+    labels: response?.labels || [],
+    datasets:
+      response?.datasets?.map((item: any) => ({
+        label: item.label,
+        data: item.data,
         backgroundColor: shade,
         borderColor: shade,
-        borderWidth: 1,
-      },
-    ],
+      })) || [],
   };
 
   const options = {
@@ -67,7 +59,7 @@ export const FrequeryntlyAskedQueries = ({ color }: { color: string }) => {
     },
     plugins: {
       legend: {
-        position: 'top' as const,
+        display: false,
       },
       title: {
         display: false,
@@ -95,15 +87,15 @@ export const FrequeryntlyAskedQueries = ({ color }: { color: string }) => {
         }}
       >
         <Typography sx={{ color: primary.menu }} style={{ display: 'inline' }}>
-          {dummyTitle}
+          {title}
         </Typography>
       </div>
 
       <div
         style={{
           padding: 20,
-          paddingLeft: '40px',
-          paddingRight: '40px',
+          paddingLeft: '15px',
+          paddingRight: '15px',
           width: '100%',
           height: '100%',
         }}
