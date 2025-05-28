@@ -14,6 +14,8 @@ import {
 
 import { Paper, Typography } from '@mui/material';
 
+import NoDataFound from 'src/sections/components/no-data-found';
+
 import QueryOptions from '../query-options';
 import { useConfigure } from '../../hooks/use-configure';
 import { useColorPicker } from '../../hooks/useColor-picker';
@@ -87,7 +89,6 @@ export const LineChart = ({
       backgroundColor: chartColor,
     })),
   };
- 
 
   return (
     <Paper
@@ -123,10 +124,16 @@ export const LineChart = ({
           paddingBottom: '15px',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
           height: '90%',
+          width: '100%',
         }}
       >
-        <Line options={options} data={data} />
+        {queryData.data.datasets[0].label <= 0 || queryData.data.datasets[0].data.length <= 0 ? (
+          <NoDataFound />
+        ) : (
+          <Line options={options} data={data} />
+        )}
       </div>
     </Paper>
   );

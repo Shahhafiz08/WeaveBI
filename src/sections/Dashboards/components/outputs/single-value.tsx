@@ -1,5 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material';
 
+import NoDataFound from 'src/sections/components/no-data-found';
+
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
@@ -47,16 +49,20 @@ const SingeValue = ({
           borderRadius: 1,
         }}
       >
-        <Typography
-          style={{
-            color: Array.isArray(chartColor) ? chartColor[0] : '#193E6D',
-            fontSize: '2.2em',
-            fontWeight: 'bold',
-            textTransform: 'capitalize',
-          }}
-        >
-          {Object.values(queryData.data[0])}
-        </Typography>
+        {queryData.data.length <= 0 ? (
+          <NoDataFound />
+        ) : (
+          <Typography
+            style={{
+              color: Array.isArray(chartColor) ? chartColor[0] : '#193E6D',
+              fontSize: '2.2em',
+              fontWeight: 'bold',
+              textTransform: 'capitalize',
+            }}
+          >
+            {Object.values(queryData.data[0])}
+          </Typography>
+        )}
       </Box>
     </Stack>
   );

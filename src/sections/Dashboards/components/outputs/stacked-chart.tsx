@@ -13,6 +13,8 @@ import {
 
 import { Paper, Typography } from '@mui/material';
 
+import NoDataFound from 'src/sections/components/no-data-found';
+
 import QueryOptions from '../query-options';
 import { useConfigure } from '../../hooks/use-configure';
 import { useColorPicker } from '../../hooks/useColor-picker';
@@ -132,6 +134,7 @@ export const StackedChart = ({
         <Typography style={{ display: 'inline', textTransform: 'capitalize' }}>
           {queryData.name}
         </Typography>
+
         <QueryOptions
           fetchDashboardInfo={fetchDashboardInfo}
           changeChatType="changeit"
@@ -144,7 +147,26 @@ export const StackedChart = ({
           chartColor={chartColor}
         />
       </div>
-      <Bar data={data} options={options} />
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          paddingLeft: '5px',
+          paddingRight: '25px',
+          paddingBottom: '15px',
+        }}
+      >
+        {queryData.data.labels.length <= 0 ||
+        queryData.data.datasets.length <= 0 ||
+        queryData.data.datasets[0].data.length <= 0 ? (
+          <NoDataFound />
+        ) : (
+          <Bar data={data} options={options} />
+        )}
+      </div>
     </Paper>
   );
 };

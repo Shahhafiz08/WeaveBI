@@ -12,6 +12,8 @@ import {
 
 import { Paper, Typography } from '@mui/material';
 
+import NoDataFound from 'src/sections/components/no-data-found';
+
 import QueryOptions from '../query-options';
 import { useConfigure } from '../../hooks/use-configure';
 import { useColorPicker } from '../../hooks/useColor-picker';
@@ -121,17 +123,24 @@ export const ScatterChart = ({
           handleChangeYTitle={handleChangeYTitle}
         />
       </div>
+
       <div
         style={{
           width: '100%',
           height: '100%',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
           paddingLeft: '5px',
           paddingRight: '25px',
           paddingBottom: '15px',
         }}
       >
-        {' '}
-        <Scatter data={data} options={options} />
+        {queryData.data.datasets.length <= 0 ? (
+          <NoDataFound />
+        ) : (
+          <Scatter data={data} options={options} />
+        )}
       </div>
     </Paper>
   );

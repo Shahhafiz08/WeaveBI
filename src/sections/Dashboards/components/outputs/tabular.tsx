@@ -10,6 +10,7 @@ import {
 
 import { truncateString } from 'src/utils/helper';
 
+import NoDataFound from 'src/sections/components/no-data-found';
 import usetTableStyling from 'src/sections/hooks/use-table-styling';
 
 import QueryOptions from '../query-options';
@@ -24,7 +25,12 @@ const Tabular = ({
   fetchDashboardInfo: () => void;
 }) => {
   const { StyledTableCell, StyledTableRow } = usetTableStyling();
-  const heading = Array.isArray(queryData.data) ? Object.keys(queryData.data[0]) : [];
+  const heading =
+    Array.isArray(queryData.data) && queryData.data.length > 0 && queryData.data[0]
+      ? Object.keys(queryData.data[0])
+      : [];
+
+  console.log(queryData);
 
   return (
     <div>
@@ -35,6 +41,7 @@ const Tabular = ({
         </div>
         <TableContainer sx={{ position: 'relative', maxHeight: '320px' }} component={Paper}>
           <Table sx={{ width: '100%' }}>
+            {queryData.data.length <= 0 && <NoDataFound />}
             <TableHead style={{ position: 'relative' }}>
               <TableRow style={{ position: 'sticky', top: '0.01px' }}>
                 {heading.map((item, i) => (

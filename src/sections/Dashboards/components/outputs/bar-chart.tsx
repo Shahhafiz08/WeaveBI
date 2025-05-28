@@ -13,6 +13,8 @@ import {
 
 import { Paper, Typography } from '@mui/material';
 
+import NoDataFound from 'src/sections/components/no-data-found';
+
 import QueryOptions from '../query-options';
 import { useConfigure } from '../../hooks/use-configure';
 import { useColorPicker } from '../../hooks/useColor-picker';
@@ -128,11 +130,18 @@ export const BarChart = ({
           padding: 20,
           paddingLeft: '0px',
           paddingRight: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           width: '100%',
           height: '100%',
         }}
       >
-        <Bar data={data} options={options} />
+        {queryData.data.datasets[0].label <= 0 || queryData.data.datasets[0].data.length <= 0 ? (
+          <NoDataFound />
+        ) : (
+          <Bar data={data} options={options} />
+        )}
       </div>
     </Paper>
   );

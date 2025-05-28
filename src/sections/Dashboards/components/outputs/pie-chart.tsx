@@ -3,6 +3,8 @@ import { Legend, Tooltip, ArcElement, Chart as ChartJS } from 'chart.js';
 
 import { Paper, Typography } from '@mui/material';
 
+import NoDataFound from 'src/sections/components/no-data-found';
+
 import QueryOptions from '../query-options';
 import { useColorPicker } from '../../hooks/useColor-picker';
 
@@ -78,7 +80,7 @@ export const PieChart = ({
       borderColor: chartColor,
       backgroundColor: chartColor,
     })),
-  }; 
+  };
 
   return (
     <Paper
@@ -94,7 +96,6 @@ export const PieChart = ({
         justifyContent: 'space-between',
       }}
     >
-      {/* Header */}
       <div
         style={{
           display: 'flex',
@@ -129,9 +130,16 @@ export const PieChart = ({
           flexGrow: 1,
           minHeight: '200px',
           position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <Pie data={data} options={options} />
+        {data.datasets.length <= 0 || data.labels.length <= 0 ? (
+          <NoDataFound />
+        ) : (
+          <Pie data={data} options={options} />
+        )}
       </div>
     </Paper>
   );
