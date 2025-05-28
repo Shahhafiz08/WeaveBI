@@ -28,7 +28,7 @@ const SingeValue = ({
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography>{queryData.name}</Typography>
+        <Typography style={{ textTransform: 'capitalize' }}>{queryData.name}</Typography>
         <QueryOptions
           fetchDashboardInfo={fetchDashboardInfo}
           showOptions="yesShow"
@@ -52,6 +52,7 @@ const SingeValue = ({
             color: Array.isArray(chartColor) ? chartColor[0] : '#193E6D',
             fontSize: '2.2em',
             fontWeight: 'bold',
+            textTransform: 'capitalize',
           }}
         >
           {Object.values(queryData.data[0])}

@@ -122,6 +122,7 @@ export const DoughnutChart = ({
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
+            textTransform: 'capitalize',
           }}
         >
           {queryData.name}

@@ -111,6 +111,7 @@ export const StackedChart = ({
         backgroundColor: color,
         borderColor: color,
         data: chart.data?.map((item: string | number) => item),
+        maxBarThickness: 70,
       };
     }),
   };
@@ -128,7 +129,9 @@ export const StackedChart = ({
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography style={{ display: 'inline' }}>{queryData.name}</Typography>
+        <Typography style={{ display: 'inline', textTransform: 'capitalize' }}>
+          {queryData.name}
+        </Typography>
         <QueryOptions
           fetchDashboardInfo={fetchDashboardInfo}
           changeChatType="changeit"

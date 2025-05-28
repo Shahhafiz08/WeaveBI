@@ -6,6 +6,7 @@ import { TabList, TabPanel, TabContext } from '@mui/lab';
 
 import { primary } from 'src/theme/core';
 
+import { HomeCharts } from './components/home-charts';
 import { KeyPoints } from './components/keypoints-home';
 import img3 from '../../assets/home/total-queries-icon.svg';
 import img1 from '../../assets/home/total-databases-icon.svg';
@@ -13,7 +14,6 @@ import img2 from '../../assets/home/active-databases-icon.svg';
 import img4 from '../../assets/home/totoal-dashboards-icon.svg';
 import PinnedDashboardList from './components/pinned-dashboard-list';
 import RecentDashboardList from './components/recent-dashboard-list';
-import { UserQueryActivity } from './components/ferquentyl-asked-queries';
 import {
   queryActivity,
   outputOverview,
@@ -132,14 +132,14 @@ export default function HomeView() {
         gap={5}
       >
         <div style={{ width: '50%' }}>
-          <UserQueryActivity
+          <HomeCharts
             response={userActivityResponse}
             title={userActivityResponse?.title}
             color="pink"
           />
         </div>
         <div style={{ width: '50%' }}>
-          <UserQueryActivity
+          <HomeCharts
             response={outputOverviewResponse}
             color="red"
             title={outputOverviewResponse?.title}

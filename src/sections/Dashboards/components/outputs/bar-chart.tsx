@@ -83,6 +83,7 @@ export const BarChart = ({
       data: plotdata.data.map((value: string) => value),
       borderColor: chartColor,
       backgroundColor: chartColor,
+      maxBarThickness: 50,
     })),
   };
 
@@ -106,7 +107,9 @@ export const BarChart = ({
           paddingBottom: '0px',
         }}
       >
-        <Typography style={{ display: 'inline' }}>{queryData.name}</Typography>
+        <Typography style={{ display: 'inline', textTransform: 'capitalize' }}>
+          {queryData.name}
+        </Typography>
         <QueryOptions
           fetchDashboardInfo={fetchDashboardInfo}
           changeChatType="changeit"

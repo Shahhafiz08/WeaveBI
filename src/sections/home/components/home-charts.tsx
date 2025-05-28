@@ -18,7 +18,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const dummyQueryId = 101;
 
-export const UserQueryActivity = ({
+export const HomeCharts = ({
   color,
   title,
   response,
@@ -43,12 +43,14 @@ export const UserQueryActivity = ({
         data: item.data,
         backgroundColor: shade,
         borderColor: shade,
+        maxBarThickness: 50,
       })) || [],
   };
 
   const options = {
     maintainAspectRatio: false,
     responsive: true,
+
     layout: {
       padding: {
         top: 10,

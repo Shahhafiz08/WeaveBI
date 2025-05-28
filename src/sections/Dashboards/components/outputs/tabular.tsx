@@ -30,7 +30,7 @@ const Tabular = ({
     <div>
       <Paper elevation={2} sx={{ p: 3, borderRadius: 2, userSelect: 'none' }}>
         <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
-          <Typography>{queryData.name}</Typography>
+          <Typography style={{ textTransform: 'capitalize' }}>{queryData.name}</Typography>
           <QueryOptions fetchDashboardInfo={fetchDashboardInfo} query={queryData} />
         </div>
         <TableContainer sx={{ position: 'relative', maxHeight: '320px' }} component={Paper}>

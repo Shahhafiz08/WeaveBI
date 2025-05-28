@@ -108,6 +108,7 @@ export const PieChart = ({
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
+            textTransform: 'capitalize',
           }}
         >
           {queryData.name}

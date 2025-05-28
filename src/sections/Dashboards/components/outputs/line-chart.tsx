@@ -103,7 +103,7 @@ export const LineChart = ({
           paddingBottom: '0px',
         }}
       >
-        <Typography style={{ display: 'inline' }}>{title}</Typography>
+        <Typography style={{ display: 'inline', textTransform: 'capitalize' }}>{title}</Typography>
         <QueryOptions
           fetchDashboardInfo={fetchDashboardInfo}
           chartColor={chartColor}

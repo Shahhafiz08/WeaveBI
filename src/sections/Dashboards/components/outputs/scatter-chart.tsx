@@ -106,7 +106,9 @@ export const ScatterChart = ({
           paddingBottom: '0px',
         }}
       >
-        <Typography style={{ display: 'inline' }}>{queryData.name}</Typography>
+        <Typography style={{ display: 'inline', textTransform: 'capitalize' }}>
+          {queryData.name}
+        </Typography>
         <QueryOptions
           fetchDashboardInfo={fetchDashboardInfo}
           chartColor={chartColor}
