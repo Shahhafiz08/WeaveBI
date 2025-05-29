@@ -23,7 +23,6 @@ import { Iconify } from 'src/components/iconify';
 import Sectionheader from './Sectionheader';
 import usetTableStyling from '../hooks/use-table-styling';
 import { getDatabase, deleteDatabase } from './api/actions';
-import { useDatabaseId } from '../context/databaseid-context';
 
 type fetchDataType = {
   id: number;
@@ -37,7 +36,7 @@ const { StyledTableCell, StyledTableRow } = usetTableStyling();
 export default function DatabaseConnectionsView() {
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const [open, setOpen] = React.useState(false);
-  const { setDatabaseId } = useDatabaseId();
+
   const [refresh, setRefresh] = React.useState<boolean>(false);
 
   const handleToggle = () => {
@@ -62,8 +61,6 @@ export default function DatabaseConnectionsView() {
     }
   };
 
-  getData.map((item) => setDatabaseId(item.id));
-
   React.useEffect(() => {
     fetchData();
   }, [refresh]);
@@ -79,10 +76,18 @@ export default function DatabaseConnectionsView() {
   };
   const [selected, setSelected] = React.useState<number[]>([]);
   return (
-    <>
+    <div style={{ background: '#F4F6F8', height: '100vh' }}>
       <Sectionheader setRefresh={setRefresh} />
       <Stack sx={{ marginX: 5, marginY: 2, boxShadow: 2, borderRadius: 1 }}>
-        <TableContainer sx={{ postion: 'relative', width: '100%', height: '400px' }}>
+        <TableContainer
+          sx={{
+            postion: 'relative',
+            width: '100%',
+            height: '400px',
+            background: 'white',
+            borderRadius: '10px',
+          }}
+        >
           <Table aria-label="customized table">
             <TableHead sx={{ position: 'sticky', top: '0.1px', zIndex: 10 }}>
               <TableRow>
@@ -179,6 +184,6 @@ export default function DatabaseConnectionsView() {
           </Table>
         </TableContainer>
       </Stack>
-    </>
+    </div>
   );
 }

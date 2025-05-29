@@ -119,6 +119,7 @@ const Dashboard = () => {
           return null;
       }
     }
+  
 
     return null;
   };
@@ -132,7 +133,7 @@ const Dashboard = () => {
       style={{
         paddingLeft: '20px',
         display: 'flex',
-        backgroundColor: '#f2f2f2',
+        backgroundColor: '#F4F6F8',
         position: 'relative',
         flexDirection: 'row',
         minHeight: '93vh',

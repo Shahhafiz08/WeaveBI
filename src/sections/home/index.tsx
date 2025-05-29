@@ -113,7 +113,7 @@ export default function HomeView() {
   }, []);
 
   return (
-    <div style={{ background: '#F2F2F2', padding: 20, width: '100%' }}>
+    <div style={{ background: '#F4F6F8', padding: 20, width: '100%' }}>
       <Stack marginBottom={2}>
         <Grid2 container direction="row" rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           {data &&

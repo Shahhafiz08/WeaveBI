@@ -10,7 +10,15 @@ const NoDataFound = () => (
       {' '}
       <img src={nodata} alt="" style={{ width: '200px' }} />
     </div>
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div
+      style={{
+        flexWrap: 'wrap',
+        fontSize: '17px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       {' '}
       Click <Iconify icon="uil:ellipsis-v" />
       above to <b style={{ marginLeft: '5px', marginRight: '5px' }}> Configure</b> your Query

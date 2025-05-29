@@ -69,7 +69,7 @@ export function HeaderSection({
 
   const toolbarStyles = {
     default: {
-      background: '#F2F2F2',
+      background: '#F4F6F8',
       minHeight: 'auto',
       maxHeight: '55px',
       height: 'var(--layout-header-mobile-height)',

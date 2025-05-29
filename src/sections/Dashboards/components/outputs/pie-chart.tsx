@@ -135,7 +135,7 @@ export const PieChart = ({
           justifyContent: 'center',
         }}
       >
-        {data.datasets.length <= 0 || data.labels.length <= 0 ? (
+        {queryData.data.datasets[0].label <= 0 || queryData.data.datasets[0].data.length <= 0 ? (
           <NoDataFound />
         ) : (
           <Pie data={data} options={options} />

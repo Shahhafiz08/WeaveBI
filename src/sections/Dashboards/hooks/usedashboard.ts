@@ -3,6 +3,8 @@ import { useParams } from 'react-router';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 
+import { useDatabaseId } from 'src/sections/context/databaseid-context';
+
 import { getDashboardInfo, updateQueryPosition, parallellyRunAllQueries } from '../api/actions';
 
 const useDashboardDetails = () => {
@@ -23,6 +25,7 @@ const useDashboardDetails = () => {
     setIsSliderOpen(true);
   };
   const { id } = useParams();
+  const { setDatabaseId } = useDatabaseId();
 
   const chartColors = [
     '#253f69',
@@ -44,7 +47,9 @@ const useDashboardDetails = () => {
     try {
       setLoading(true);
       const response = await getDashboardInfo(Number(id));
+
       setDashboardData(response);
+      setDatabaseId(response.databaseId);
       const _renderableQueries = response?.queries.filter(
         (query: { data: any; outputType: string }) =>
           query.data &&
@@ -61,14 +66,15 @@ const useDashboardDetails = () => {
               'singleValue chart',
             ]))
       );
+
       setRenderableQueries(_renderableQueries);
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
-  }, [id]);
-  console.log(renderableQueries);
+  }, [id, setDatabaseId]);
+
   // Refresh dashboard
   const refreshDashboardQueries = useCallback(async () => {
     try {

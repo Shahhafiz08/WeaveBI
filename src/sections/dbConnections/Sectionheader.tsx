@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Stack, Button, Typography } from '@mui/material';
+import { Stack, Typography, IconButton } from '@mui/material';
+
+import { primary } from 'src/theme/core';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -21,20 +23,20 @@ const Sectionheader: React.FC<SectionheaderProps> = ({ setRefresh }) => {
       marginLeft={5}
       marginRight={10}
     >
-      <Typography variant="h3" fontWeight="medium">
+      <Typography variant="h3" fontWeight="semibold" fontFamily="poppins" color={primary.main}>
         Connection Names
       </Typography>
       <Stack gap={5} direction="row">
-        <Button
+        <IconButton
           onClick={() => {
             handleRefresh();
           }}
         >
           <Iconify icon="ic:baseline-autorenew" />
-        </Button>
-        <Button>
+        </IconButton>
+        <IconButton>
           <Iconify icon="ic:round-more-vert" />
-        </Button>
+        </IconButton>
       </Stack>
     </Stack>
   );

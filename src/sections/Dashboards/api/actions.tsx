@@ -7,9 +7,8 @@ import type { UpdateQuery, SaveQueryType, DashboardColors, DashboardPosition } f
 // Get dashboard queries
 export const getDashboardInfo = async (id: number) => {
   try {
-    const dashboardinfo = await axios.get(`${endpoints.dashboard.info}/${id}/info`);
-    console.log('updated response', dashboardinfo);
-    return dashboardinfo.data;
+    const response = await axios.get(`${endpoints.dashboard.info}/${id}/info`);
+    return response.data;
   } catch (error) {
     console.log(error);
   }
@@ -116,7 +115,7 @@ export const updateQuery = async ({
     outputType,
     databaseId,
   });
-  
+
   return responce.data;
 };
 

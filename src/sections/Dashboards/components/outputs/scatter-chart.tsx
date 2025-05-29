@@ -129,14 +129,16 @@ export const ScatterChart = ({
           width: '100%',
           height: '100%',
           position: 'relative',
+
           display: 'flex',
+          justifyContent: 'center',
           alignItems: 'center',
           paddingLeft: '5px',
           paddingRight: '25px',
           paddingBottom: '15px',
         }}
       >
-        {queryData.data.datasets.length <= 0 ? (
+        {queryData.data.datasets[0].label <= 0 || queryData.data.datasets[0].data.length <= 0 ? (
           <NoDataFound />
         ) : (
           <Scatter data={data} options={options} />
