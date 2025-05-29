@@ -12,8 +12,8 @@ const NoDataFound = () => (
     </div>
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       {' '}
-      Click <Iconify icon="uil:ellipsis-v" /> to{' '}
-      <b style={{ marginLeft: '5px', marginRight: '5px' }}> Configure</b> your Query
+      Click <Iconify icon="uil:ellipsis-v" />
+      above to <b style={{ marginLeft: '5px', marginRight: '5px' }}> Configure</b> your Query
     </div>
   </Stack>
 );
