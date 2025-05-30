@@ -109,7 +109,7 @@ export async function totalDashboardCount() {
 // get total dashboard details
 export async function getDashboardResponse() {
   try {
-    const response = await axios.get(endpoints.dashboard.listOfDashboards);
+    const response = await axios.get(`${endpoints.dashboard.listOfDashboards}?page=1&limit=20`);
     return response.data;
   } catch (error) {
     const { message } = error;

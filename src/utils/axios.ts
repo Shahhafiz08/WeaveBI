@@ -77,6 +77,7 @@ export const endpoints = {
     count: '/database/count',
   },
   dashboard: {
+    create:'dashboard',
     listOfDashboards: '/dashboard',
     totalDashboardCount: '/dashboard/count',
     delete: 'dashboard',

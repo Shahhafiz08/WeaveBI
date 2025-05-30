@@ -6,6 +6,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './app';
 import { CONFIG } from './config-global';
 import { DatabaseIdProvider } from './sections/context/databaseid-context';
+import { IsThereDashboard } from './sections/visualize/context/dashbord-context';
 
 // ----------------------------------------------------------------------
 
@@ -16,9 +17,11 @@ root.render(
   <HelmetProvider>
     <BrowserRouter basename={CONFIG.site.basePath}>
       <Suspense>
-        <DatabaseIdProvider>
-          <App />
-        </DatabaseIdProvider>
+        <IsThereDashboard>
+          <DatabaseIdProvider>
+            <App />
+          </DatabaseIdProvider>
+        </IsThereDashboard>
       </Suspense>
     </BrowserRouter>
   </HelmetProvider>

@@ -25,6 +25,7 @@ import { Iconify } from 'src/components/iconify';
 import { CustomPopover } from 'src/components/custom-popover';
 
 import usetTableStyling from 'src/sections/hooks/use-table-styling';
+import { Abc } from 'src/sections/visualize/context/dashbord-context';
 import { useDatabaseId } from 'src/sections/context/databaseid-context';
 
 import {
@@ -68,15 +69,16 @@ export default function RecentDashboardList() {
       day: 'numeric',
     });
   }
+  const { isDashboard } = Abc();
 
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     try {
       const incomingData = await getDashboardResponse();
       setGetData(incomingData.dashboards);
     } catch (error) {
       toast.error('Error fetching dashboard:', error);
     }
-  };
+  }, []);
 
   async function handleDeleteDashboard(dashboardId: number) {
     try {
@@ -111,7 +113,7 @@ export default function RecentDashboardList() {
 
   React.useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData, isDashboard]);
 
   const tableHeadItems = ['Name', 'Description', 'Domain', 'Created', 'Action'];
 
