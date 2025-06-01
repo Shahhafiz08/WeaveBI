@@ -16,7 +16,7 @@ import { getDashboardResponse } from 'src/sections/home/api/actions';
 import { selectDatabase } from 'src/sections/queryBuilder/api/actions';
 
 import { createDashboard } from '../api/action';
-import { Abc } from '../context/dashbord-context';
+import { ChangeInBbList } from '../context/dashbord-context';
 
 import type { createDashboardType } from '../types/types';
 
@@ -51,7 +51,7 @@ const SetupDashboard = ({ onClose }: SetupDashboardprops) => {
 
   const { handleSubmit, setValue, getValues, watch, formState } = methods;
   const { errors } = formState;
-  const { setIsDashboard, isDashboard } = Abc();
+  const { setIsDashboard, isDashboard } = ChangeInBbList();
 
   const istag = watch('tagArray') || [];
   const [tag, setTag] = useState('');

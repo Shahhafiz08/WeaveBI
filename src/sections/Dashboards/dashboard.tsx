@@ -17,11 +17,11 @@ import { Box } from '@mui/material';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useCustomDrawer } from 'src/components/custom-drawer/useCustomDrawer';
 
-import EmptyDashboard from './empty-dashboard';
 import Tabular from './components/outputs/tabular';
 import useDashboardDetails from './hooks/usedashboard';
 import { PieChart } from './components/outputs/pie-chart';
 import { BarChart } from './components/outputs/bar-chart';
+import EmptyDashboard from './components/empty-dashboard';
 import SingeValue from './components/outputs/single-value';
 import AddQueryWidget from './components/add-query-widget';
 import Descriptive from './components/outputs/descriptive';
@@ -119,7 +119,6 @@ const Dashboard = () => {
           return null;
       }
     }
-  
 
     return null;
   };
@@ -151,7 +150,6 @@ const Dashboard = () => {
         >
           <DashboardHeader
             handleOpenSlider={handleOpenSlider}
-            // addWidget={showAddWidget}
             dashboardName={dashboardData?.name}
             id={id as unknown as any}
             saveLayout={saveLayout}

@@ -3,9 +3,10 @@ import { Grid, Stack, Button, Typography } from '@mui/material';
 import AddWidgetDrawer from 'src/components/custom-drawer/add-widget-drawer';
 import { useCustomDrawer } from 'src/components/custom-drawer/useCustomDrawer';
 
-import AddQueryWidget from './components/add-query-widget';
-import addWidget from '../../assets/dashboard/add-widget.svg';
-import { useDatabaseId } from '../context/databaseid-context';
+import { useDatabaseId } from 'src/sections/context/databaseid-context';
+
+import AddQueryWidget from './add-query-widget';
+import addWidget from '../../../assets/dashboard/add-widget.svg';
 
 type EmptyDashboardType = {
   isSliderOpen: any;
@@ -21,6 +22,7 @@ const EmptyDashboard = ({
   handleCloseSlider,
 }: EmptyDashboardType) => {
   const { MainContent } = useCustomDrawer();
+
   const { databaseId } = useDatabaseId();
 
   return (

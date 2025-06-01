@@ -125,27 +125,30 @@ export default function HomeView() {
         </Grid2>
       </Stack>
 
-      <Stack
-        height="50vh"
-        style={{ marginBottom: '40px', width: '100%' }}
-        flexDirection="row"
-        gap={5}
+      <div
+        style={{
+          marginBottom: '40px',
+          width: '100%',
+          display: 'flex',
+          height: '400px',
+          gap: '2%',
+        }}
       >
-        <div style={{ width: '50%' }}>
+        <div style={{ width: '49%' }}>
           <HomeCharts
             response={userActivityResponse}
             title={userActivityResponse?.title}
             color="pink"
           />
         </div>
-        <div style={{ width: '50%' }}>
+        <div style={{ width: '49%' }}>
           <HomeCharts
             response={outputOverviewResponse}
             color="red"
             title={outputOverviewResponse?.title}
           />
         </div>
-      </Stack>
+      </div>
 
       <Stack>
         <Typography variant="h3" style={{ color: primary.main }}>

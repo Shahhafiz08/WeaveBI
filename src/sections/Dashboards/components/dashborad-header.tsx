@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Paper,
@@ -14,12 +14,13 @@ import { Iconify } from 'src/components/iconify';
 import { StyledArrow } from 'src/components/custom-popover/styles';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
+import HoverDialogue from 'src/sections/components/hover-dialogue';
+
 type DashboardProps = {
   id: string | number;
   edit?: boolean;
   editDashboard: () => void;
   dashboardName: string;
-  // addWidget: () => void;
   refreshLoading: boolean;
   refreshDashboardQueries: () => void;
   saveLayout: () => void;
@@ -39,6 +40,15 @@ const DashboardHeader: React.FC<DashboardProps> = ({
   refreshDashboardQueries,
 }) => {
   const popover = usePopover();
+  const [dialogue, setDialogue] = useState<Boolean>(false);
+  const showDialogue = () => {
+    setDialogue(true);
+    console.log('entered');
+  };
+  const hideDialogue = () => {
+    setDialogue(false);
+    console.log('leaved');
+  };
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -82,15 +92,19 @@ const DashboardHeader: React.FC<DashboardProps> = ({
 
           <StyledArrow />
 
-          <IconButton
+          <Button
+            sx={{ fontWeight: 'medium', postion: 'relative' }}
+            variant="contained"
             type="button"
+            onMouseEnter={showDialogue}
+            onMouseLeave={hideDialogue}
             onClick={() => {
               refreshDashboardQueries();
             }}
-            disabled={refreshLoading}
           >
-            <Iconify icon="ic:baseline-autorenew" className={`${refreshLoading ? 'spin' : ''}`} />
-          </IconButton>
+            Re-Run
+          </Button>
+          {dialogue && <HoverDialogue />}
 
           <IconButton type="button" onClick={popover.onOpen}>
             <Iconify icon="uil:ellipsis-v" />

@@ -25,8 +25,8 @@ import { Iconify } from 'src/components/iconify';
 import { CustomPopover } from 'src/components/custom-popover';
 
 import usetTableStyling from 'src/sections/hooks/use-table-styling';
-import { Abc } from 'src/sections/visualize/context/dashbord-context';
 import { useDatabaseId } from 'src/sections/context/databaseid-context';
+import { ChangeInBbList } from 'src/sections/visualize/context/dashbord-context';
 
 import {
   getDashboardResponse,
@@ -69,7 +69,7 @@ export default function RecentDashboardList() {
       day: 'numeric',
     });
   }
-  const { isDashboard } = Abc();
+  const { isDashboard } = ChangeInBbList();
 
   const fetchData = React.useCallback(async () => {
     try {
