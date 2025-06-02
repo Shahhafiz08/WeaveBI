@@ -39,7 +39,7 @@ const Tabular = ({
           <Typography style={{ textTransform: 'capitalize' }}>{queryData.name}</Typography>
           <QueryOptions fetchDashboardInfo={fetchDashboardInfo} query={queryData} />
         </div>
-        <TableContainer sx={{ position: 'relative', maxHeight: '320px' }} component={Paper}>
+        <TableContainer sx={{ position: 'relative' }} component={Paper}>
           <Table sx={{ width: '100%' }}>
             {queryData.data.length <= 0 && <NoDataFound />}
             <TableHead style={{ position: 'relative' }}>

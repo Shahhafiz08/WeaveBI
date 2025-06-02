@@ -158,6 +158,7 @@ const QueryOptions = ({
           handleClose={handleCloseModal}
           handleAPICall={removeDashboardQuery}
           actionDescripton="You want to remove this query from the dashboard ."
+          id={query.id}
         />
       </Modal>
     </>
