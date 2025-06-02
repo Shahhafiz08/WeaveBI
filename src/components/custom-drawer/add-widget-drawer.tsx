@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 
-import CloseIcon from '@mui/icons-material/Close';
 import { Drawer, IconButton } from '@mui/material';
+
+import { Iconify } from '../iconify';
 
 interface AddWidgetDrawerProps {
   open: boolean;
@@ -34,7 +35,7 @@ export default function AddWidgetDrawer({
     >
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton onClick={onClose}>
-          <CloseIcon />
+          <Iconify icon="ic:baseline-close" />
         </IconButton>
       </div>
       {children}

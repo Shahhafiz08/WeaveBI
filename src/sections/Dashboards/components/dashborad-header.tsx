@@ -51,7 +51,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
       <Typography variant="h3" color="primary" sx={{ mb: 2 }}>
         {dashboardName
           ? dashboardName.charAt(0).toUpperCase() + dashboardName.slice(1)
@@ -93,7 +93,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
           <StyledArrow />
 
           <Button
-            sx={{ fontWeight: 'medium', postion: 'relative' }}
+            sx={{ fontWeight: 'medium' }}
             variant="contained"
             type="button"
             onMouseEnter={showDialogue}
@@ -104,7 +104,11 @@ const DashboardHeader: React.FC<DashboardProps> = ({
           >
             Re-Run
           </Button>
-          {dialogue && <HoverDialogue />}
+          {dialogue && (
+            <div style={{ position: 'absolute', top: '90%', left: '65%', zIndex: '99999' }}>
+              <HoverDialogue />
+            </div>
+          )}
 
           <IconButton type="button" onClick={popover.onOpen}>
             <Iconify icon="uil:ellipsis-v" />
