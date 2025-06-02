@@ -1,4 +1,9 @@
+// const handleGetPinnedDashboards = async () => {
+//   const incomingData = await pinnedDashboardsResponse(1, true);
+//   setGetData(incomingData.dashboards);
+// };
 import * as React from 'react';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 import Table from '@mui/material/Table';
@@ -10,6 +15,7 @@ import {
   Box,
   Chip,
   Stack,
+  Modal,
   Button,
   Checkbox,
   MenuList,
@@ -21,9 +27,13 @@ import {
 import { paths } from 'src/routes/paths';
 
 import { Iconify } from 'src/components/iconify';
-import { usePopover, CustomPopover } from 'src/components/custom-popover';
+import { CustomPopover } from 'src/components/custom-popover';
 
 import usetTableStyling from 'src/sections/hooks/use-table-styling';
+import { useDatabaseId } from 'src/sections/context/databaseid-context';
+import { ChangeInBbList } from 'src/sections/visualize/context/dashbord-context';
+import ConfimationPopup from 'src/sections/components/confermation-popup/confirmation-popup';
+import useConfirmationPopup from 'src/sections/components/confermation-popup/useConfirmation-popup';
 
 import {
   pinDashboardResponse,
@@ -38,62 +48,97 @@ type fetchDataType = {
   description: string;
   createdAt: string;
   tags: string[];
+  databaseId: number;
 };
 
-export default function PinnedDashboardList() {
-  const popover = usePopover();
+const { StyledTableCell, StyledTableRow } = usetTableStyling();
+
+export default function RecentDashboardList() {
   const [getData, setGetData] = React.useState<fetchDataType[]>([]);
   const [selected, setSelected] = React.useState<number[]>([]);
-  const tableHeadItems = ['Name', 'Description', 'Domain', 'Created', 'Action'];
-  const { StyledTableCell, StyledTableRow } = usetTableStyling();
+  const [popoverAnchor, setPopoverAnchor] = React.useState<HTMLElement | null>(null);
+  const [activeDashboardId, setActiveDashboardId] = React.useState<number>(0);
+  const { setDatabaseId } = useDatabaseId();
+  const { handleCloseModal, handleOpenModal, modal } = useConfirmationPopup();
 
   const maxDescriptionLength = 60;
-  const truncateDescription = (description: string) =>
-    description.length > maxDescriptionLength
+
+  function truncateDescription(description: string) {
+    return description.length > maxDescriptionLength
       ? `${description.slice(0, maxDescriptionLength)}...`
       : description;
+  }
 
-  const formatFetchedDate = (fetchedDate: string) => {
+  function formatFetchedDate(fetchedDate: string) {
     const date = new Date(fetchedDate);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'numeric',
       day: 'numeric',
     });
-  };
+  }
+  const { isDashboard } = ChangeInBbList();
 
-  const handlePin = async (dashboardId: number) => {
+  const fetchData = React.useCallback(async () => {
+    try {
+      const incomingData = await pinnedDashboardsResponse(1, true);
+      setGetData(incomingData.dashboards);
+    } catch (error) {
+      toast.error('Error fetching dashboard:', error);
+    }
+  }, []);
+
+  const handleDeleteDashboard = async (dashboardId: number) => {
+    try {
+      if (activeDashboardId) {
+        const resp = await deleteDashboardResponse(dashboardId);
+        handlePopoverClose();
+        fetchData();
+        toast.success(resp.message);
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  getData?.map((item) => setDatabaseId(item.databaseId));
+
+  async function handlePin(dashboardId: number) {
     setGetData((prevData) =>
       prevData.map((dashboard) =>
         dashboard.id === dashboardId ? { ...dashboard, isPinned: !dashboard.isPinned } : dashboard
       )
     );
     await pinDashboardResponse(dashboardId);
-  };
+  }
 
-  const handleGetPinnedDashboards = async (page: number, isPinned: boolean) => {
-    const incomingData = await pinnedDashboardsResponse(page, isPinned);
-    setGetData(incomingData.dashboards);
-  };
+  function handlePopoverOpen(event: React.MouseEvent<HTMLElement>, dashboardId: number) {
+    setPopoverAnchor(event.currentTarget);
+    setActiveDashboardId(dashboardId);
+  }
 
-  const handleDeleteDashboard = async (dashboardId: number) => {
-    try {
-      await deleteDashboardResponse(dashboardId);
-      popover.onClose();
-      handleGetPinnedDashboards(1, true);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  function handlePopoverClose() {
+    setPopoverAnchor(null);
+    setActiveDashboardId(0);
+  }
 
   React.useEffect(() => {
-    handleGetPinnedDashboards(1, true);
-  }, []);
+    fetchData();
+  }, [fetchData, isDashboard]);
+
+  const tableHeadItems = ['Name', 'Description', 'Domain', 'Created', 'Action'];
 
   return (
-    <Stack sx={{ boxShadow: 2, height: '400px', borderRadius: 1, background: 'white' }}>
-      <TableContainer component={Paper} sx={{ marginRight: 30 }}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+    <Stack
+      sx={{
+        boxShadow: 2,
+        height: '400px',
+        position: 'relative',
+        borderRadius: 1,
+        background: 'white',
+      }}
+    >
+      <TableContainer component={Paper}>
+        <Table aria-label="customized table">
           <TableHead sx={{ position: 'sticky', top: '0.1px', zIndex: 10 }}>
             <TableRow>
               <StyledTableCell>
@@ -106,28 +151,28 @@ export default function PinnedDashboardList() {
                   }}
                 />
               </StyledTableCell>
-              {tableHeadItems.map((item) => (
-                <StyledTableCell key={item}>{item}</StyledTableCell>
+              {tableHeadItems.map((item, index) => (
+                <StyledTableCell key={index}>{item}</StyledTableCell>
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {getData.length === 0 ? (
-              <StyledTableRow>
-                <StyledTableCell colSpan={6} align="center">
-                  No pinned dashboards found.
-                </StyledTableCell>
-              </StyledTableRow>
-            ) : (
-              getData.map((data) => (
+          {getData.length <= 0 ? (
+            <StyledTableRow>
+              <StyledTableCell colSpan={6} align="center">
+                No dashboards found.
+              </StyledTableCell>
+            </StyledTableRow>
+          ) : (
+            <TableBody>
+              {getData.map((data) => (
                 <StyledTableRow key={data.id}>
                   <StyledTableCell>
                     <Checkbox
                       checked={selected.includes(data.id)}
                       onChange={(event) => {
-                        const { checked } = event.target;
+                        const isChecked = event.target.checked;
                         setSelected((prev) =>
-                          checked ? [...prev, data.id] : prev.filter((id) => id !== data.id)
+                          isChecked ? [...prev, data.id] : prev.filter((id) => id !== data.id)
                         );
                       }}
                     />
@@ -143,9 +188,7 @@ export default function PinnedDashboardList() {
                     </Link>
                   </StyledTableCell>
 
-                  <StyledTableCell align="left">
-                    {truncateDescription(data.description)}
-                  </StyledTableCell>
+                  <StyledTableCell>{truncateDescription(data.description)}</StyledTableCell>
 
                   <StyledTableCell align="left">
                     <Box
@@ -174,62 +217,67 @@ export default function PinnedDashboardList() {
                     </Box>
                   </StyledTableCell>
 
-                  <StyledTableCell align="left">
-                    {formatFetchedDate(data.createdAt)}
-                  </StyledTableCell>
+                  <StyledTableCell>{formatFetchedDate(data.createdAt)}</StyledTableCell>
 
-                  <StyledTableCell
-                    align="left"
-                    sx={{ display: 'flex', flexDirection: 'row-reverse' }}
-                  >
-                    <Button
-                      sx={{ maxWidth: '12px', padding: '5px' }}
-                      onClick={(event) => popover.setAnchorEl(event.currentTarget)}
-                    >
+                  <StyledTableCell sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button onClick={(e) => handlePopoverOpen(e, data.id)}>
                       <Iconify icon="mdi:dots-vertical" />
                     </Button>
 
                     <Button onClick={() => handlePin(data.id)}>
-                      {data.isPinned ? (
-                        <Iconify icon="ic:sharp-push-pin" sx={{ rotate: '45deg' }} />
-                      ) : (
-                        <Iconify icon="ic:outline-push-pin" sx={{ rotate: '45deg' }} />
-                      )}
+                      <Iconify
+                        icon={data.isPinned ? 'ic:sharp-push-pin' : 'ic:outline-push-pin'}
+                        sx={{ rotate: '45deg' }}
+                      />
                     </Button>
-
-                    <CustomPopover
-                      open={popover.open}
-                      anchorEl={popover.anchorEl}
-                      onClose={popover.onClose}
-                      sx={{ marginTop: '10px' }}
-                    >
-                      <Paper>
-                        <ClickAwayListener onClickAway={popover.onClose}>
-                          <MenuList>
-                            <MenuItem>
-                              <Iconify icon="ic:baseline-file-open" /> Open
-                            </MenuItem>
-                            <MenuItem onClick={() => console.log(data.id)}>
-                              <Iconify icon="ic:baseline-edit" /> Edit
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => {
-                                handleDeleteDashboard(data.id);
-                              }}
-                            >
-                              <Iconify icon="ic:baseline-delete" /> Delete
-                            </MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </CustomPopover>
                   </StyledTableCell>
                 </StyledTableRow>
-              ))
-            )}
-          </TableBody>
+              ))}
+            </TableBody>
+          )}
         </Table>
       </TableContainer>
+
+      <CustomPopover
+        open={Boolean(popoverAnchor)}
+        anchorEl={popoverAnchor}
+        onClose={(e) => {
+          console.log('aadfadsfadfdfasfdaf', e);
+          handlePopoverClose();
+        }}
+        sx={{ marginTop: '10px' }}
+      >
+        <ClickAwayListener onClickAway={() => handlePopoverClose()}>
+          <MenuList>
+            <MenuItem>
+              <Iconify icon="ic:baseline-file-open" />
+              Open
+            </MenuItem>
+            <MenuItem onClick={() => console.log('Edit:', activeDashboardId)}>
+              <Iconify icon="ic:baseline-edit" />
+              Edit
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleOpenModal();
+              }}
+            >
+              <Iconify icon="ic:baseline-delete" />
+              Delete
+            </MenuItem>
+          </MenuList>
+        </ClickAwayListener>
+      </CustomPopover>
+
+      <Modal open={modal} onClose={handleCloseModal}>
+        <ConfimationPopup
+          buttonText="Delete"
+          handleClose={handleCloseModal}
+          handleAPICall={handleDeleteDashboard}
+          actionDescripton="Deleting the dahboard will delete all the queries related to the dashboad."
+          id={activeDashboardId}
+        />
+      </Modal>
     </Stack>
   );
 }

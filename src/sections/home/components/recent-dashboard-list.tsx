@@ -11,6 +11,7 @@ import {
   Box,
   Chip,
   Stack,
+  Modal,
   Button,
   Checkbox,
   MenuList,
@@ -27,6 +28,8 @@ import { CustomPopover } from 'src/components/custom-popover';
 import usetTableStyling from 'src/sections/hooks/use-table-styling';
 import { useDatabaseId } from 'src/sections/context/databaseid-context';
 import { ChangeInBbList } from 'src/sections/visualize/context/dashbord-context';
+import ConfimationPopup from 'src/sections/components/confermation-popup/confirmation-popup';
+import useConfirmationPopup from 'src/sections/components/confermation-popup/useConfirmation-popup';
 
 import {
   getDashboardResponse,
@@ -50,8 +53,9 @@ export default function RecentDashboardList() {
   const [getData, setGetData] = React.useState<fetchDataType[]>([]);
   const [selected, setSelected] = React.useState<number[]>([]);
   const [popoverAnchor, setPopoverAnchor] = React.useState<HTMLElement | null>(null);
-  const [activeDashboardId, setActiveDashboardId] = React.useState<number | null>(null);
+  const [activeDashboardId, setActiveDashboardId] = React.useState<number>(0);
   const { setDatabaseId } = useDatabaseId();
+  const { handleCloseModal, handleOpenModal, modal } = useConfirmationPopup();
 
   const maxDescriptionLength = 60;
 
@@ -80,16 +84,18 @@ export default function RecentDashboardList() {
     }
   }, []);
 
-  async function handleDeleteDashboard(dashboardId: number) {
+  const handleDeleteDashboard = async (dashboardId: number) => {
     try {
-      const resp = await deleteDashboardResponse(dashboardId);
-      handlePopoverClose();
-      fetchData();
-      toast.success(resp.message);
+      if (activeDashboardId) {
+        const resp = await deleteDashboardResponse(dashboardId);
+        handlePopoverClose();
+        fetchData();
+        toast.success(resp.message);
+      }
     } catch (error) {
       toast.error(error);
     }
-  }
+  };
   getData.map((item) => setDatabaseId(item.databaseId));
 
   async function handlePin(dashboardId: number) {
@@ -108,7 +114,7 @@ export default function RecentDashboardList() {
 
   function handlePopoverClose() {
     setPopoverAnchor(null);
-    setActiveDashboardId(null);
+    setActiveDashboardId(0);
   }
 
   React.useEffect(() => {
@@ -118,7 +124,15 @@ export default function RecentDashboardList() {
   const tableHeadItems = ['Name', 'Description', 'Domain', 'Created', 'Action'];
 
   return (
-    <Stack sx={{ boxShadow: 2, height: '400px', borderRadius: 1, background: 'white' }}>
+    <Stack
+      sx={{
+        boxShadow: 2,
+        height: '400px',
+        position: 'relative',
+        borderRadius: 1,
+        background: 'white',
+      }}
+    >
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead sx={{ position: 'sticky', top: '0.1px', zIndex: 10 }}>
@@ -223,7 +237,10 @@ export default function RecentDashboardList() {
       <CustomPopover
         open={Boolean(popoverAnchor)}
         anchorEl={popoverAnchor}
-        onClose={() => handlePopoverClose()}
+        onClose={(e) => {
+          console.log('aadfadsfadfdfasfdaf', e);
+          handlePopoverClose();
+        }}
         sx={{ marginTop: '10px' }}
       >
         <ClickAwayListener onClickAway={() => handlePopoverClose()}>
@@ -236,13 +253,27 @@ export default function RecentDashboardList() {
               <Iconify icon="ic:baseline-edit" />
               Edit
             </MenuItem>
-            <MenuItem onClick={() => activeDashboardId && handleDeleteDashboard(activeDashboardId)}>
+            <MenuItem
+              onClick={() => {
+                handleOpenModal();
+              }}
+            >
               <Iconify icon="ic:baseline-delete" />
               Delete
             </MenuItem>
           </MenuList>
         </ClickAwayListener>
       </CustomPopover>
+
+      <Modal open={modal} onClose={handleCloseModal}>
+        <ConfimationPopup
+          buttonText="Delete"
+          handleClose={handleCloseModal}
+          handleAPICall={handleDeleteDashboard}
+          actionDescripton="Deleting the dahboard will delete all the queries related to the dashboad."
+          id={activeDashboardId}
+        />
+      </Modal>
     </Stack>
   );
 }

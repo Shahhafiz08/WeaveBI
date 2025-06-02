@@ -1,9 +1,20 @@
 import React, { useRef } from 'react';
 
-import { Paper, Drawer, MenuItem, MenuList, IconButton, ClickAwayListener } from '@mui/material';
+import {
+  Modal,
+  Paper,
+  Drawer,
+  MenuItem,
+  MenuList,
+  IconButton,
+  ClickAwayListener,
+} from '@mui/material';
 
 import { Iconify } from 'src/components/iconify';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
+
+import ConfimationPopup from 'src/sections/components/confermation-popup/confirmation-popup';
+import useConfirmationPopup from 'src/sections/components/confermation-popup/useConfirmation-popup';
 
 import Configure from './configure';
 import { Insights } from './insights';
@@ -38,7 +49,7 @@ const QueryOptions = ({
   const popover = usePopover();
   const {
     showInsights,
-    deleteDashboardQuery,
+    removeDashboardQuery,
     downloadQueryData,
     toggleDrawer,
     open,
@@ -47,6 +58,7 @@ const QueryOptions = ({
     handleChangeOutputType,
     outputType,
   } = useQueryOptions(query.id, fetchDashboardInfo, query?.outputType);
+  const { handleCloseModal, handleOpenModal, modal } = useConfirmationPopup();
 
   const value = useRef<string>('');
 
@@ -102,8 +114,7 @@ const QueryOptions = ({
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  deleteDashboardQuery();
-                  popover.onClose();
+                  handleOpenModal();
                 }}
               >
                 <Iconify
@@ -141,6 +152,14 @@ const QueryOptions = ({
           />
         )}
       </Drawer>
+      <Modal open={modal} onClose={handleCloseModal}>
+        <ConfimationPopup
+          buttonText="Remove"
+          handleClose={handleCloseModal}
+          handleAPICall={removeDashboardQuery}
+          actionDescripton="You want to remove this query from the dashboard ."
+        />
+      </Modal>
     </>
   );
 };

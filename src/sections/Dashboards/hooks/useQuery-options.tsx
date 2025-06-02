@@ -76,7 +76,7 @@ export const useQueryOptions = (
     }
   };
   // delete query
-  const deleteDashboardQuery = async () => {
+  const removeDashboardQuery = async () => {
     try {
       const response = await unlinkQueryFromDashboard({ queryId, dashboardId: Number(id) });
       toast.success(response.message);
@@ -92,7 +92,7 @@ export const useQueryOptions = (
     setInsights,
     insights,
     downloadQueryData,
-    deleteDashboardQuery,
+    removeDashboardQuery,
     loading,
     showInsights,
     open,

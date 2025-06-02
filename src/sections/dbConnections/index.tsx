@@ -2,15 +2,13 @@ import * as React from 'react';
 import { toast } from 'react-toastify';
 
 import Table from '@mui/material/Table';
-import Paper from '@mui/material/Paper';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import TableContainer from '@mui/material/TableContainer';
 import {
-  Grow,
+  Modal,
   Stack,
   Button,
-  Popper,
   Checkbox,
   MenuList,
   MenuItem,
@@ -19,10 +17,13 @@ import {
 } from '@mui/material';
 
 import { Iconify } from 'src/components/iconify';
+import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 import Sectionheader from './Sectionheader';
 import usetTableStyling from '../hooks/use-table-styling';
 import { getDatabase, deleteDatabase } from './api/actions';
+import ConfimationPopup from '../components/confermation-popup/confirmation-popup';
+import useConfirmationPopup from '../components/confermation-popup/useConfirmation-popup';
 
 type fetchDataType = {
   id: number;
@@ -34,21 +35,13 @@ type fetchDataType = {
 const { StyledTableCell, StyledTableRow } = usetTableStyling();
 
 export default function DatabaseConnectionsView() {
-  const anchorRef = React.useRef<HTMLButtonElement>(null);
-  const [open, setOpen] = React.useState(false);
+  const popover = usePopover();
+
+  const [rowId, setRowid] = React.useState(0);
 
   const [refresh, setRefresh] = React.useState<boolean>(false);
+  const { handleCloseModal, handleOpenModal, modal } = useConfirmationPopup();
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event: Event | React.SyntheticEvent) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
-    }
-    setOpen(false);
-  };
   const [getData, setGetdata] = React.useState<fetchDataType[]>([]);
 
   const fetchData = async () => {
@@ -123,6 +116,9 @@ export default function DatabaseConnectionsView() {
                         checked={selected.includes(row.id)}
                         onChange={(event) => {
                           const isChecked = event.target.checked;
+
+                          setRowid(row.id);
+
                           setSelected((prev) =>
                             isChecked ? [...prev, row.id] : prev.filter((id) => id !== row.id)
                           );
@@ -140,42 +136,46 @@ export default function DatabaseConnectionsView() {
                       </Button>
 
                       <Button
-                        ref={anchorRef}
-                        id="composition-button"
-                        aria-controls={open ? 'composition-menu' : undefined}
-                        aria-expanded={open ? 'true' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleToggle}
+                        onClick={(e) => {
+                          popover.setAnchorEl(e.currentTarget);
+                        }}
                       >
                         <Iconify icon="uil:ellipsis-v" />
                       </Button>
 
-                      <Popper
-                        open={open}
-                        anchorEl={anchorRef.current}
-                        placement="right-end"
-                        transition
-                        id={row.id.toString()}
-                        disablePortal
+                      <CustomPopover
+                        open={popover.open}
+                        anchorEl={popover.anchorEl}
+                        onClose={popover.onClose}
+                        sx={{ mt: 1 }}
                       >
-                        {({ TransitionProps }) => (
-                          <Grow {...TransitionProps}>
-                            <Paper>
-                              <ClickAwayListener onClickAway={handleClose}>
-                                <MenuList
-                                  autoFocusItem={open}
-                                  id="composition-menu"
-                                  aria-labelledby="composition-button"
-                                >
-                                  <MenuItem onClick={handleClose}>Edit</MenuItem>
-                                  <MenuItem onClick={() => deleteDB(row.id)}>Delete</MenuItem>
-                                  <MenuItem onClick={handleClose}>Logout</MenuItem>
-                                </MenuList>
-                              </ClickAwayListener>
-                            </Paper>
-                          </Grow>
-                        )}
-                      </Popper>
+                        <ClickAwayListener onClickAway={popover.onClose}>
+                          <MenuList>
+                            <MenuItem
+                              onClick={() => {
+                                popover.onClose();
+                              }}
+                            >
+                              <Iconify icon="ic:baseline-file-open" /> Open
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                popover.onClose();
+                              }}
+                            >
+                              <Iconify icon="ic:baseline-edit" /> Edit
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                handleOpenModal();
+                              }}
+                            >
+                              <Iconify icon="ic:baseline-delete" />
+                              Delete
+                            </MenuItem>
+                          </MenuList>
+                        </ClickAwayListener>
+                      </CustomPopover>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))
@@ -183,6 +183,15 @@ export default function DatabaseConnectionsView() {
             </TableBody>
           </Table>
         </TableContainer>
+        <Modal open={modal} onClose={handleCloseModal}>
+          <ConfimationPopup
+            buttonText="Delete"
+            handleClose={handleCloseModal}
+            handleAPICall={deleteDB}
+            actionDescripton="Deleting the Database will delete all the data related to the database."
+            id={rowId}
+          />
+        </Modal>
       </Stack>
     </div>
   );

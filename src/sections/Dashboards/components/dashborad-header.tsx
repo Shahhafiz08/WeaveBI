@@ -105,7 +105,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
             Re-Run
           </Button>
           {dialogue && (
-            <div style={{ position: 'absolute', top: '90%', left: '65%', zIndex: '99999' }}>
+            <div style={{ position: 'absolute', top: '90%', left: '60%', zIndex: '99999' }}>
               <HoverDialogue />
             </div>
           )}
