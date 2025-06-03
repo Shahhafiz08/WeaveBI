@@ -49,7 +49,7 @@ export const useConfigure = ({
         dashboardId: Number(id),
       });
       fetchDashboardInfo();
-      toast.success(response.message);
+
       return response;
     } catch (error) {
       toast.error(error);
@@ -69,7 +69,7 @@ export const useConfigure = ({
         queryId: query.id,
         outputType: outputType ?? '',
       });
-      toast.success(response.message);
+      toast.success('Widget updated sucessfully');
       runExistingQuery(query.id);
 
       return response;

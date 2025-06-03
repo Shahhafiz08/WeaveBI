@@ -17,7 +17,7 @@ type PropertiesType = {
   chartColor: any;
   showOptions?: string;
   changeChatType?: string;
-  fetchDashboardInfo:()=>void
+  fetchDashboardInfo: () => void;
 };
 const Properties = ({
   query,
