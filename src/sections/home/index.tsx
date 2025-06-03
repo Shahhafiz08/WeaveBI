@@ -4,6 +4,8 @@ import Grid2 from '@mui/material/Unstable_Grid2';
 import { Tab, Stack, Typography } from '@mui/material';
 import { TabList, TabPanel, TabContext } from '@mui/lab';
 
+import { paths } from 'src/routes/paths';
+
 import { primary } from 'src/theme/core';
 
 import { HomeCharts } from './components/home-charts';
@@ -64,21 +66,25 @@ export default function HomeView() {
       total: totalDatabases,
       image: img1,
       title: 'Total Databases',
+      path: paths.dashboard.databaseConnections,
     },
     {
       total: activedatabases,
       image: img2,
       title: 'Active Databases',
+      path: paths.dashboard.databaseConnections,
     },
     {
       total: totalDashboards,
       image: img3,
       title: 'Total Dashboards',
+      path: paths.dashboard.visualize,
     },
     {
       total: totalQueries,
       image: img4,
       title: 'Total Queries',
+      path: '',
     },
   ];
   const [value, setValue] = React.useState('1');
@@ -119,7 +125,12 @@ export default function HomeView() {
           {data &&
             data.map((card, index) => (
               <Grid2 key={index} xs={12} sm={6} md={3} lg={3}>
-                <KeyPoints total={card.total} image={card.image} title={card.title} />
+                <KeyPoints
+                  total={card.total}
+                  image={card.image}
+                  title={card.title}
+                  redirectingPath={card.path}
+                />
               </Grid2>
             ))}
         </Grid2>
