@@ -30,16 +30,23 @@ const Tabular = ({
       ? Object.keys(queryData.data[0])
       : [];
 
-  console.log(queryData);
-
   return (
     <div>
-      <Paper sx={{ p: 3, borderRadius: 2, userSelect: 'none' }}>
+      <Paper
+        sx={{
+          p: 3,
+          borderRadius: 2,
+          userSelect: 'none',
+        }}
+      >
         <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
           <Typography style={{ textTransform: 'capitalize' }}>{queryData.name}</Typography>
           <QueryOptions fetchDashboardInfo={fetchDashboardInfo} query={queryData} />
         </div>
-        <TableContainer sx={{ position: 'relative' }} component={Paper}>
+        <TableContainer
+          sx={{ position: 'relative', height: '320px', maxHeight: '100%' }}
+          component={Paper}
+        >
           <Table sx={{ width: '100%' }}>
             {queryData.data.length <= 0 && <NoDataFound />}
             <TableHead style={{ position: 'relative' }}>
