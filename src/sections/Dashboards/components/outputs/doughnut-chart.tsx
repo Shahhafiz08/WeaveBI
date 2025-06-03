@@ -99,7 +99,7 @@ export const DoughnutChart = ({
   return (
     <Paper
       key={queryData.id}
-      elevation={2}
+      elevation={0}
       sx={{
         textAlign: 'start',
         borderRadius: 2,

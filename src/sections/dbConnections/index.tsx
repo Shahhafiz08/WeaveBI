@@ -191,7 +191,7 @@ export default function DatabaseConnectionsView() {
               if (id !== undefined) {
                 return deleteDB(id);
               }
-              return Promise.resolve(); // or optionally throw an error
+              return Promise.resolve();
             }}
             actionDescripton="Deleting the Database will delete all the data related to the database."
             id={rowId}

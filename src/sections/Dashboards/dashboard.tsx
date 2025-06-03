@@ -58,7 +58,7 @@ ChartJS.register(
 );
 const Dashboard = () => {
   const {
-    edit, 
+    edit,
     loading,
     renderableQueries,
     dashboardData,
@@ -147,6 +147,7 @@ const Dashboard = () => {
           }}
         >
           <DashboardHeader
+            refreshLoading={refreshLoading}
             handleOpenSlider={handleOpenSlider}
             dashboardName={dashboardData?.name}
             saveLayout={saveLayout}

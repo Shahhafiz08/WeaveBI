@@ -85,7 +85,6 @@ export const PieChart = ({
   return (
     <Paper
       key={queryData.id}
-      elevation={2}
       sx={{
         textAlign: 'start',
         borderRadius: 2,

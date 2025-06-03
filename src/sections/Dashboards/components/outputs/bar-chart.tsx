@@ -92,7 +92,7 @@ export const BarChart = ({
   return (
     <Paper
       key={queryData.id}
-      elevation={2}
+      elevation={0}
       sx={{
         width: '100%',
         textAlign: 'start',

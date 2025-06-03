@@ -21,6 +21,7 @@ import useConfirmationPopup from 'src/sections/components/confermation-popup/use
 
 type DashboardProps = {
   edit?: boolean;
+  refreshLoading: boolean;
   editDashboard: () => void;
   dashboardName: string;
   refreshDashboardQueries: () => Promise<void>;
@@ -31,6 +32,7 @@ type DashboardProps = {
 
 const DashboardHeader: React.FC<DashboardProps> = ({
   dashboardName,
+  refreshLoading,
   handleOpenSlider,
   saveLayout,
   edit,
@@ -93,20 +95,20 @@ const DashboardHeader: React.FC<DashboardProps> = ({
 
             <StyledArrow />
 
-            <Button
-              sx={{ fontWeight: 'medium' }}
-              variant="contained"
+            <IconButton
               type="button"
               onMouseEnter={showDialogue}
               onMouseLeave={hideDialogue}
               onClick={() => {
                 handleOpenModal();
               }}
+              disabled={refreshLoading}
             >
-              Re-Run
-            </Button>
+              <Iconify icon="ic:baseline-autorenew" className={`${refreshLoading ? 'spin' : ''}`} />
+            </IconButton>
+
             {dialogue && (
-              <div style={{ position: 'absolute', top: '90%', left: '60%', zIndex: '99999' }}>
+              <div style={{ position: 'absolute', top: '100%', left: '61%', zIndex: '99999' }}>
                 <HoverDialogue />
               </div>
             )}

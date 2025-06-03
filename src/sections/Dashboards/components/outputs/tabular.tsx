@@ -34,7 +34,7 @@ const Tabular = ({
 
   return (
     <div>
-      <Paper elevation={2} sx={{ p: 3, borderRadius: 2, userSelect: 'none' }}>
+      <Paper sx={{ p: 3, borderRadius: 2, userSelect: 'none' }}>
         <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
           <Typography style={{ textTransform: 'capitalize' }}>{queryData.name}</Typography>
           <QueryOptions fetchDashboardInfo={fetchDashboardInfo} query={queryData} />

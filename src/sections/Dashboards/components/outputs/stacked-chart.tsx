@@ -121,7 +121,6 @@ export const StackedChart = ({
   return (
     <Paper
       key={queryData.id}
-      elevation={2}
       sx={{
         width: '100%',
         height: '100%',

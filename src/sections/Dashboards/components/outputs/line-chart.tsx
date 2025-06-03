@@ -93,7 +93,7 @@ export const LineChart = ({
   return (
     <Paper
       key={queryData.id}
-      elevation={2}
+
       sx={{ textAlign: 'start', borderRadius: 2, height: '100%' }}
     >
       <div
