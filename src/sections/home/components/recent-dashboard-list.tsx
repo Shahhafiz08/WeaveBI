@@ -269,7 +269,12 @@ export default function RecentDashboardList() {
         <ConfimationPopup
           buttonText="Delete"
           handleClose={handleCloseModal}
-          handleAPICall={handleDeleteDashboard}
+          handleAPICall={({ id }) => {
+            if (id !== undefined) {
+              return handleDeleteDashboard(id);
+            }
+            return Promise.resolve(); // or optionally throw an error
+          }}
           actionDescripton="Deleting the dahboard will delete all the queries related to the dashboad."
           id={activeDashboardId}
         />

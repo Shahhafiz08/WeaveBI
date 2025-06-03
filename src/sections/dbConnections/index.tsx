@@ -187,7 +187,12 @@ export default function DatabaseConnectionsView() {
           <ConfimationPopup
             buttonText="Delete"
             handleClose={handleCloseModal}
-            handleAPICall={deleteDB}
+            handleAPICall={({ id }) => {
+              if (id !== undefined) {
+                return deleteDB(id);
+              }
+              return Promise.resolve(); // or optionally throw an error
+            }}
             actionDescripton="Deleting the Database will delete all the data related to the database."
             id={rowId}
           />

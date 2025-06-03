@@ -9,7 +9,7 @@ import { Iconify } from 'src/components/iconify';
 import exclamation from '../../../assets/home/exclamation.svg';
 
 type props = {
-  handleAPICall: (id: number) => void;
+  handleAPICall: ({ id }: { id?: number }) => Promise<void>;
   handleClose: () => void;
   actionDescripton: string;
   buttonText: string;
@@ -76,9 +76,10 @@ const ConfimationPopup = ({
           variant="contained"
           onClick={() => {
             if (id) {
-              handleAPICall(id);
+              handleAPICall({ id });
+            } else {
+              handleAPICall({});
             }
-
             handleClose();
           }}
         >

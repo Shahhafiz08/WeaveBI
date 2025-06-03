@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import {
+  Modal,
   Paper,
   Button,
   MenuItem,
@@ -15,14 +16,14 @@ import { StyledArrow } from 'src/components/custom-popover/styles';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 import HoverDialogue from 'src/sections/components/hover-dialogue';
+import ConfimationPopup from 'src/sections/components/confermation-popup/confirmation-popup';
+import useConfirmationPopup from 'src/sections/components/confermation-popup/useConfirmation-popup';
 
 type DashboardProps = {
-  id: string | number;
   edit?: boolean;
   editDashboard: () => void;
   dashboardName: string;
-  refreshLoading: boolean;
-  refreshDashboardQueries: () => void;
+  refreshDashboardQueries: () => Promise<void>;
   saveLayout: () => void;
   handleOpenSlider: () => void;
   renderableQueries: any[];
@@ -30,12 +31,10 @@ type DashboardProps = {
 
 const DashboardHeader: React.FC<DashboardProps> = ({
   dashboardName,
-  id,
   handleOpenSlider,
   saveLayout,
   edit,
   editDashboard,
-  refreshLoading,
   renderableQueries,
   refreshDashboardQueries,
 }) => {
@@ -49,6 +48,7 @@ const DashboardHeader: React.FC<DashboardProps> = ({
     setDialogue(false);
     console.log('leaved');
   };
+  const { handleCloseModal, handleOpenModal, modal } = useConfirmationPopup();
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
@@ -59,84 +59,95 @@ const DashboardHeader: React.FC<DashboardProps> = ({
         {' Dashboard'}
       </Typography>
       {renderableQueries?.length > 0 && (
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          {edit ? (
+        <>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            {edit ? (
+              <Button
+                onClick={() => {
+                  saveLayout();
+                }}
+                type="button"
+                variant="contained"
+                sx={{
+                  fontWeight: 'medium',
+                  paddingX: '15px',
+                  maxHeight: '40px',
+                }}
+              >
+                Save
+              </Button>
+            ) : (
+              <Button
+                onClick={handleOpenSlider}
+                type="button"
+                variant="contained"
+                sx={{
+                  fontWeight: 'medium',
+                  paddingX: '15px',
+                  maxHeight: '40px',
+                }}
+              >
+                + Add Widget
+              </Button>
+            )}
+
+            <StyledArrow />
+
             <Button
+              sx={{ fontWeight: 'medium' }}
+              variant="contained"
+              type="button"
+              onMouseEnter={showDialogue}
+              onMouseLeave={hideDialogue}
               onClick={() => {
-                saveLayout();
-              }}
-              type="button"
-              variant="contained"
-              sx={{
-                fontWeight: 'medium',
-                paddingX: '15px',
-                maxHeight: '40px',
+                handleOpenModal();
               }}
             >
-              Save
+              Re-Run
             </Button>
-          ) : (
-            <Button
-              onClick={handleOpenSlider}
-              type="button"
-              variant="contained"
-              sx={{
-                fontWeight: 'medium',
-                paddingX: '15px',
-                maxHeight: '40px',
-              }}
+            {dialogue && (
+              <div style={{ position: 'absolute', top: '90%', left: '60%', zIndex: '99999' }}>
+                <HoverDialogue />
+              </div>
+            )}
+
+            <IconButton type="button" onClick={popover.onOpen}>
+              <Iconify icon="uil:ellipsis-v" />
+            </IconButton>
+
+            <CustomPopover
+              open={popover.open}
+              anchorEl={popover.anchorEl}
+              onClose={popover.onClose}
+              sx={{ marginTop: '10px' }}
             >
-              + Add Widget
-            </Button>
-          )}
-
-          <StyledArrow />
-
-          <Button
-            sx={{ fontWeight: 'medium' }}
-            variant="contained"
-            type="button"
-            onMouseEnter={showDialogue}
-            onMouseLeave={hideDialogue}
-            onClick={() => {
-              refreshDashboardQueries();
-            }}
-          >
-            Re-Run
-          </Button>
-          {dialogue && (
-            <div style={{ position: 'absolute', top: '90%', left: '60%', zIndex: '99999' }}>
-              <HoverDialogue />
-            </div>
-          )}
-
-          <IconButton type="button" onClick={popover.onOpen}>
-            <Iconify icon="uil:ellipsis-v" />
-          </IconButton>
-
-          <CustomPopover
-            open={popover.open}
-            anchorEl={popover.anchorEl}
-            onClose={popover.onClose}
-            sx={{ marginTop: '10px' }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={popover.onClose}>
-                <MenuList id="composition-menu" aria-labelledby="composition-button">
-                  <MenuItem
-                    onClick={() => {
-                      editDashboard();
-                      popover.onClose();
-                    }}
-                  >
-                    <Iconify icon="mdi:application-edit-outline" sx={{ marginRight: '5px' }} />
-                    Edit
-                  </MenuItem>
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </CustomPopover>
-        </div>
+              <Paper>
+                <ClickAwayListener onClickAway={popover.onClose}>
+                  <MenuList id="composition-menu" aria-labelledby="composition-button">
+                    <MenuItem
+                      onClick={() => {
+                        editDashboard();
+                        popover.onClose();
+                      }}
+                    >
+                      <Iconify icon="mdi:application-edit-outline" sx={{ marginRight: '5px' }} />
+                      Edit
+                    </MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </CustomPopover>
+          </div>
+          <Modal open={modal} onClose={handleCloseModal}>
+            <ConfimationPopup
+              buttonText="Confirm"
+              handleClose={handleCloseModal}
+              handleAPICall={refreshDashboardQueries}
+              actionDescripton="Are you sure you want to re-run the whole dashboard."
+              id={undefined}
+            />
+          </Modal>
+        </>
       )}
     </div>
   );

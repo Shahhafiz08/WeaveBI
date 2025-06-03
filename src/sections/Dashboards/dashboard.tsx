@@ -1,4 +1,3 @@
-import { useParams } from 'react-router';
 import {
   Title,
   Legend,
@@ -58,9 +57,8 @@ ChartJS.register(
   Legend
 );
 const Dashboard = () => {
-  const { id } = useParams();
   const {
-    edit,
+    edit, 
     loading,
     renderableQueries,
     dashboardData,
@@ -151,13 +149,11 @@ const Dashboard = () => {
           <DashboardHeader
             handleOpenSlider={handleOpenSlider}
             dashboardName={dashboardData?.name}
-            id={id as unknown as any}
             saveLayout={saveLayout}
             renderableQueries={renderableQueries}
             edit={edit}
             editDashboard={editDashboard}
             refreshDashboardQueries={refreshDashboardQueries}
-            refreshLoading={refreshLoading}
           />
         </div>
 
