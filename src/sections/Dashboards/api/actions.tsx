@@ -27,14 +27,16 @@ export const parallellyRunAllQueries = async (id: string) => {
 };
 // download chart data
 export const downloadChartData = async (id: number) => {
-  const response = await axios.get(`${endpoints.query.downloadCharts}${id}`);
+  const response = await axios.get(`${endpoints.query.downloadCharts}/${id}/download-json`);
 
   return response.data;
 };
 
 // download chart data
 export const downloadTabularData = async (id: number) => {
-  const response = await axios.get(`${endpoints.query.downloadTabular}${id}`);
+  const response = await axios.get(
+    `${endpoints.query.downloadCharts}/${id}/download-csv/download-csv`
+  );
   return response.data;
 };
 // generate query insights
