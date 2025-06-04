@@ -44,6 +44,7 @@ export function Section({
         background: colors.secondary.main,
         px: 3,
         pb: 3,
+        backgroundColor: '#F4F6F8',
         width: '50%',
         maxWidth: '%',
         display: 'none',

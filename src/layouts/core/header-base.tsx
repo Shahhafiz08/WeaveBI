@@ -31,7 +31,7 @@ const StyledDivider = styled('span')(({ theme }) => ({
   flexDirection: 'column',
   marginLeft: theme.spacing(2.5),
   marginRight: theme.spacing(2.5),
-  backgroundColor: '#D9D9D9',
+  backgroundColor: '#F4F6F8',
   color: theme.vars.palette.divider,
   '&::before, &::after': {
     top: -5,
@@ -41,12 +41,10 @@ const StyledDivider = styled('span')(({ theme }) => ({
     flexShrink: 0,
     borderRadius: '50%',
     position: 'absolute',
-    backgroundColor: '#D9D9D9',
+    backgroundColor: '#F4F6F8',
   },
   '&::after': { bottom: -5, top: 'auto' },
 }));
-
-// ----------------------------------------------------------------------
 
 export type HeaderBaseProps = HeaderSectionProps & {
   onOpenNav: () => void;

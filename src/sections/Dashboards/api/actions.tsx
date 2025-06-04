@@ -46,7 +46,7 @@ export const generateQueryInsights = async (
   customInstructions?: string
 ) => {
   const response = await axios.get(
-    `${endpoints.query.insights}/{${id}}/insights?search=${browseOnline}&customInstructions=${customInstructions}`
+    `${endpoints.query.insights}/${id}/insights?search=${browseOnline}&customInstructions=${customInstructions}`
   );
 
   return response.data;
