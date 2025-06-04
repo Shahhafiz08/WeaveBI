@@ -17,6 +17,9 @@ const SingeValue = ({
   const { chartColor, setChartColor } = useColorPicker({
     incommingChartColor: queryData.colors?.chartColor,
   });
+  const string = Object.values(queryData.data[0]).toString();
+  const indexOfDot = Object.values(queryData.data[0]).toString().indexOf('.');
+ 
 
   return (
     <Stack
@@ -60,7 +63,7 @@ const SingeValue = ({
               textTransform: 'capitalize',
             }}
           >
-            {Object.values(queryData.data[0])}
+            {string.slice(0, indexOfDot) + string.slice(indexOfDot, 5)}
           </Typography>
         )}
       </Box>

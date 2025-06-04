@@ -161,109 +161,115 @@ export default function RecentDashboardList() {
           ) : (
             <TableBody>
               {getData.map((data) => (
-                <StyledTableRow key={data.id}>
-                  <StyledTableCell>
-                    <Checkbox
-                      checked={selected.includes(data.id)}
-                      onChange={(event) => {
-                        const isChecked = event.target.checked;
-                        setSelected((prev) =>
-                          isChecked ? [...prev, data.id] : prev.filter((id) => id !== data.id)
-                        );
-                      }}
-                    />
-                  </StyledTableCell>
-
-                  <StyledTableCell sx={{ width: '25%' }}>
-                    <Link
-                      className="open-Visulize"
-                      style={{ textDecoration: 'none', color: 'black' }}
-                      to={paths.dashboard.OpenVisualize(data.id)}
-                    >
-                      {data.name}
-                    </Link>
-                  </StyledTableCell>
-
-                  <StyledTableCell>{truncateDescription(data.description)}</StyledTableCell>
-
-                  <StyledTableCell align="left">
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'start',
-                        flexWrap: 'wrap',
-                        overflow: 'hidden',
-                        width: '300px',
-                      }}
-                    >
-                      {data.tags.map((tag) => (
-                        <Chip
-                          key={tag}
-                          size="small"
-                          label={tag}
-                          sx={{
-                            fontWeight: 'normal',
-                            fontFamily: 'poppins',
-                            marginRight: '4px',
-                            marginBottom: '4px',
-                            backgroundColor: 'grey',
-                          }}
-                        />
-                      ))}
-                    </Box>
-                  </StyledTableCell>
-
-                  <StyledTableCell>{formatFetchedDate(data.createdAt)}</StyledTableCell>
-
-                  <StyledTableCell sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button onClick={(e) => handlePopoverOpen(e, data.id)}>
-                      <Iconify icon="mdi:dots-vertical" />
-                    </Button>
-
-                    <Button onClick={() => handlePin(data.id)}>
-                      <Iconify
-                        icon={data.isPinned ? 'ic:sharp-push-pin' : 'ic:outline-push-pin'}
-                        sx={{ rotate: '45deg' }}
+                <>
+                  <StyledTableRow key={data.id}>
+                    <StyledTableCell>
+                      <Checkbox
+                        checked={selected.includes(data.id)}
+                        onChange={(event) => {
+                          const isChecked = event.target.checked;
+                          setSelected((prev) =>
+                            isChecked ? [...prev, data.id] : prev.filter((id) => id !== data.id)
+                          );
+                        }}
                       />
-                    </Button>
-                  </StyledTableCell>
-                </StyledTableRow>
+                    </StyledTableCell>
+
+                    <StyledTableCell sx={{ width: '25%' }}>
+                      <Link
+                        className="open-Visulize"
+                        style={{ textDecoration: 'none', color: 'black' }}
+                        to={paths.dashboard.OpenVisualize(data.id)}
+                      >
+                        {data.name}
+                      </Link>
+                    </StyledTableCell>
+
+                    <StyledTableCell>{truncateDescription(data.description)}</StyledTableCell>
+
+                    <StyledTableCell align="left">
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'start',
+                          flexWrap: 'wrap',
+                          overflow: 'hidden',
+                          width: '300px',
+                        }}
+                      >
+                        {data.tags.map((tag) => (
+                          <Chip
+                            key={tag}
+                            size="small"
+                            label={tag}
+                            sx={{
+                              fontWeight: 'normal',
+                              fontFamily: 'poppins',
+                              marginRight: '4px',
+                              marginBottom: '4px',
+                              backgroundColor: 'grey',
+                            }}
+                          />
+                        ))}
+                      </Box>
+                    </StyledTableCell>
+
+                    <StyledTableCell>{formatFetchedDate(data.createdAt)}</StyledTableCell>
+
+                    <StyledTableCell sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Button onClick={(e) => handlePopoverOpen(e, data.id)}>
+                        <Iconify icon="mdi:dots-vertical" />
+                      </Button>
+
+                      <Button onClick={() => handlePin(data.id)}>
+                        <Iconify
+                          icon={data.isPinned ? 'ic:sharp-push-pin' : 'ic:outline-push-pin'}
+                          sx={{ rotate: '45deg' }}
+                        />
+                      </Button>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  <CustomPopover
+                    open={Boolean(popoverAnchor)}
+                    anchorEl={popoverAnchor}
+                    onClose={(e) => {
+                      console.log('aadfadsfadfdfasfdaf', e);
+                      handlePopoverClose();
+                    }}
+                    sx={{ marginTop: '10px' }}
+                  >
+                    <ClickAwayListener onClickAway={() => handlePopoverClose()}>
+                      <MenuList>
+                        <MenuItem>
+                          <Link
+                            style={{ textDecoration: 'none', color: 'black' }}
+                            to={paths.dashboard.OpenVisualize(data.id)}
+                          >
+                            <Iconify icon="ic:baseline-file-open" />
+                            Open
+                          </Link>
+                        </MenuItem>
+                        <MenuItem onClick={() => console.log('Edit:', activeDashboardId)}>
+                          <Iconify icon="ic:baseline-edit" />
+                          Edit
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            handleOpenModal();
+                          }}
+                        >
+                          <Iconify icon="ic:baseline-delete" />
+                          Delete
+                        </MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </CustomPopover>
+                </>
               ))}
             </TableBody>
           )}
         </Table>
       </TableContainer>
-
-      <CustomPopover
-        open={Boolean(popoverAnchor)}
-        anchorEl={popoverAnchor}
-        onClose={(e) => {
-          console.log('aadfadsfadfdfasfdaf', e);
-          handlePopoverClose();
-        }}
-        sx={{ marginTop: '10px' }}
-      >
-        <ClickAwayListener onClickAway={() => handlePopoverClose()}>
-          <MenuList>
-            <MenuItem>
-              <Iconify icon="ic:baseline-file-open" />
-              Open
-            </MenuItem>
-            <MenuItem onClick={() => console.log('Edit:', activeDashboardId)}>
-              <Iconify icon="ic:baseline-edit" />
-              Edit
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleOpenModal();
-              }}
-            >
-              <Iconify icon="ic:baseline-delete" />
-              Delete
-            </MenuItem>
-          </MenuList>
-        </ClickAwayListener>
-      </CustomPopover>
 
       <Modal open={modal} onClose={handleCloseModal}>
         <ConfimationPopup
