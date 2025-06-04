@@ -91,11 +91,7 @@ export const LineChart = ({
   };
 
   return (
-    <Paper
-      key={queryData.id}
-
-      sx={{ textAlign: 'start', borderRadius: 2, height: '100%' }}
-    >
+    <Paper key={queryData.id} sx={{ textAlign: 'start', borderRadius: 2, height: '100%' }}>
       <div
         style={{
           display: 'flex',
@@ -129,7 +125,10 @@ export const LineChart = ({
           width: '100%',
         }}
       >
-        {queryData.data.datasets[0].label <= 0 || queryData.data.datasets[0].data.length <= 0 ? (
+        {!queryData.data.datasets ||
+        !queryData.data.labels ||
+        queryData.data.datasets[0].label <= 0 ||
+        queryData.data.datasets[0].data.length <= 0 ? (
           <NoDataFound />
         ) : (
           <Line options={options} data={data} />

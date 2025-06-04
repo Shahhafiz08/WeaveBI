@@ -158,7 +158,9 @@ export const StackedChart = ({
           paddingBottom: '15px',
         }}
       >
-        {queryData.data.labels.length <= 0 ||
+        {!queryData.data.datasets ||
+        !queryData.data.labels ||
+        queryData.data.labels.length <= 0 ||
         queryData.data.datasets.length <= 0 ||
         queryData.data.datasets[0].data.length <= 0 ? (
           <NoDataFound />

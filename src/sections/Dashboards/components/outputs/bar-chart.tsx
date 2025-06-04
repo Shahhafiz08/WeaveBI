@@ -137,7 +137,10 @@ export const BarChart = ({
           height: '100%',
         }}
       >
-        {queryData.data.datasets[0].label <= 0 || queryData.data.datasets[0].data.length <= 0 ? (
+        {!queryData.data.datasets ||
+        !queryData.data.labels ||
+        queryData.data.datasets[0].label <= 0 ||
+        queryData.data.datasets[0].data.length <= 0 ? (
           <NoDataFound />
         ) : (
           <Bar data={data} options={options} />
