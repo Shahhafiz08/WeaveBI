@@ -47,11 +47,7 @@ export function NavVertical({
       )}
 
       <Scrollbar fillContent>
-        <NavSectionVertical
-          data={data}
-          sx={{ px: 2, flex: '1 1 auto',  }}
-          {...other}
-        />
+        <NavSectionVertical data={data} sx={{ px: 2, flex: '1 1 auto' }} {...other} />
       </Scrollbar>
     </>
   );
@@ -83,7 +79,7 @@ export function NavVertical({
         position: 'fixed',
         fontFamily: 'poppins',
         flexDirection: 'column',
-        bgcolor: 'var(--layout-nav-bg)',
+        bgcolor: 'var(--layout-nav-bg) ',
         zIndex: 'var(--layout-nav-zIndex)',
         width: isNavMini ? 'var(--layout-nav-mini-width)' : 'var(--layout-nav-vertical-width)',
         borderRight: `1px solid var(--layout-nav-border-color, ${varAlpha(theme.vars.palette.grey['500Channel'], 0.12)})`,

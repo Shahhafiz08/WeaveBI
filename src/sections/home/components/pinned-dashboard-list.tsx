@@ -13,7 +13,6 @@ import TableHead from '@mui/material/TableHead';
 import TableContainer from '@mui/material/TableContainer';
 import {
   Box,
-  Chip,
   Stack,
   Modal,
   Button,
@@ -199,22 +198,13 @@ export default function RecentDashboardList() {
                           flexWrap: 'wrap',
                           overflow: 'hidden',
                           width: '300px',
+                          textTransform: 'capitalize',
                         }}
                       >
-                        {data.tags.map((tag) => (
-                          <Chip
-                            key={tag}
-                            size="small"
-                            label={tag}
-                            sx={{
-                              fontWeight: 'normal',
-                              fontFamily: 'poppins',
-                              marginRight: '4px',
-                              marginBottom: '4px',
-                              backgroundColor: 'grey',
-                            }}
-                          />
-                        ))}
+                        {data.tags.length <= 1 && data.tags.map((tag) => tag)
+                        
+                        }
+
                       </Box>
                     </StyledTableCell>
 

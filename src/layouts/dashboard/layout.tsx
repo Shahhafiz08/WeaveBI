@@ -6,7 +6,6 @@ import { useMemo } from 'react';
 
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
-import { iconButtonClasses } from '@mui/material/IconButton';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -107,35 +106,35 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
             }}
             slotProps={{
               toolbar: {
-                sx: {
-                  [`& [data-slot="logo"]`]: {
-                    display: 'none',
-                  },
-                  [`& [data-area="right"]`]: {
-                    gap: { xs: 0, sm: 0.75 },
-                  },
-                  ...(isNavHorizontal && {
-                    bgcolor: 'var(--layout-nav-bg)',
-                    [`& .${iconButtonClasses.root}`]: {
-                      color: 'var(--layout-nav-text-secondary-color)',
-                    },
-                    [theme.breakpoints.up(layoutQuery)]: {
-                      height: 'var(--layout-nav-horizontal-height)',
-                    },
-                    [`& [data-slot="workspaces"]`]: {
-                      color: 'var(--layout-nav-text-primary-color)',
-                    },
-                    [`& [data-slot="logo"]`]: {
-                      display: 'none',
-                      [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
-                    },
-                    [`& [data-slot="divider"]`]: {
-                      [theme.breakpoints.up(layoutQuery)]: {
-                        display: 'flex',
-                      },
-                    },
-                  }),
-                },
+                // sx: {
+                //   [`& [data-slot="logo"]`]: {
+                //     display: 'none',
+                //   },
+                //   [`& [data-area="right"]`]: {
+                //     gap: { xs: 0, sm: 0.75 },
+                //   },
+                //   ...(isNavHorizontal && {
+                //     bgcolor: 'var(--layout-nav-bg)',
+                //     [`& .${iconButtonClasses.root}`]: {
+                //       color: 'var(--layout-nav-text-secondary-color)',
+                //     },
+                //     [theme.breakpoints.up(layoutQuery)]: {
+                //       height: 'var(--layout-nav-horizontal-height)',
+                //     },
+                //     [`& [data-slot="workspaces"]`]: {
+                //       color: 'var(--layout-nav-text-primary-color)',
+                //     },
+                //     [`& [data-slot="logo"]`]: {
+                //       display: 'none',
+                //       [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
+                //     },
+                //     [`& [data-slot="divider"]`]: {
+                //       [theme.breakpoints.up(layoutQuery)]: {
+                //         display: 'flex',
+                //       },
+                //     },
+                //   }),
+                // },
               },
               container: {
                 maxWidth: false,

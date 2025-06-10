@@ -56,7 +56,6 @@ export function KeyPoints({ title, total, image, sx, redirectingPath, ...other }
             style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
             to={redirectingPath}
           >
-            {' '}
             {title}
           </Link>
         </Box>

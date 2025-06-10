@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { LoadingButton } from '@mui/lab';
-import { Chip, Stack, Button, Typography, IconButton } from '@mui/material';
+import { Stack, Button, Typography, IconButton } from '@mui/material';
 
 import { primary } from 'src/theme/core';
 
@@ -75,7 +75,7 @@ const SetupDashboard = ({ onClose }: SetupDashboardprops) => {
       try {
         const response = await createDashboard({ name, description, databaseId, tags });
         await getDashboardResponse();
-        console.log('dsssdsdds', response);
+
         toast.success(response.message);
         setIsDashboard((prev) => !prev);
       } catch (error) {
@@ -148,7 +148,7 @@ const SetupDashboard = ({ onClose }: SetupDashboardprops) => {
           <Stack direction="row" justifyContent="space-between" width="100%">
             <Field.Text
               name="dummyTag" // not used by Zod
-              label="Dashboard Tags"
+              label="Dashboard Domain"
               sx={{ width: '50%', height: '100%' }}
               value={tag}
               onChange={(e) => setTag(e.target.value)}
@@ -166,28 +166,13 @@ const SetupDashboard = ({ onClose }: SetupDashboardprops) => {
           )}
 
           <Stack marginTop={2} width="100%" direction="row" flexWrap="wrap">
-            {istag.map((item) => (
-              <Chip
-                key={item}
-                size="small"
-                label={item}
-                sx={{
-                  padding: 2,
-                  fontWeight: 'normal',
-                  fontFamily: 'poppins',
-                  marginRight: '4px',
-                  marginBottom: '4px',
-                  backgroundColor: 'grey',
-                }}
-              />
-            ))}
+            {istag.map((item) => `${item} `)}
           </Stack>
 
           <LoadingButton
             style={{ width: 'fit-content', marginTop: '20px' }}
             variant="contained"
             onClick={handleSubmit((data) => {
-              // console.log(data);
               addDahboard({
                 databaseId: data.databaseId,
                 description: data.description,

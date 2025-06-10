@@ -75,7 +75,7 @@ export function JwtSignInView() {
   const renderHead = (
     <Stack spacing={1.5} sx={{ mb: 5 }}>
       <Typography marginBottom={3} variant="h3" align="center" sx={{ color: color.primary.main }}>
-        Cognify
+        Weve BI
       </Typography>
       <Typography variant="h5" sx={{ color: color.primary.main }}>
         Sign in to your account
