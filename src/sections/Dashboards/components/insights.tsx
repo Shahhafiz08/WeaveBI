@@ -25,13 +25,18 @@ export const Insights = ({
   query: Query;
   insights: string;
   loading: boolean;
-  showInsights: (browseOnline?: boolean, addInstructions?: string) => Promise<null>;
+  showInsights: (
+    browseOnline?: boolean,
+    addInstructions?: string,
+    overwrite?: boolean
+  ) => Promise<null>;
 }) => {
   const [isDisabled, setIsDisabled] = React.useState<boolean>(true);
   const [isHidden, setIsHidden] = React.useState<string>('none');
   const [addInstructions, setAddInstructions] = React.useState<boolean>(true);
   const [customInstructions, setCustomInstructions] = React.useState<string>('');
   const [browseOnline, setBrowseOnline] = React.useState<boolean>(false);
+  const [overwrite, setoverwrite] = React.useState<boolean>(true);
 
   const handleIsDisabled = (val: boolean) => {
     setIsDisabled(() => val);
@@ -138,7 +143,8 @@ export const Insights = ({
         />
         <Button
           onClick={() => {
-            showInsights(browseOnline, customInstructions);
+            setoverwrite(true);
+            showInsights(browseOnline, customInstructions, overwrite);
           }}
           sx={{ width: 'fit-content', fontWeight: '500' }}
           variant="contained"

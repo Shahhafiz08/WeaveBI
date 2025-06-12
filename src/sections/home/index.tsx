@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 import Grid2 from '@mui/material/Unstable_Grid2';
-import { Tab, Stack, Typography } from '@mui/material';
+import ScheduleIcon from '@mui/icons-material/Schedule';
 import { TabList, TabPanel, TabContext } from '@mui/lab';
+import { Tab, Box, Stack, Typography } from '@mui/material';
+import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
 
 import { paths } from 'src/routes/paths';
 
@@ -138,6 +140,7 @@ export default function HomeView() {
 
       <div
         style={{
+          padding: '0px',
           marginBottom: '40px',
           width: '100%',
           display: 'flex',
@@ -162,22 +165,101 @@ export default function HomeView() {
       </div>
 
       <Stack>
-        <Typography variant="h3" style={{ color: primary.main }}>
+        <Typography variant="h3" style={{ color: primary.main, marginBottom: '15px' }}>
           Dashboards
         </Typography>
-        <TabContext value={value}>
-          <TabList onChange={handleChange}>
-            <Tab label=" Recent" value="1" />
-            <Tab label="Pinned" value="2" />
-          </TabList>
 
-          <TabPanel value="1">
-            <RecentDashboardList />
-          </TabPanel>
-          <TabPanel value="2">
-            <PinnedDashboardList />
-          </TabPanel>
-        </TabContext>
+        <Box
+          sx={{
+            backgroundColor: 'white',
+            borderTopLeftRadius: '16px',
+            borderTopRightRadius: '16px',
+          }}
+        >
+          <TabContext value={value}>
+            <Box
+              sx={{
+                width: 'fit-content',
+                backgroundColor: '#F5F9FF',
+                borderRadius: '10px',
+                margin: '10px',
+              }}
+            >
+              <TabList
+                onChange={handleChange}
+                sx={{
+                  backgroundColor: '#F5F9FF',
+                  borderRadius: '10px',
+                  padding: '2px',
+                  minHeight: 'unset',
+
+                  gap: 0,
+
+                  '& .MuiTabs-flexContainer': {
+                    gap: 1,
+                  },
+                  '& .MuiTab-root': {
+                    fontSize: '13px',
+                    paddingX: '15px',
+                    paddingY: '1px',
+                    height: '20px',
+                  },
+
+                  '& .MuiSvgIcon-root': {
+                    width: '20px',
+                  },
+                }}
+                TabIndicatorProps={{
+                  sx: { display: 'none' },
+                }}
+              >
+                <Tab
+                  label="Recent"
+                  value="1"
+                  icon={<ScheduleIcon />}
+                  disableRipple
+                  sx={{
+                    backgroundColor: value === '1' ? 'white' : '#F5F9FF',
+                    borderRadius: '7px ',
+                    paddingX: '5px',
+                    minHeight: '36px',
+                    height: '36px',
+
+                    margin: '4px',
+                    '&.Mui-selected': {
+                      fontWeight: 500,
+                    },
+                  }}
+                />
+
+                <Tab
+                  label="Pinned"
+                  value="2"
+                  icon={<PushPinOutlinedIcon />}
+                  disableRipple
+                  sx={{
+                    backgroundColor: value === '2' ? 'white' : '#F5F9FF',
+                    borderRadius: '7px',
+                    margin: '4px',
+                    paddingX: '5px',
+                    minHeight: '36px',
+                    height: '36px',
+                    '&.Mui-selected': {
+                      fontWeight: 500,
+                    },
+                  }}
+                />
+              </TabList>
+            </Box>
+
+            <TabPanel value="1" sx={{ padding: 0 }}>
+              <RecentDashboardList />
+            </TabPanel>
+            <TabPanel value="2" sx={{ padding: 0 }}>
+              <PinnedDashboardList />
+            </TabPanel>
+          </TabContext>
+        </Box>
       </Stack>
     </div>
   );

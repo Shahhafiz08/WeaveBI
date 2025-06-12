@@ -31,10 +31,19 @@ export const useQueryOptions = (
     setOpen(newBool);
   };
 
-  const showInsights = async (browseOnline?: boolean, addInstructions?: string) => {
+  const showInsights = async (
+    browseOnline?: boolean,
+    addInstructions?: string,
+    overwrite?: boolean
+  ) => {
     try {
       setLoading(true);
-      const insightData = await generateQueryInsights(queryId, browseOnline, addInstructions);
+      const insightData = await generateQueryInsights(
+        queryId,
+        browseOnline,
+        addInstructions,
+        overwrite
+      );
       setInsights(insightData.insights);
     } catch (error) {
       alert(error);

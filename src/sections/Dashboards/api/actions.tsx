@@ -43,10 +43,11 @@ export const downloadTabularData = async (id: number) => {
 export const generateQueryInsights = async (
   id: number,
   browseOnline?: boolean,
-  customInstructions?: string
+  customInstructions?: string,
+  overwrite?: boolean
 ) => {
   const response = await axios.get(
-    `${endpoints.query.insights}/${id}/insights?search=${browseOnline}&customInstructions=${customInstructions}`
+    `${endpoints.query.insights}/${id}/insights?search=${browseOnline}&customInstructions=${customInstructions}&overwrite=${overwrite}`
   );
 
   return response.data;

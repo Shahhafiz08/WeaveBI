@@ -2,17 +2,13 @@ import type { NavSectionProps } from 'src/components/nav-section';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { Settings } from '@mui/icons-material';
 import { styled, useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
 
-import { Logo } from 'src/components/logo';
-
 import { HeaderSection } from './header-section';
 import { MenuButton } from '../components/menu-button';
 import { SignInButton } from '../components/sign-in-button';
-import { NotificationsDrawer } from '../components/notifications-drawer';
 import { AccountDrawer, type AccountDrawerProps } from '../components/account-drawer';
 
 import type { HeaderSectionProps } from './header-section';
@@ -122,7 +118,6 @@ export function HeaderBase({
             )}
 
             {/* -- Logo -- */}
-            <Logo data-slot="logo" />
 
             {/* -- Divider -- */}
             <StyledDivider data-slot="divider" />
@@ -141,12 +136,12 @@ export function HeaderBase({
               }}
             >
               {/* -- Settings button -- */}
-              {settings && <Settings />}
+              {/* {settings && <Settings />} */}
 
               {/* -- Notifications popover -- */}
-              {notifications && (
+              {/* {notifications && (
                 <NotificationsDrawer data-slot="notifications" data={data?.notifications} />
-              )}
+              )} */}
 
               {/* -- Account drawer -- */}
               {account && <AccountDrawer data-slot="account" data={data?.account} />}

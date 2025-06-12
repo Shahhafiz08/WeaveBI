@@ -17,7 +17,8 @@ const usetTableStyling = () => {
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(even)': {
       backgroundColor: primary.gray,
-      border: '1px solid rgba(240,240,240,02)',
+      borderTop: '1px solid rgba(240,240,240,02)',
+      borderBottom: '1px solid rgba(240,240,240,02)',
     },
 
     '&:last-child td, &:last-child th': {},

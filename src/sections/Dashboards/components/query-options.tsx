@@ -100,9 +100,7 @@ const QueryOptions = ({
               <MenuItem
                 onClick={() => {
                   value.current = 'Configure';
-
                   toggleDrawer(true);
-
                   popover.onClose();
                 }}
               >
